@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_main"
+    app:startDestination="@id/home_fragment">
+
+    <fragment
+        android:id="@+id/home_fragment"
+        android:name="com.nomargin.cynema_app.ui.fragment.home_fragment.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_home_fragment_to_search_fragment"
+            app:destination="@id/search_fragment" />
+        <action
+            android:id="@+id/action_home_fragment_to_favorites_fragment"
+            app:destination="@id/favorites_fragment" />
+        <action
+            android:id="@+id/action_home_fragment_to_profile_fragment"
+            app:destination="@id/profile_fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/search_fragment"
+        android:name="com.nomargin.cynema_app.ui.fragment.search_fragment.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" />
+    <fragment
+        android:id="@+id/favorites_fragment"
+        android:name="com.nomargin.cynema_app.ui.fragment.favorites_fragment.FavoritesFragment"
+        android:label="fragment_favorites"
+        tools:layout="@layout/fragment_favorites" />
+    <fragment
+        android:id="@+id/profile_fragment"
+        android:name="com.nomargin.cynema_app.ui.fragment.profile_fragment.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
+</navigation>
