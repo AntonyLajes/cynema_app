@@ -10,7 +10,9 @@ import com.nomargin.cynema_app.databinding.ActivityAuthBinding
 import com.nomargin.cynema_app.ui.adapter.view_pager.ViewPagerAdapter
 import com.nomargin.cynema_app.ui.fragment.sign_in_fragment.SignInFragment
 import com.nomargin.cynema_app.ui.fragment.sign_up_fragment.SignUpFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class AuthActivity : AppCompatActivity() {
 
     private val binding: ActivityAuthBinding by lazy { ActivityAuthBinding.inflate(layoutInflater) }
