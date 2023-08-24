@@ -25,6 +25,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0"
             app:layout_constraintVertical_chainStyle="packed"
             app:startIconDrawable="@drawable/ic_mail">
 
@@ -74,12 +75,12 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
-            android:visibility="invisible"
             android:id="@+id/password_requirements_field"
             style="@style/CustomVerifyPasswordLabel"
-            android:drawablePadding="8dp"
             android:layout_marginVertical="8dp"
+            android:drawablePadding="8dp"
             android:text="@string/password_char_rules"
+            android:visibility="invisible"
             app:drawableStartCompat="@drawable/ic_unchecked"
             app:drawableTint="@color/custom_normal_grey"
             app:layout_constraintBottom_toTopOf="@id/checkbox_terms_conditions"
@@ -91,10 +92,9 @@
             android:id="@+id/checkbox_terms_conditions"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
             android:button="@drawable/custom_checkbox"
             android:paddingStart="4dp"
-            android:gravity="top"
-            android:layout_marginBottom="8dp"
             android:text="@string/sign_up_terms_and_conditions"
             android:textColor="@color/custom_bold_grey"
             android:textSize="15sp"
