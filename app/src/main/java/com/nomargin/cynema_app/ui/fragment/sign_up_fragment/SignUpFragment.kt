@@ -9,11 +9,13 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.nomargin.cynema_app.R
 import com.nomargin.cynema_app.data.remote.entity.SignUpModel
 import com.nomargin.cynema_app.databinding.FragmentSignUpBinding
@@ -30,6 +32,10 @@ class SignUpFragment : Fragment() {
     private val email: TextInputEditText by lazy { binding.emailInput }
     private val password: TextInputEditText by lazy { binding.passwordInput }
     private val confirmPassword: TextInputEditText by lazy { binding.confirmPasswordInput }
+    private val emailLayout: TextInputLayout by lazy { binding.emailInputLayout }
+    private val passwordLayout: TextInputLayout by lazy { binding.passwordInputLayout }
+    private val confirmPasswordLayout: TextInputLayout by lazy { binding.confirmPasswordInputLayout }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,7 +61,8 @@ class SignUpFragment : Fragment() {
             SignUpModel(
                 email = email.text.toString(),
                 password = password.text.toString(),
-                confirmPassword = confirmPassword.text.toString()
+                confirmPassword = confirmPassword.text.toString(),
+                acceptedTermsAndPrivacyPolicy = binding.checkboxTermsConditions.isChecked
             )
         )
     }
@@ -63,8 +70,6 @@ class SignUpFragment : Fragment() {
     private fun observers() {
         signUpViewModel.attributesStatus.observe(viewLifecycleOwner) { status ->
             if (status.isValid) {
-                makeToast(status.message)
-            } else {
                 makeToast(status.message)
             }
             fieldsHandler(status)
@@ -76,21 +81,59 @@ class SignUpFragment : Fragment() {
     }
 
     private fun fieldsHandler(value: StatusModel) {
+        binding.checkboxTermsConditions.error = null
         if (value.isValid) {
             email.text?.clear()
             password.text?.clear()
             confirmPassword.text?.clear()
+            binding.checkboxTermsConditions.isChecked = false
         } else {
+            when (value.errorType) {
+                Constants.ERROR_TYPES.emailFieldIsEmpty -> {
+                    emailLayout.setFieldError(value.message)
+                }
 
+                Constants.ERROR_TYPES.passwordFieldIsEmpty -> {
+                    passwordLayout.setFieldError(value.message)
+                }
+
+                Constants.ERROR_TYPES.passwordShouldHaveMoreThanEightCharacters -> {
+                    passwordLayout.setFieldError(value.message)
+                }
+
+                Constants.ERROR_TYPES.confirmPasswordFieldIsEmpty -> {
+                    confirmPasswordLayout.setFieldError(value.message)
+                }
+
+                Constants.ERROR_TYPES.passwordsDoNotMatch -> {
+                    passwordLayout.setFieldError(value.message)
+                    confirmPasswordLayout.setFieldError(value.message)
+                }
+
+                Constants.ERROR_TYPES.theUserDidNotAcceptedTermsOfUseAndPrivacyPolicy -> {
+                    binding.checkboxTermsConditions.error =
+                        requireContext().getString(value.message)
+                }
+
+                Constants.ERROR_TYPES.firebaseSignUpError -> {
+                    makeToast(value.message)
+                }
+            }
         }
     }
 
     private fun inputWatcher() {
+        email.doAfterTextChanged { text ->
+            if (text.toString().isNotEmpty()) {
+                emailLayout.setFieldError(null)
+            }
+        }
         password.doAfterTextChanged { text ->
             binding.passwordRequirementsField.visibility = if (text.toString().isNotEmpty()) {
+                passwordLayout.setFieldError(null)
                 View.VISIBLE
             } else {
-                View.INVISIBLE
+                View.GONE
             }
 
             if (Regex(Constants.REGEX.passwordRegexPattern).containsMatchIn(text.toString())) {
@@ -103,9 +146,24 @@ class SignUpFragment : Fragment() {
                 binding.passwordRequirementsField.changeDrawableColor(R.color.custom_normal_grey)
             }
         }
+        confirmPassword.doAfterTextChanged { text ->
+            if (text.toString().isNotEmpty()) {
+                confirmPasswordLayout.setFieldError(null)
+            }
+        }
     }
 
-    private fun TextView.changeTextColor(@ColorRes color: Int){
+    private fun TextInputLayout.setFieldError(@StringRes error: Int?) {
+        this.error = if (error != null) {
+            this.isErrorEnabled = true
+            requireContext().getString(error)
+        } else {
+            this.isErrorEnabled = false
+            null
+        }
+    }
+
+    private fun TextView.changeTextColor(@ColorRes color: Int) {
         setTextColor(
             ContextCompat.getColor(
                 requireContext(),
@@ -127,7 +185,7 @@ class SignUpFragment : Fragment() {
             }
     }
 
-    private fun TextView.changeStartDrawable(@DrawableRes drawable: Int){
+    private fun TextView.changeStartDrawable(@DrawableRes drawable: Int) {
         val imgDrawable = AppCompatResources.getDrawable(requireContext(), drawable)
         setCompoundDrawablesWithIntrinsicBounds(imgDrawable, null, null, null)
     }

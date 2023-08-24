@@ -22,7 +22,7 @@
     <string name="at_least_1_number">At least 1 number</string>
     <string name="upper_and_lower_case_letters">Upper and lower case letters</string>
     <string name="password_char_rules">Password must contain at least one lower case letter, one upper case letter &amp; one number.</string>
-    <string name="sign_up_terms_and_conditions">By registering, you are agreeing with our <a>Therms of Use</a> and <a>Privacy Policy</a>.</string>
+    <string name="sign_up_terms_and_conditions">By registering, you are agreeing with our <a>Terms of Use</a> and <a>Privacy Policy</a>.</string>
     <string name="sign_up">Sign Up</string>
     <string name="text_forgot_password_subtitle">Enter your email and we’ll send you a link to reset your password.</string>
     <string name="send_email_illustration_content_description">Send email Illustration</string>
@@ -48,4 +48,11 @@
     <string name="signup_to_get_started">SignUp to get started.</string>
     <string name="signup_with_google">SignUp with Google</string>
     <string name="signup_with_facebook">SignUp with Facebook</string>
+    <string name="error">Unknown error.</string>
+    <string name="please_insert_a_email">Please, insert a email.</string>
+    <string name="please_insert_a_password">Please, insert a password.</string>
+    <string name="please_confirm_your_password">Please, confirm your password.</string>
+    <string name="the_passwords_do_not_match">The passwords don\'t match</string>
+    <string name="unknown_error">A unknown error occurred.</string>
+    <string name="terms_of_use_and_privacy_policy_did_not_accepted">You cannot continue without accepting our Terms of Use and Privacy Policy</string>
 </resources>

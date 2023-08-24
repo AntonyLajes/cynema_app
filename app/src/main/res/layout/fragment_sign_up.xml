@@ -100,7 +100,7 @@
             android:layout_marginVertical="8dp"
             android:drawablePadding="8dp"
             android:text="@string/password_char_rules"
-            android:visibility="invisible"
+            android:visibility="gone"
             app:drawableStartCompat="@drawable/ic_unchecked"
             app:drawableTint="@color/custom_normal_grey"
             app:layout_constraintBottom_toTopOf="@id/checkbox_terms_conditions"

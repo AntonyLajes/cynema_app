@@ -6,8 +6,10 @@ object Constants {
         const val emailFieldIsEmpty = 1
         const val passwordFieldIsEmpty = 2
         const val confirmPasswordFieldIsEmpty = 3
-        const val passwordDoNotMatch = 4
+        const val passwordsDoNotMatch = 4
         const val passwordShouldHaveMoreThanEightCharacters = 5
+        const val theUserDidNotAcceptedTermsOfUseAndPrivacyPolicy = 6
+        const val firebaseSignUpError = 7
     }
 
     object MIN_LENGTH{

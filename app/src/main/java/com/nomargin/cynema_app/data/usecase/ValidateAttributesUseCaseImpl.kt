@@ -45,8 +45,16 @@ class ValidateAttributesUseCaseImpl @Inject constructor() : ValidateAttributesUs
             signUpModel.password != signUpModel.confirmPassword -> {
                 StatusModel(
                     isValid = false,
-                    Constants.ERROR_TYPES.passwordDoNotMatch,
+                    Constants.ERROR_TYPES.passwordsDoNotMatch,
                     R.string.password_do_not_match
+                )
+            }
+
+            !signUpModel.acceptedTermsAndPrivacyPolicy -> {
+                StatusModel(
+                    isValid = false,
+                    Constants.ERROR_TYPES.theUserDidNotAcceptedTermsOfUseAndPrivacyPolicy,
+                    R.string.terms_of_use_and_privacy_policy_did_not_accepted
                 )
             }
 
