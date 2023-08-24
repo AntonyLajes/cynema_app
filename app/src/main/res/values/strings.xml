@@ -20,6 +20,7 @@
     <string name="at_least_8_characters">At least 8 characters</string>
     <string name="at_least_1_number">At least 1 number</string>
     <string name="upper_and_lower_case_letters">Upper and lower case letters</string>
+    <string name="password_char_rules">Password must contain at least one lower case letter, one upper case letter &amp; one number.</string>
     <string name="sign_up_terms_and_conditions">Yes, I accept the Cynema Terms of Use and the Cynema Terms and Conditions.</string>
     <string name="sign_up">Sign Up</string>
     <string name="text_forgot_password_subtitle">Enter your email and we’ll send you a link to reset your password.</string>
@@ -32,6 +33,12 @@
     <string name="profile">Profile</string>
     <string name="welcome_user">Welcome, User!</string>
     <string name="lets_relax_and_talk">Let’s relax and talk about movies!</string>
-    <string name="searchbar_hint">Search movie...</string>
+    <string name="searchbar_hint">Search movie…</string>
     <string name="categories">Categories</string>
+    <string name="email_field_is_empty">Insert a valid email!</string>
+    <string name="password_field_is_empty">Insert a password!</string>
+    <string name="password_should_have_more_than_8_char">Your password should have more than 8 characters</string>
+    <string name="confirm_password_field_is_empty">Insert a confirm password!</string>
+    <string name="password_do_not_match">Password don\'t match!</string>
+    <string name="sign_up_with_successfully">Successfully Registered!</string>
 </resources>

@@ -3,10 +3,11 @@ package com.nomargin.cynema_app.ui.fragment.sign_in_fragment
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.nomargin.cynema_app.databinding.FragmentSignInBinding
 import com.nomargin.cynema_app.ui.activity.forgot_password_activity.ForgotPasswordActivity
 import com.nomargin.cynema_app.ui.activity.main_activity.MainActivity
@@ -15,6 +16,7 @@ class SignInFragment : Fragment(), View.OnClickListener {
 
     private var _binding: FragmentSignInBinding? = null
     private val binding: FragmentSignInBinding get() = _binding!!
+    private val signInViewModel: SignInViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

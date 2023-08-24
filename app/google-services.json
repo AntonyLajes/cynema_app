@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "800239542885",
+    "project_id": "cynema-app",
+    "storage_bucket": "cynema-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:800239542885:android:dfba3d636e847ee0739c8c",
+        "android_client_info": {
+          "package_name": "com.nomargin.cynema_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "800239542885-dim2kl9j5800b2k8i0qsde3ct7qqk3du.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nomargin.cynema_app",
+            "certificate_hash": "4f0e704179e19edd2c217b053c05cf859679d0b9"
+          }
+        },
+        {
+          "client_id": "800239542885-7laqp8korasglnba80jlc0491ns7etdv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCpUCglaY9pTiwKWQ7ScuC2DPcWHafS4VU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "800239542885-7laqp8korasglnba80jlc0491ns7etdv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
