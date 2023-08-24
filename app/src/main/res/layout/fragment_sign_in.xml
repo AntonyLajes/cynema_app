@@ -13,26 +13,44 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/general_padding">
 
+        <TextView
+            android:id="@+id/label_welcome_back_title"
+            style="@style/CustomMainLabel"
+            android:text="@string/welcome_back"
+            app:chainUseRtl="true"
+            app:layout_constraintBottom_toTopOf="@id/label_welcome_back_subtitle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <TextView
+            android:id="@+id/label_welcome_back_subtitle"
+            style="@style/CustomSubText"
+            android:text="@string/enter_your_credentials_to_continue"
+            app:layout_constraintBottom_toTopOf="@id/sign_in_with_google"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintTop_toBottomOf="@id/label_welcome_back_title" />
+
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/sign_in_with_google"
             style="@style/CustomProviderButton"
-            android:layout_marginBottom="8dp"
+            android:layout_marginVertical="8dp"
             android:drawableStart="@drawable/ic_google"
             android:text="@string/sign_in_with_google"
-            app:chainUseRtl="true"
             app:layout_constraintBottom_toTopOf="@id/sign_in_with_facebook"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed" />
+            app:layout_constraintTop_toBottomOf="@id/label_welcome_back_subtitle" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/sign_in_with_facebook"
+            android:layout_marginBottom="4dp"
             style="@style/CustomProviderButton"
-            android:layout_marginBottom="16dp"
             android:drawableStart="@drawable/ic_facebook"
             android:text="@string/sign_in_with_facebook"
-            app:layout_constraintBottom_toTopOf="@id/or_continue_with"
+            app:layout_constraintBottom_toTopOf="@id/or_signup_with"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/sign_in_with_google" />
@@ -42,13 +60,13 @@
             android:layout_width="0dp"
             android:layout_height="2dp"
             android:background="@color/custom_low_grey"
-            app:layout_constraintBottom_toBottomOf="@id/or_continue_with"
-            app:layout_constraintEnd_toStartOf="@id/or_continue_with"
+            app:layout_constraintBottom_toBottomOf="@id/or_signup_with"
+            app:layout_constraintEnd_toStartOf="@id/or_signup_with"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/or_continue_with" />
+            app:layout_constraintTop_toTopOf="@id/or_signup_with" />
 
         <TextView
-            android:id="@+id/or_continue_with"
+            android:id="@+id/or_signup_with"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginVertical="16dp"
@@ -65,21 +83,20 @@
             android:layout_width="0dp"
             android:layout_height="2dp"
             android:background="@color/custom_low_grey"
-            app:layout_constraintBottom_toBottomOf="@id/or_continue_with"
+            app:layout_constraintBottom_toBottomOf="@id/or_signup_with"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/or_continue_with"
-            app:layout_constraintTop_toTopOf="@id/or_continue_with" />
+            app:layout_constraintStart_toEndOf="@id/or_signup_with"
+            app:layout_constraintTop_toTopOf="@id/or_signup_with" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/email_input_layout"
             style="@style/CustomInputTextLayout"
-            android:layout_marginTop="8dp"
             android:hint="@string/enter_your_email"
             app:endIconMode="clear_text"
             app:layout_constraintBottom_toTopOf="@id/password_input_layout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/or_continue_with"
+            app:layout_constraintTop_toBottomOf="@id/or_signup_with"
             app:startIconDrawable="@drawable/ic_mail">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -103,8 +120,8 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/password_input"
-                android:inputType="textPassword"
-                style="@style/CustomInputText"/>
+                style="@style/CustomInputText"
+                android:inputType="textPassword" />
 
         </com.google.android.material.textfield.TextInputLayout>
 

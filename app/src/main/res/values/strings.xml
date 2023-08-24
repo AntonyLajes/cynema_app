@@ -10,6 +10,7 @@
     <string name="sign_in_with_google">Sign in With Google</string>
     <string name="sign_in_with_facebook">Sign in With Facebook</string>
     <string name="or_continue_with">or continue with</string>
+    <string name="or_signup_with">or signup with</string>
     <string name="enter_your_email">Enter your email</string>
     <string name="enter_your_password">Enter your password</string>
     <string name="confirm_your_password">Confirm your password</string>
@@ -21,7 +22,7 @@
     <string name="at_least_1_number">At least 1 number</string>
     <string name="upper_and_lower_case_letters">Upper and lower case letters</string>
     <string name="password_char_rules">Password must contain at least one lower case letter, one upper case letter &amp; one number.</string>
-    <string name="sign_up_terms_and_conditions">Yes, I accept the Cynema Terms of Use and the Cynema Terms and Conditions.</string>
+    <string name="sign_up_terms_and_conditions">By registering, you are agreeing with our <a>Therms of Use</a> and <a>Privacy Policy</a>.</string>
     <string name="sign_up">Sign Up</string>
     <string name="text_forgot_password_subtitle">Enter your email and we’ll send you a link to reset your password.</string>
     <string name="send_email_illustration_content_description">Send email Illustration</string>
@@ -41,4 +42,10 @@
     <string name="confirm_password_field_is_empty">Insert a confirm password!</string>
     <string name="password_do_not_match">Password don\'t match!</string>
     <string name="sign_up_with_successfully">Successfully Registered!</string>
+    <string name="welcome_back">Welcome back!</string>
+    <string name="enter_your_credentials_to_continue">Enter your credentials to continue.</string>
+    <string name="create_your_account">Create your account!</string>
+    <string name="signup_to_get_started">SignUp to get started.</string>
+    <string name="signup_with_google">SignUp with Google</string>
+    <string name="signup_with_facebook">SignUp with Facebook</string>
 </resources>

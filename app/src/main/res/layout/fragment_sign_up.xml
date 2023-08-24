@@ -14,6 +14,26 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/general_padding">
 
+        <TextView
+            android:id="@+id/label_welcome_back_title"
+            style="@style/CustomMainLabel"
+            android:text="@string/create_your_account"
+            app:chainUseRtl="true"
+            app:layout_constraintBottom_toTopOf="@id/label_welcome_back_subtitle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <TextView
+            android:id="@+id/label_welcome_back_subtitle"
+            style="@style/CustomSubText"
+            android:layout_marginBottom="16dp"
+            android:text="@string/signup_to_get_started"
+            app:layout_constraintBottom_toTopOf="@id/email_input_layout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/label_welcome_back_title" />
+
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/email_input_layout"
@@ -24,8 +44,8 @@
             app:layout_constraintBottom_toTopOf="@id/password_input_layout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0"
+            app:layout_constraintTop_toBottomOf="@id/label_welcome_back_subtitle"
+            app:layout_constraintVertical_bias="0.1"
             app:layout_constraintVertical_chainStyle="packed"
             app:startIconDrawable="@drawable/ic_mail">
 
@@ -94,6 +114,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:button="@drawable/custom_checkbox"
+            android:gravity="top"
             android:paddingStart="4dp"
             android:text="@string/sign_up_terms_and_conditions"
             android:textColor="@color/custom_bold_grey"
@@ -114,6 +135,64 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/checkbox_terms_conditions" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/start_divider"
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:background="@color/custom_low_grey"
+            app:layout_constraintBottom_toBottomOf="@id/or_signup_with"
+            app:layout_constraintEnd_toStartOf="@id/or_signup_with"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/or_signup_with" />
+
+        <TextView
+            android:id="@+id/or_signup_with"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="16dp"
+            android:gravity="center"
+            android:text="@string/or_signup_with"
+            android:textColor="@color/custom_bold_grey"
+            app:layout_constraintEnd_toStartOf="@id/end_divider"
+            app:layout_constraintStart_toEndOf="@id/start_divider"
+            app:layout_constraintTop_toBottomOf="@id/button_sign_up" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/end_divider"
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:background="@color/custom_low_grey"
+            app:layout_constraintBottom_toBottomOf="@id/or_signup_with"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/or_signup_with"
+            app:layout_constraintTop_toTopOf="@id/or_signup_with" />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/sign_up_with_google"
+            style="@style/CustomImageButton"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:contentDescription="@string/signup_with_google"
+            android:src="@drawable/ic_google"
+            app:chainUseRtl="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/sign_up_with_facebook"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/or_signup_with"
+            app:layout_constraintVertical_bias="0" />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/sign_up_with_facebook"
+            style="@style/CustomImageButton"
+            android:layout_marginStart="16dp"
+            android:contentDescription="@string/signup_with_facebook"
+            android:src="@drawable/ic_facebook"
+            app:layout_constraintBottom_toBottomOf="@id/sign_up_with_google"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/sign_up_with_google"
+            app:layout_constraintTop_toTopOf="@id/sign_up_with_google" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

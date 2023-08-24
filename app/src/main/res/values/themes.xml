@@ -73,4 +73,18 @@
         <item name="android:textSize">20sp</item>
     </style>
 
+    <style name="CustomMainLabel" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/color_primary</item>
+        <item name="android:textSize">22sp</item>
+    </style>
+
+    <style name="CustomImageButton" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/bg_image_button</item>
+        <item name="android:padding">16dp</item>
+    </style>
+
 </resources>
