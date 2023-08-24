@@ -14,4 +14,12 @@ object Constants {
         const val passwordMinLength = 8
     }
 
+    object FIELD_HANDLER{
+        const val isSuccess = true
+    }
+
+    object REGEX {
+        const val passwordRegexPattern = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,64}"
+    }
+
 }

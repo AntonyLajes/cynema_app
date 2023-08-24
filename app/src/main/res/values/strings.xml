@@ -20,6 +20,7 @@
     <string name="at_least_8_characters">At least 8 characters</string>
     <string name="at_least_1_number">At least 1 number</string>
     <string name="upper_and_lower_case_letters">Upper and lower case letters</string>
+    <string name="password_char_rules">Password must contain at least one lower case letter, one upper case letter &amp; one number.</string>
     <string name="sign_up_terms_and_conditions">Yes, I accept the Cynema Terms of Use and the Cynema Terms and Conditions.</string>
     <string name="sign_up">Sign Up</string>
     <string name="text_forgot_password_subtitle">Enter your email and we’ll send you a link to reset your password.</string>

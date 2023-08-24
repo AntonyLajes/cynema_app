@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/custom_low_grey"
     android:fillViewport="true"
+    android:fitsSystemWindows="true"
     tools:context=".ui.fragment.sign_up_fragment.SignUpFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -72,76 +73,28 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:paddingBottom="16dp"
+        <TextView
+            android:visibility="invisible"
             android:id="@+id/password_requirements_field"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            style="@style/CustomVerifyPasswordLabel"
+            android:drawablePadding="8dp"
+            android:layout_marginVertical="8dp"
+            android:text="@string/password_char_rules"
+            app:drawableStartCompat="@drawable/ic_unchecked"
+            app:drawableTint="@color/custom_normal_grey"
             app:layout_constraintBottom_toTopOf="@id/checkbox_terms_conditions"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/confirm_password_input_layout">
-
-            <ImageView
-                android:id="@+id/check_at_least_8_char"
-                style="@style/CustomVerifyPasswordIcon"
-                android:contentDescription="@string/at_least_8_characters"
-                android:src="@drawable/ic_unchecked"
-                app:layout_constraintBottom_toTopOf="@id/check_at_least_1_number"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
-
-            <TextView
-                android:id="@+id/check_at_least_8_char_label"
-                style="@style/CustomVerifyPasswordLabel"
-                android:text="@string/at_least_8_characters"
-                app:layout_constraintBottom_toBottomOf="@id/check_at_least_8_char"
-                app:layout_constraintStart_toEndOf="@id/check_at_least_8_char"
-                app:layout_constraintTop_toTopOf="@id/check_at_least_8_char" />
-
-            <ImageView
-                android:id="@+id/check_at_least_1_number"
-                style="@style/CustomVerifyPasswordIcon"
-                android:contentDescription="@string/at_least_1_number"
-                android:src="@drawable/ic_unchecked"
-                app:layout_constraintBottom_toTopOf="@id/check_upper_and_lower_case_letter"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/check_at_least_8_char"/>
-
-            <TextView
-                android:id="@+id/check_at_least_1_number_label"
-                style="@style/CustomVerifyPasswordLabel"
-                android:text="@string/at_least_1_number"
-                app:layout_constraintBottom_toBottomOf="@id/check_at_least_1_number"
-                app:layout_constraintStart_toEndOf="@id/check_at_least_1_number"
-                app:layout_constraintTop_toTopOf="@id/check_at_least_1_number" />
-
-            <ImageView
-                android:id="@+id/check_upper_and_lower_case_letter"
-                style="@style/CustomVerifyPasswordIcon"
-                android:contentDescription="@string/upper_and_lower_case_letters"
-                android:src="@drawable/ic_unchecked"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/check_at_least_1_number"/>
-
-            <TextView
-                android:id="@+id/check_upper_and_lower_case_letter_label"
-                style="@style/CustomVerifyPasswordLabel"
-                android:text="@string/upper_and_lower_case_letters"
-                app:layout_constraintBottom_toBottomOf="@id/check_upper_and_lower_case_letter"
-                app:layout_constraintStart_toEndOf="@id/check_upper_and_lower_case_letter"
-                app:layout_constraintTop_toTopOf="@id/check_upper_and_lower_case_letter" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            app:layout_constraintTop_toBottomOf="@id/confirm_password_input_layout" />
 
         <androidx.appcompat.widget.AppCompatCheckBox
             android:id="@+id/checkbox_terms_conditions"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:button="@drawable/custom_checkbox"
-            android:gravity="top"
             android:paddingStart="4dp"
+            android:gravity="top"
+            android:layout_marginBottom="8dp"
             android:text="@string/sign_up_terms_and_conditions"
             android:textColor="@color/custom_bold_grey"
             android:textSize="15sp"
