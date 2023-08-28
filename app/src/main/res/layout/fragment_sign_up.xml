@@ -103,13 +103,13 @@
             android:visibility="gone"
             app:drawableStartCompat="@drawable/ic_unchecked"
             app:drawableTint="@color/custom_normal_grey"
-            app:layout_constraintBottom_toTopOf="@id/checkbox_terms_conditions"
+            app:layout_constraintBottom_toTopOf="@id/checkbox_terms_conditions_privacy_policy"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/confirm_password_input_layout" />
 
         <androidx.appcompat.widget.AppCompatCheckBox
-            android:id="@+id/checkbox_terms_conditions"
+            android:id="@+id/checkbox_terms_conditions_privacy_policy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
@@ -133,7 +133,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/checkbox_terms_conditions" />
+            app:layout_constraintTop_toBottomOf="@id/checkbox_terms_conditions_privacy_policy" />
 
         <com.google.android.material.divider.MaterialDivider
             android:id="@+id/start_divider"

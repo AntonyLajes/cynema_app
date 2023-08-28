@@ -16,13 +16,13 @@
     <string name="confirm_your_password">Confirm your password</string>
     <string name="sign_in">Sign In</string>
     <string name="forgot_password">Forgot Password?</string>
-    <string name="sign_in_terms_and_conditions">By signing in, you agree to our Terms of Service and Privacy Policy.</string>
+    <string name="sign_in_terms_and_conditions">By signing in, you agree to our <a href="https://cynema.info/index.php/terms-of-use-for-the-cynema-app/">Terms of Service</a> and <a href="https://cynema.info/index.php/privacy-policy/">Privacy Policy</a>.</string>
     <string name="enter_your_name">Enter your name</string>
     <string name="at_least_8_characters">At least 8 characters</string>
     <string name="at_least_1_number">At least 1 number</string>
     <string name="upper_and_lower_case_letters">Upper and lower case letters</string>
     <string name="password_char_rules">Password must contain at least one lower case letter, one upper case letter &amp; one number.</string>
-    <string name="sign_up_terms_and_conditions">By registering, you are agreeing with our <a>Terms of Use</a> and <a>Privacy Policy</a>.</string>
+    <string name="sign_up_terms_and_conditions">By registering, you are agreeing with our <a href="https://cynema.info/index.php/terms-of-use-for-the-cynema-app/">Terms of Use</a> and <a href="https://cynema.info/index.php/privacy-policy/">Privacy Policy</a>.</string>
     <string name="sign_up">Sign Up</string>
     <string name="text_forgot_password_subtitle">Enter your email and we’ll send you a link to reset your password.</string>
     <string name="send_email_illustration_content_description">Send email Illustration</string>

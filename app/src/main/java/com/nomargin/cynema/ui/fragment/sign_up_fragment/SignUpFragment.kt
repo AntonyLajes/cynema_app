@@ -1,6 +1,7 @@
 package com.nomargin.cynema.ui.fragment.sign_up_fragment
 
 import android.os.Bundle
+import android.text.method.LinkMovementMethod
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -50,6 +51,7 @@ class SignUpFragment : Fragment() {
         initClicks()
         observers()
         inputWatcher()
+        setMovementMethod()
     }
 
     private fun initClicks() {
@@ -62,7 +64,7 @@ class SignUpFragment : Fragment() {
                 email = email.text.toString(),
                 password = password.text.toString(),
                 confirmPassword = confirmPassword.text.toString(),
-                acceptedTermsAndPrivacyPolicy = binding.checkboxTermsConditions.isChecked
+                acceptedTermsAndPrivacyPolicy = binding.checkboxTermsConditionsPrivacyPolicy.isChecked
             )
         )
     }
@@ -81,12 +83,12 @@ class SignUpFragment : Fragment() {
     }
 
     private fun fieldsHandler(value: StatusModel) {
-        binding.checkboxTermsConditions.error = null
+        binding.checkboxTermsConditionsPrivacyPolicy.error = null
         if (value.isValid) {
             email.text?.clear()
             password.text?.clear()
             confirmPassword.text?.clear()
-            binding.checkboxTermsConditions.isChecked = false
+            binding.checkboxTermsConditionsPrivacyPolicy.isChecked = false
         } else {
             when (value.errorType) {
                 Constants.ERROR_TYPES.emailFieldIsEmpty -> {
@@ -111,7 +113,7 @@ class SignUpFragment : Fragment() {
                 }
 
                 Constants.ERROR_TYPES.theUserDidNotAcceptedTermsOfUseAndPrivacyPolicy -> {
-                    binding.checkboxTermsConditions.error =
+                    binding.checkboxTermsConditionsPrivacyPolicy.error =
                         requireContext().getString(value.message)
                 }
 
@@ -151,6 +153,10 @@ class SignUpFragment : Fragment() {
                 confirmPasswordLayout.setFieldError(null)
             }
         }
+    }
+    private fun setMovementMethod(){
+        binding.checkboxTermsConditionsPrivacyPolicy.movementMethod = LinkMovementMethod.getInstance()
+        binding.checkboxTermsConditionsPrivacyPolicy.setLinkTextColor(ContextCompat.getColor(requireContext(), R.color.color_primary))
     }
 
     private fun TextInputLayout.setFieldError(@StringRes error: Int?) {
