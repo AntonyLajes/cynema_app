@@ -1,41 +1,70 @@
 {
   "project_info": {
-    "project_number": "800239542885",
-    "project_id": "cynema-app",
-    "storage_bucket": "cynema-app.appspot.com"
+    "project_number": "15708406258",
+    "project_id": "cynema-app-5bc37",
+    "storage_bucket": "cynema-app-5bc37.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:800239542885:android:dfba3d636e847ee0739c8c",
+        "mobilesdk_app_id": "1:15708406258:android:11b00e530640a8df902b6b",
         "android_client_info": {
-          "package_name": "com.nomargin.cynema_app"
+          "package_name": "com.nomargin.cynema"
         }
       },
       "oauth_client": [
         {
-          "client_id": "800239542885-dim2kl9j5800b2k8i0qsde3ct7qqk3du.apps.googleusercontent.com",
+          "client_id": "15708406258-368sflaqgi8nehfnqg3ol8s91r8tp6op.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.nomargin.cynema_app",
+            "package_name": "com.nomargin.cynema",
             "certificate_hash": "4f0e704179e19edd2c217b053c05cf859679d0b9"
           }
         },
         {
-          "client_id": "800239542885-7laqp8korasglnba80jlc0491ns7etdv.apps.googleusercontent.com",
+          "client_id": "15708406258-lf16c9clmi5c3je75jrta9mje8hdp43s.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCpUCglaY9pTiwKWQ7ScuC2DPcWHafS4VU"
+          "current_key": "AIzaSyAN8fVqq-mv5Z2va1nt3-TLvmpHxI9X25A"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "800239542885-7laqp8korasglnba80jlc0491ns7etdv.apps.googleusercontent.com",
+              "client_id": "15708406258-29uhfip821bmhc661ir7l34kqddpvumc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:15708406258:android:b68e2339a8bf989e902b6b",
+        "android_client_info": {
+          "package_name": "com.nomargin.cynema_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "15708406258-lf16c9clmi5c3je75jrta9mje8hdp43s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAN8fVqq-mv5Z2va1nt3-TLvmpHxI9X25A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "15708406258-29uhfip821bmhc661ir7l34kqddpvumc.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
