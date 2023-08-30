@@ -1,4 +1,4 @@
-package com.nomargin.cynema.ui.fragment.sign_up_fragment
+package com.nomargin.cynema.ui.activity.auth_activity
 
 import androidx.activity.result.ActivityResult
 import androidx.lifecycle.LiveData
@@ -10,7 +10,6 @@ import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.nomargin.cynema.R
-import com.nomargin.cynema.data.remote.entity.SignUpModel
 import com.nomargin.cynema.data.repository.AuthenticationRepository
 import com.nomargin.cynema.util.Constants
 import com.nomargin.cynema.util.StatusModel
@@ -19,27 +18,14 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SignUpViewModel @Inject constructor(
+class AuthViewModel @Inject constructor(
     private val authenticationRepository: AuthenticationRepository
 ) : ViewModel() {
 
-    private var _attributesStatus: MutableLiveData<StatusModel> = MutableLiveData()
-    val attributesStatus: LiveData<StatusModel> = _attributesStatus
     private var _oneTapStatus: MutableLiveData<StatusModel> = MutableLiveData()
     val oneTapStatus: LiveData<StatusModel> = _oneTapStatus
-    fun signUp(signUpModel: SignUpModel) = viewModelScope.launch {
-        val result = authenticationRepository.signUp(signUpModel)
-        if(result.statusModel != null){
-            _attributesStatus.value =
-                StatusModel(
-                    result.statusModel.isValid,
-                    result.statusModel.errorType,
-                    result.statusModel.message
-                )
-        }
-    }
 
-    suspend fun beginAuthenticationRequest(): BeginSignInRequest {
+    suspend fun beginAuthenticationRequest(): BeginSignInRequest{
         return authenticationRepository.getAuthenticationRequest()
     }
 

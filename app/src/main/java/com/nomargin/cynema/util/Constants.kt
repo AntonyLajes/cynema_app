@@ -10,6 +10,8 @@ object Constants {
         const val passwordShouldHaveMoreThanEightCharacters = 5
         const val theUserDidNotAcceptedTermsOfUseAndPrivacyPolicy = 6
         const val firebaseSignUpError = 7
+        const val firebaseCredentialAuthError = 8
+        const val apiException = 9
     }
 
     object MIN_LENGTH{

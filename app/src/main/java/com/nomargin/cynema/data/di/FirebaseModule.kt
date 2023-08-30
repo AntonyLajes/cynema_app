@@ -1,7 +1,7 @@
 package com.nomargin.cynema.data.di
 
-import com.nomargin.cynema.data.remote.firebase.signin.FirebaseAuthUseCase
-import com.nomargin.cynema.data.remote.firebase.signin.FirebaseAuthUseCaseImpl
+import com.nomargin.cynema.data.remote.firebase.authentication.FirebaseAuthUseCase
+import com.nomargin.cynema.data.remote.firebase.authentication.FirebaseAuthUseCaseImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

@@ -1,13 +1,18 @@
 package com.nomargin.cynema.ui.fragment.sign_up_fragment
 
+import android.app.Activity
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
@@ -15,6 +20,10 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import com.google.android.gms.auth.api.identity.BeginSignInRequest
+import com.google.android.gms.auth.api.identity.Identity
+import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.nomargin.cynema.R
@@ -23,9 +32,10 @@ import com.nomargin.cynema.databinding.FragmentSignUpBinding
 import com.nomargin.cynema.util.Constants
 import com.nomargin.cynema.util.StatusModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class SignUpFragment : Fragment() {
+class SignUpFragment : Fragment(), View.OnClickListener {
 
     private val signUpViewModel: SignUpViewModel by viewModels()
     private var _binding: FragmentSignUpBinding? = null
@@ -36,7 +46,17 @@ class SignUpFragment : Fragment() {
     private val emailLayout: TextInputLayout by lazy { binding.emailInputLayout }
     private val passwordLayout: TextInputLayout by lazy { binding.passwordInputLayout }
     private val confirmPasswordLayout: TextInputLayout by lazy { binding.confirmPasswordInputLayout }
-
+    private lateinit var oneTapClient: SignInClient
+    private lateinit var authenticationRequest: BeginSignInRequest
+    private val oneTapSignInResultLauncher: ActivityResultLauncher<IntentSenderRequest> =
+        registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                signUpViewModel.verifyIdToken(
+                    result,
+                    oneTapClient
+                )
+            }
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,8 +74,20 @@ class SignUpFragment : Fragment() {
         setMovementMethod()
     }
 
+    override fun onClick(view: View) {
+        when(view.id){
+            binding.buttonSignUp.id -> {
+                signUp()
+            }
+            binding.signUpWithGoogle.id -> {
+                initOneTapAuthentication()
+            }
+        }
+    }
+
     private fun initClicks() {
-        binding.buttonSignUp.setOnClickListener { signUp() }
+        binding.buttonSignUp.setOnClickListener(this)
+        binding.signUpWithGoogle.setOnClickListener(this)
     }
 
     private fun signUp() {
@@ -67,6 +99,23 @@ class SignUpFragment : Fragment() {
                 acceptedTermsAndPrivacyPolicy = binding.checkboxTermsConditionsPrivacyPolicy.isChecked
             )
         )
+    }
+
+    private fun initOneTapAuthentication() {
+        oneTapClient = Identity.getSignInClient(requireActivity())
+        lifecycleScope.launch {
+            authenticationRequest = signUpViewModel.beginAuthenticationRequest()
+            oneTapClient.beginSignIn(authenticationRequest)
+                .addOnSuccessListener(requireActivity()) { result ->
+                    val intentSenderRequest =
+                        IntentSenderRequest.Builder(result.pendingIntent.intentSender).build()
+                    oneTapSignInResultLauncher.launch(intentSenderRequest)
+                }
+                .addOnFailureListener(requireActivity()) { e ->
+                    // No Google Accounts found. Just continue presenting the signed-out UI.
+                    e.localizedMessage?.let { Log.d("authenticationRequest", it) }
+                }
+        }
     }
 
     private fun observers() {

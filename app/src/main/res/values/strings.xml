@@ -42,6 +42,9 @@
     <string name="confirm_password_field_is_empty">Insert a confirm password!</string>
     <string name="password_do_not_match">Password don\'t match!</string>
     <string name="sign_up_with_successfully">Successfully Registered!</string>
+    <string name="auth_with_successfully">Authenticated with Success!</string>
+    <string name="auth_failed">Authentication failed.</string>
+    <string name="no_id_token">No ID Token</string>
     <string name="welcome_back">Welcome back!</string>
     <string name="enter_your_credentials_to_continue">Enter your credentials to continue.</string>
     <string name="create_your_account">Create your account!</string>
@@ -55,4 +58,7 @@
     <string name="the_passwords_do_not_match">The passwords don\'t match</string>
     <string name="unknown_error">A unknown error occurred.</string>
     <string name="terms_of_use_and_privacy_policy_did_not_accepted">You cannot continue without accepting our Terms of Use and Privacy Policy</string>
+    <string name="one_tap_dialog_was_closed">One-tap dialog was closed.</string>
+    <string name="one_tap_encountered_a_network_error">One-tap encountered a network error.</string>
+    <string name="couldn_t_get_credential_from_result">Could not get credential from result.</string>
 </resources>
