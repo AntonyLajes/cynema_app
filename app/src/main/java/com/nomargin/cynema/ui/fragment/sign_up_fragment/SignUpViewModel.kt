@@ -23,8 +23,8 @@ class SignUpViewModel @Inject constructor(
     private val authenticationRepository: AuthenticationRepository
 ) : ViewModel() {
 
-    private var _attributesStatus: MutableLiveData<StatusModel> = MutableLiveData()
-    val attributesStatus: LiveData<StatusModel> = _attributesStatus
+    private var _attributesStatus: MutableLiveData<StatusModel?> = MutableLiveData()
+    val attributesStatus: LiveData<StatusModel?> = _attributesStatus
     private var _oneTapStatus: MutableLiveData<StatusModel> = MutableLiveData()
     val oneTapStatus: LiveData<StatusModel> = _oneTapStatus
     fun signUp(signUpModel: SignUpModel) = viewModelScope.launch {

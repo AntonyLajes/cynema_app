@@ -15,7 +15,6 @@ import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
@@ -31,6 +30,7 @@ import com.nomargin.cynema.data.remote.entity.SignUpModel
 import com.nomargin.cynema.databinding.FragmentSignUpBinding
 import com.nomargin.cynema.util.Constants
 import com.nomargin.cynema.util.StatusModel
+import com.nomargin.cynema.util.TextInputLayoutExtensions.setFieldError
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -125,6 +125,11 @@ class SignUpFragment : Fragment(), View.OnClickListener {
             }
             fieldsHandler(status)
         }
+        signUpViewModel.oneTapStatus.observe(viewLifecycleOwner){resultStatus ->
+            if(resultStatus.isValid){
+                makeToast(resultStatus.message)
+            }
+        }
     }
 
     private fun makeToast(message: Int) {
@@ -166,7 +171,7 @@ class SignUpFragment : Fragment(), View.OnClickListener {
                         requireContext().getString(value.message)
                 }
 
-                Constants.ERROR_TYPES.firebaseSignUpError -> {
+                Constants.ERROR_TYPES.firebaseAuthError -> {
                     makeToast(value.message)
                 }
             }
@@ -206,16 +211,6 @@ class SignUpFragment : Fragment(), View.OnClickListener {
     private fun setMovementMethod(){
         binding.checkboxTermsConditionsPrivacyPolicy.movementMethod = LinkMovementMethod.getInstance()
         binding.checkboxTermsConditionsPrivacyPolicy.setLinkTextColor(ContextCompat.getColor(requireContext(), R.color.color_primary))
-    }
-
-    private fun TextInputLayout.setFieldError(@StringRes error: Int?) {
-        this.error = if (error != null) {
-            this.isErrorEnabled = true
-            requireContext().getString(error)
-        } else {
-            this.isErrorEnabled = false
-            null
-        }
     }
 
     private fun TextView.changeTextColor(@ColorRes color: Int) {

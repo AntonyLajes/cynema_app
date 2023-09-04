@@ -39,10 +39,12 @@
             android:layout_marginVertical="8dp"
             android:drawableStart="@drawable/ic_google"
             android:text="@string/sign_in_with_google"
-            app:layout_constraintBottom_toTopOf="@id/sign_in_with_facebook"
+            app:layout_constraintBottom_toTopOf="@id/or_signup_with"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/label_welcome_back_subtitle" />
+
+        <!--
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/sign_in_with_facebook"
@@ -54,6 +56,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/sign_in_with_google" />
+
+        -->
 
         <com.google.android.material.divider.MaterialDivider
             android:id="@+id/start_divider"
@@ -76,7 +80,7 @@
             app:layout_constraintBottom_toTopOf="@id/email_input_layout"
             app:layout_constraintEnd_toStartOf="@id/end_divider"
             app:layout_constraintStart_toEndOf="@id/start_divider"
-            app:layout_constraintTop_toBottomOf="@id/sign_in_with_facebook" />
+            app:layout_constraintTop_toBottomOf="@id/sign_in_with_google" />
 
         <com.google.android.material.divider.MaterialDivider
             android:id="@+id/end_divider"

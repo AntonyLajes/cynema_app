@@ -56,9 +56,26 @@
     <string name="please_insert_a_password">Please, insert a password.</string>
     <string name="please_confirm_your_password">Please, confirm your password.</string>
     <string name="the_passwords_do_not_match">The passwords don\'t match</string>
-    <string name="unknown_error">A unknown error occurred.</string>
+    <string name="unknown_error">An unknown error occurred.</string>
     <string name="terms_of_use_and_privacy_policy_did_not_accepted">You cannot continue without accepting our Terms of Use and Privacy Policy</string>
     <string name="one_tap_dialog_was_closed">One-tap dialog was closed.</string>
     <string name="one_tap_encountered_a_network_error">One-tap encountered a network error.</string>
     <string name="couldn_t_get_credential_from_result">Could not get credential from result.</string>
+    <string name="all_fields_are_checked">All fields are checked.</string>
+    <string name="error_login_custom_token">The custom token format is incorrect. Please check the documentation.</string>
+    <string name="error_login_custom_token_mismatch">The custom token corresponds to a different audience.</string>
+    <string name="error_login_credential_malformed_or_expired">The supplied auth credential is malformed or has expired.</string>
+    <string name="error_login_invalid_email">Insert a valid email.</string>
+    <string name="error_login_wrong_password">Your password is wrong.</string>
+    <string name="error_login_user_mismatch">The supplied credentials do not correspond to the previously signed in user.</string>
+    <string name="error_login_requires_recent_login">This operation is sensitive and requires recent authentication. Log in again before retrying this request.</string>
+    <string name="error_login_accounts_exits_with_different_credential">An account already exists with the same email address but different sign-in credentials. Sign in using a provider associated with this email address.</string>
+    <string name="error_login_email_already_in_use">The email address is already in use by another account.</string>
+    <string name="error_login_credential_already_in_use">This credential is already associated with a different user account.</string>
+    <string name="error_login_user_disabled">The user account has been disabled by an administrator.</string>
+    <string name="error_login_user_not_found">There is no user record corresponding to this email.</string>
+    <string name="error_login_operation_not_allowed">This operation is not allowed. You must enable this service in the console.</string>
+    <string name="error_login_password_is_weak">The given password is invalid.</string>
+    <string name="error_login_user_token_expired">The user\'s credential is no longer valid. The user must sign in again</string>
+    <string name="error_login_invalid_user_token">The user\'s credential is no longer valid. The user must sign in again.</string>
 </resources>
