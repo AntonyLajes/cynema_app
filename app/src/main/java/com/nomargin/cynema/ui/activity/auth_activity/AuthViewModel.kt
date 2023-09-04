@@ -1,4 +1,4 @@
-package com.nomargin.cynema.ui.fragment.sign_in_fragment
+package com.nomargin.cynema.ui.activity.auth_activity
 
 import androidx.activity.result.ActivityResult
 import androidx.lifecycle.LiveData
@@ -10,7 +10,6 @@ import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.nomargin.cynema.R
-import com.nomargin.cynema.data.remote.entity.SignInModel
 import com.nomargin.cynema.data.repository.AuthenticationRepository
 import com.nomargin.cynema.util.Constants
 import com.nomargin.cynema.util.StatusModel
@@ -19,16 +18,14 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SignInViewModel @Inject constructor(
+class AuthViewModel @Inject constructor(
     private val authenticationRepository: AuthenticationRepository
 ) : ViewModel() {
 
     private var _oneTapStatus: MutableLiveData<StatusModel> = MutableLiveData()
     val oneTapStatus: LiveData<StatusModel> = _oneTapStatus
-    private var _attributesStatus: MutableLiveData<StatusModel?> = MutableLiveData()
-    val attributesStatus: LiveData<StatusModel?> = _attributesStatus
 
-    suspend fun beginAuthenticationRequest(): BeginSignInRequest {
+    suspend fun beginAuthenticationRequest(): BeginSignInRequest{
         return authenticationRepository.getAuthenticationRequest()
     }
 
@@ -74,8 +71,4 @@ class SignInViewModel @Inject constructor(
         }
     }
 
-    fun signIn(signInModel: SignInModel) = viewModelScope.launch {
-        val result = authenticationRepository.signIn(signInModel)
-            _attributesStatus.value = result.statusModel
-    }
 }

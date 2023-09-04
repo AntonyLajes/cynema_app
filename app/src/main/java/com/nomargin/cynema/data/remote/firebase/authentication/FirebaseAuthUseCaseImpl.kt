@@ -1,4 +1,4 @@
-package com.nomargin.cynema.data.remote.firebase.signin
+package com.nomargin.cynema.data.remote.firebase.authentication
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth

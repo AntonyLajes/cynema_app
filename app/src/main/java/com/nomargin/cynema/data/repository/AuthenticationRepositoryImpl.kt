@@ -1,8 +1,15 @@
 package com.nomargin.cynema.data.repository
 
+import android.util.Log
+import com.google.android.gms.auth.api.identity.BeginSignInRequest
+import com.google.android.gms.auth.api.identity.SignInCredential
+import com.google.firebase.auth.FirebaseAuthException
+import com.google.firebase.auth.GoogleAuthProvider
 import com.nomargin.cynema.R
+import com.nomargin.cynema.data.remote.entity.SignInModel
 import com.nomargin.cynema.data.remote.entity.SignUpModel
-import com.nomargin.cynema.data.remote.firebase.signin.FirebaseAuthUseCase
+import com.nomargin.cynema.data.remote.firebase.authentication.FirebaseAuthUseCase
+import com.nomargin.cynema.data.remote.google.AuthenticationRequestUseCase
 import com.nomargin.cynema.data.usecase.ValidateAttributesUseCase
 import com.nomargin.cynema.util.Constants
 import com.nomargin.cynema.util.Resource
@@ -12,31 +19,163 @@ import javax.inject.Inject
 
 class AuthenticationRepositoryImpl @Inject constructor(
     private val firebaseAuth: FirebaseAuthUseCase,
-    private val validateAttributes: ValidateAttributesUseCase
+    private val validateAttributes: ValidateAttributesUseCase,
+    private val authenticationRequestUseCaseImpl: AuthenticationRequestUseCase
 ) : AuthenticationRepository {
 
-    private lateinit var resultTask: Resource<StatusModel>
+    private lateinit var resultSignUpTask: Resource<StatusModel>
+    private lateinit var resultSignInTask: Resource<StatusModel>
 
     override suspend fun signUp(signUpModel: SignUpModel): Resource<StatusModel> {
-        val validatedAttributes = validateAttributes.validateAttributes(signUpModel)
-        return if (validatedAttributes.isValid) {
-                try{
-                    firebaseAuth.getFirebaseAuth()
-                        .createUserWithEmailAndPassword(signUpModel.email, signUpModel.password)
-                        .addOnCompleteListener { task ->
-                            resultTask = if(task.isSuccessful){
-                                Resource.success(null, validatedAttributes)
-                            }else{
-                                Resource.error(task.exception?.message ?: "Error", null, StatusModel(false, Constants.ERROR_TYPES.firebaseSignUpError, R.string.unknown_error))
-                            }
-                        }.await()
-                    resultTask
-                }catch (e: Exception){
-                    Resource.error(e.message ?: "Error", null, StatusModel(false, Constants.ERROR_TYPES.firebaseSignUpError, R.string.unknown_error))
-                }
-        }else{
-            Resource.error(msg = "Error", data = null, statusModel = validatedAttributes)
+        val validatedSignUpAttributes = validateAttributes.validateSignUpAttributes(signUpModel)
+        if (validatedSignUpAttributes.isValid) {
+            try {
+                firebaseAuth.getFirebaseAuth().createUserWithEmailAndPassword(
+                    signUpModel.email,
+                    signUpModel.password
+                ).addOnSuccessListener {
+                    resultSignUpTask = Resource.success(
+                        null,
+                        StatusModel(
+                            true,
+                            null,
+                            R.string.sign_up_with_successfully
+                        )
+                    )
+                }.addOnFailureListener {
+                    resultSignUpTask = firebaseOnFailure(it)
+                }.await()
+            } catch (e: Exception) {
+                resultSignUpTask = catchError(e)
+            }
+        } else {
+            resultSignUpTask =
+                Resource.error(
+                    msg = "Error",
+                    data = null,
+                    statusModel = validatedSignUpAttributes
+                )
+        }
+        return resultSignUpTask
+    }
+
+    override suspend fun signIn(signInModel: SignInModel): Resource<StatusModel> {
+        val validatedSignInAttributes = validateAttributes.validateSignInAttributes(signInModel)
+        if (validatedSignInAttributes.isValid) {
+            try {
+                firebaseAuth.getFirebaseAuth().signInWithEmailAndPassword(
+                    signInModel.email,
+                    signInModel.password
+                ).addOnSuccessListener {
+                    resultSignInTask = Resource.success(
+                        null,
+                        StatusModel(
+                            true,
+                            null,
+                            R.string.auth_with_successfully
+                        )
+                    )
+                }.addOnFailureListener {
+                    resultSignInTask = firebaseOnFailure(it)
+                }.await()
+            } catch (e: Exception) {
+                resultSignInTask = catchError(e)
+            }
+        } else {
+            resultSignInTask =
+                Resource.error(msg = "Error", data = null, statusModel = validatedSignInAttributes)
+        }
+        return resultSignInTask
+    }
+
+    override suspend fun authWithCredential(credential: SignInCredential): Resource<StatusModel> {
+        val idToken = credential.googleIdToken
+        return when {
+            idToken != null -> {
+                val firebaseCredential = GoogleAuthProvider.getCredential(idToken, null)
+                firebaseAuth.getFirebaseAuth().signInWithCredential(firebaseCredential)
+                    .addOnCompleteListener { task ->
+                        resultSignUpTask = if (task.isSuccessful) {
+                            Resource.success(
+                                null,
+                                StatusModel(
+                                    true,
+                                    null,
+                                    R.string.auth_with_successfully
+                                )
+                            )
+                        } else {
+                            Log.w("firebaseAuth", "signInWithCredential:failure", task.exception)
+                            Resource.error(
+                                task.exception?.message.toString(),
+                                null,
+                                StatusModel(
+                                    false,
+                                    Constants.ERROR_TYPES.firebaseCredentialAuthError,
+                                    R.string.auth_failed
+                                )
+                            )
+                        }
+                    }.await()
+                resultSignUpTask
+            }
+
+            else -> {
+                // Shouldn't happen.
+                Resource.error(
+                    "No ID token!",
+                    null,
+                    StatusModel(
+                        false,
+                        Constants.ERROR_TYPES.firebaseCredentialAuthError,
+                        R.string.no_id_token
+                    )
+                )
+            }
         }
     }
 
+    override suspend fun getAuthenticationRequest(): BeginSignInRequest {
+        return authenticationRequestUseCaseImpl.getAuthenticationRequest()
+    }
+
+    private fun firebaseOnFailure(exception: Exception): Resource<StatusModel> {
+        return if (exception == FirebaseAuthException::class.java) {
+            val errorCode = (exception as FirebaseAuthException).errorCode
+            val errorMessage = Constants.AUTH_ERRORS.authErrors[errorCode] ?: R.string.unknown_error
+            Resource.error(
+                exception.message ?: "Error",
+                null,
+                StatusModel(
+                    false,
+                    Constants.ERROR_TYPES.firebaseAuthError,
+                    errorMessage
+                )
+            )
+        } else {
+            Resource.error(
+                exception.message ?: "Error",
+                null,
+                StatusModel(
+                    false,
+                    Constants.ERROR_TYPES.firebaseAuthError,
+                    R.string.unknown_error
+                )
+            )
+        }
+    }
+
+    private fun catchError(exception: Exception): Resource<StatusModel> {
+        val errorCode = (exception as FirebaseAuthException).errorCode
+        val errorMessage = Constants.AUTH_ERRORS.authErrors[errorCode] ?: R.string.unknown_error
+        return Resource.error(
+            exception.message ?: "Error",
+            null,
+            StatusModel(
+                false,
+                Constants.ERROR_TYPES.firebaseAuthError,
+                errorMessage
+            )
+        )
+    }
 }

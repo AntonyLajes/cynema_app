@@ -176,11 +176,13 @@
             android:src="@drawable/ic_google"
             app:chainUseRtl="true"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/sign_up_with_facebook"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/or_signup_with"
             app:layout_constraintVertical_bias="0" />
+
+        <!--
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/sign_up_with_facebook"
@@ -192,6 +194,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/sign_up_with_google"
             app:layout_constraintTop_toTopOf="@id/sign_up_with_google" />
+
+        -->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

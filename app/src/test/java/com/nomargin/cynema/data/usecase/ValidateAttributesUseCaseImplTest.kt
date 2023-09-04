@@ -20,7 +20,7 @@ class ValidateAttributesUseCaseImplTest {
     @Test
     fun `Empty email isn't valid`() {
         val signUpModel = SignUpModel("", "123456789", "123456789", true)
-        val result = validAttributesUseCase.validateAttributes(signUpModel)
+        val result = validAttributesUseCase.validateSignUpAttributes(signUpModel)
         assertThat(result)
             .isEqualTo(
                 StatusModel(
@@ -34,7 +34,7 @@ class ValidateAttributesUseCaseImplTest {
     @Test
     fun `Empty password isn't valid`() {
         val signUpModel = SignUpModel("email@email.com", "", "123456789", true)
-        val result = validAttributesUseCase.validateAttributes(signUpModel)
+        val result = validAttributesUseCase.validateSignUpAttributes(signUpModel)
         assertThat(result)
             .isEqualTo(
                 StatusModel(
@@ -48,7 +48,7 @@ class ValidateAttributesUseCaseImplTest {
     @Test
     fun `Empty confirm password isn't valid`() {
         val signUpModel = SignUpModel("email@email.com", "123456789", "", true)
-        val result = validAttributesUseCase.validateAttributes(signUpModel)
+        val result = validAttributesUseCase.validateSignUpAttributes(signUpModel)
         assertThat(result)
             .isEqualTo(
                 StatusModel(
@@ -62,7 +62,7 @@ class ValidateAttributesUseCaseImplTest {
     @Test
     fun `Password less than 8 characters isn't valid`() {
         val signUpModel = SignUpModel("email@email.com", "1234567", "1234567", true)
-        val result = validAttributesUseCase.validateAttributes(signUpModel)
+        val result = validAttributesUseCase.validateSignUpAttributes(signUpModel)
         assertThat(result)
             .isEqualTo(
                 StatusModel(
@@ -76,7 +76,7 @@ class ValidateAttributesUseCaseImplTest {
     @Test
     fun `Passwords don't match returns Resource-Error`() {
         val signUpModel = SignUpModel("email@email.com", "12345678", "1234567", true)
-        val result = validAttributesUseCase.validateAttributes(signUpModel)
+        val result = validAttributesUseCase.validateSignUpAttributes(signUpModel)
         assertThat(result)
             .isEqualTo(
                 StatusModel(
@@ -90,7 +90,7 @@ class ValidateAttributesUseCaseImplTest {
     @Test
     fun `User don't accepted the Terms of Use and Privacy Policy isn't valid`() {
         val signUpModel = SignUpModel("email@email.com", "12345678", "12345678", false)
-        val result = validAttributesUseCase.validateAttributes(signUpModel)
+        val result = validAttributesUseCase.validateSignUpAttributes(signUpModel)
         assertThat(result)
             .isEqualTo(
                 StatusModel(
@@ -104,7 +104,7 @@ class ValidateAttributesUseCaseImplTest {
     @Test
     fun `All requirements are OK is valid`() {
         val signUpModel = SignUpModel("email@email.com", "12345678", "12345678", false)
-        val result = validAttributesUseCase.validateAttributes(signUpModel)
+        val result = validAttributesUseCase.validateSignUpAttributes(signUpModel)
         assertThat(result)
             .isEqualTo(
                 StatusModel(

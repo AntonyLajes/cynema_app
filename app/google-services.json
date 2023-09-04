@@ -14,42 +14,13 @@
       },
       "oauth_client": [
         {
-          "client_id": "15708406258-368sflaqgi8nehfnqg3ol8s91r8tp6op.apps.googleusercontent.com",
+          "client_id": "15708406258-ddro042qk41uh0482ai7rh87app728ij.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.nomargin.cynema",
             "certificate_hash": "4f0e704179e19edd2c217b053c05cf859679d0b9"
           }
         },
-        {
-          "client_id": "15708406258-lf16c9clmi5c3je75jrta9mje8hdp43s.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyAN8fVqq-mv5Z2va1nt3-TLvmpHxI9X25A"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "15708406258-29uhfip821bmhc661ir7l34kqddpvumc.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:15708406258:android:b68e2339a8bf989e902b6b",
-        "android_client_info": {
-          "package_name": "com.nomargin.cynema_app"
-        }
-      },
-      "oauth_client": [
         {
           "client_id": "15708406258-lf16c9clmi5c3je75jrta9mje8hdp43s.apps.googleusercontent.com",
           "client_type": 3
