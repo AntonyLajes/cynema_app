@@ -4,7 +4,7 @@ import androidx.annotation.StringRes
 import com.nomargin.cynema.R
 import com.nomargin.cynema.data.remote.entity.SignUpModel
 import com.nomargin.cynema.util.Resource
-import com.nomargin.cynema.util.StatusModel
+import com.nomargin.cynema.util.model.StatusModel
 
 class FakeAuthenticationRepository: AuthenticationRepository {
 

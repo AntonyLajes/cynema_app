@@ -27,7 +27,8 @@ import com.nomargin.cynema.databinding.FragmentSignInBinding
 import com.nomargin.cynema.ui.activity.forgot_password_activity.ForgotPasswordActivity
 import com.nomargin.cynema.ui.activity.main_activity.MainActivity
 import com.nomargin.cynema.util.Constants
-import com.nomargin.cynema.util.TextInputLayoutExtensions.setFieldError
+import com.nomargin.cynema.util.FrequencyFunctions
+import com.nomargin.cynema.util.extension.TextInputLayoutExtensions.setFieldError
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -96,9 +97,13 @@ class SignInFragment : Fragment(), View.OnClickListener {
     }
 
     private fun observers() {
-        signInViewModel.oneTapStatus.observe(viewLifecycleOwner) { resultStatus ->
-            if (resultStatus.isValid) {
-                makeToast(resultStatus.message)
+        signInViewModel.oneTapStatus.observe(viewLifecycleOwner) { oneTapStatus ->
+            if (oneTapStatus.isValid) {
+                FrequencyFunctions.makeToast(requireContext(), oneTapStatus.message)
+                startActivity(Intent(requireContext(), MainActivity::class.java))
+                requireActivity().finish()
+            } else {
+                FrequencyFunctions.makeToast(requireContext(), oneTapStatus.message)
             }
         }
         signInViewModel.attributesStatus.observe(viewLifecycleOwner) { attributeStatus ->

@@ -1,6 +1,7 @@
 package com.nomargin.cynema.ui.fragment.sign_up_fragment
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
 import android.util.Log
@@ -8,14 +9,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.ColorRes
-import androidx.annotation.DrawableRes
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
@@ -28,9 +24,14 @@ import com.google.android.material.textfield.TextInputLayout
 import com.nomargin.cynema.R
 import com.nomargin.cynema.data.remote.entity.SignUpModel
 import com.nomargin.cynema.databinding.FragmentSignUpBinding
+import com.nomargin.cynema.ui.activity.main_activity.MainActivity
 import com.nomargin.cynema.util.Constants
-import com.nomargin.cynema.util.StatusModel
-import com.nomargin.cynema.util.TextInputLayoutExtensions.setFieldError
+import com.nomargin.cynema.util.FrequencyFunctions
+import com.nomargin.cynema.util.model.StatusModel
+import com.nomargin.cynema.util.extension.TextInputLayoutExtensions.setFieldError
+import com.nomargin.cynema.util.extension.TextViewExtensions.changeDrawableColor
+import com.nomargin.cynema.util.extension.TextViewExtensions.changeStartDrawable
+import com.nomargin.cynema.util.extension.TextViewExtensions.changeTextColor
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -75,10 +76,11 @@ class SignUpFragment : Fragment(), View.OnClickListener {
     }
 
     override fun onClick(view: View) {
-        when(view.id){
+        when (view.id) {
             binding.buttonSignUp.id -> {
                 signUp()
             }
+
             binding.signUpWithGoogle.id -> {
                 initOneTapAuthentication()
             }
@@ -119,21 +121,23 @@ class SignUpFragment : Fragment(), View.OnClickListener {
     }
 
     private fun observers() {
-        signUpViewModel.attributesStatus.observe(viewLifecycleOwner) { status ->
-            if (status.isValid) {
-                makeToast(status.message)
-            }
-            fieldsHandler(status)
-        }
-        signUpViewModel.oneTapStatus.observe(viewLifecycleOwner){resultStatus ->
-            if(resultStatus.isValid){
-                makeToast(resultStatus.message)
+        signUpViewModel.attributesStatus.observe(viewLifecycleOwner) { attributesStatus ->
+            attributesStatus?.let {
+                if (attributesStatus.isValid) {
+                    FrequencyFunctions.makeToast(requireContext(), attributesStatus.message)
+                }
+                fieldsHandler(attributesStatus)
             }
         }
-    }
-
-    private fun makeToast(message: Int) {
-        Toast.makeText(requireContext(), getString(message), Toast.LENGTH_SHORT).show()
+        signUpViewModel.oneTapStatus.observe(viewLifecycleOwner) { oneTapStatus ->
+            if (oneTapStatus.isValid) {
+                FrequencyFunctions.makeToast(requireContext(), oneTapStatus.message)
+                startActivity(Intent(requireContext(), MainActivity::class.java))
+                requireActivity().finish()
+            } else {
+                FrequencyFunctions.makeToast(requireContext(), oneTapStatus.message)
+            }
+        }
     }
 
     private fun fieldsHandler(value: StatusModel) {
@@ -170,9 +174,8 @@ class SignUpFragment : Fragment(), View.OnClickListener {
                     binding.checkboxTermsConditionsPrivacyPolicy.error =
                         requireContext().getString(value.message)
                 }
-
                 Constants.ERROR_TYPES.firebaseAuthError -> {
-                    makeToast(value.message)
+                    FrequencyFunctions.makeToast(requireContext(), value.message)
                 }
             }
         }
@@ -208,36 +211,16 @@ class SignUpFragment : Fragment(), View.OnClickListener {
             }
         }
     }
-    private fun setMovementMethod(){
-        binding.checkboxTermsConditionsPrivacyPolicy.movementMethod = LinkMovementMethod.getInstance()
-        binding.checkboxTermsConditionsPrivacyPolicy.setLinkTextColor(ContextCompat.getColor(requireContext(), R.color.color_primary))
-    }
 
-    private fun TextView.changeTextColor(@ColorRes color: Int) {
-        setTextColor(
+    private fun setMovementMethod() {
+        binding.checkboxTermsConditionsPrivacyPolicy.movementMethod =
+            LinkMovementMethod.getInstance()
+        binding.checkboxTermsConditionsPrivacyPolicy.setLinkTextColor(
             ContextCompat.getColor(
                 requireContext(),
-                color
+                R.color.color_primary
             )
         )
-    }
-
-    private fun TextView.changeDrawableColor(@ColorRes color: Int) {
-        compoundDrawables.filterNotNull()
-            .forEach { drawable ->
-                drawable.mutate()
-                drawable.setTint(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        color
-                    )
-                )
-            }
-    }
-
-    private fun TextView.changeStartDrawable(@DrawableRes drawable: Int) {
-        val imgDrawable = AppCompatResources.getDrawable(requireContext(), drawable)
-        setCompoundDrawablesWithIntrinsicBounds(imgDrawable, null, null, null)
     }
 
 }

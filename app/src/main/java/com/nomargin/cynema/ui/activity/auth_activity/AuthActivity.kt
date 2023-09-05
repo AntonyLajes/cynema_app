@@ -3,7 +3,6 @@ package com.nomargin.cynema.ui.activity.auth_activity
 import android.app.Activity
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -18,9 +17,11 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.nomargin.cynema.R
 import com.nomargin.cynema.databinding.ActivityAuthBinding
+import com.nomargin.cynema.ui.activity.main_activity.MainActivity
 import com.nomargin.cynema.ui.adapter.view_pager.ViewPagerAdapter
 import com.nomargin.cynema.ui.fragment.sign_in_fragment.SignInFragment
 import com.nomargin.cynema.ui.fragment.sign_up_fragment.SignUpFragment
+import com.nomargin.cynema.util.FrequencyFunctions
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -80,12 +81,13 @@ class AuthActivity : AppCompatActivity() {
         }
     }
 
-    private fun observers(){
-        authViewModel.oneTapStatus.observe(this){oneTapStatus ->
-            if(oneTapStatus.isValid){
-                Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show()
-            }else{
-                Log.d("oneTapError", oneTapStatus.message.toString())
+    private fun observers() {
+        authViewModel.oneTapStatus.observe(this) { oneTapStatus ->
+            if (oneTapStatus.isValid) {
+                FrequencyFunctions.makeToast(this, oneTapStatus.message)
+                FrequencyFunctions.startNewActivityFromCurrentActivity(this, MainActivity())
+            } else {
+                FrequencyFunctions.makeToast(this, oneTapStatus.message)
             }
         }
     }

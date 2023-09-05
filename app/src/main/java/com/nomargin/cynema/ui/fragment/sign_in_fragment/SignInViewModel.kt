@@ -13,7 +13,7 @@ import com.nomargin.cynema.R
 import com.nomargin.cynema.data.remote.entity.SignInModel
 import com.nomargin.cynema.data.repository.AuthenticationRepository
 import com.nomargin.cynema.util.Constants
-import com.nomargin.cynema.util.StatusModel
+import com.nomargin.cynema.util.model.StatusModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

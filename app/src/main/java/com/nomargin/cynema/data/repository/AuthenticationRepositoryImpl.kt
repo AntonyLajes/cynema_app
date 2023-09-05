@@ -4,6 +4,7 @@ import android.util.Log
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.SignInCredential
 import com.google.firebase.auth.FirebaseAuthException
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.nomargin.cynema.R
 import com.nomargin.cynema.data.remote.entity.SignInModel
@@ -13,7 +14,7 @@ import com.nomargin.cynema.data.remote.google.AuthenticationRequestUseCase
 import com.nomargin.cynema.data.usecase.ValidateAttributesUseCase
 import com.nomargin.cynema.util.Constants
 import com.nomargin.cynema.util.Resource
-import com.nomargin.cynema.util.StatusModel
+import com.nomargin.cynema.util.model.StatusModel
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -25,6 +26,30 @@ class AuthenticationRepositoryImpl @Inject constructor(
 
     private lateinit var resultSignUpTask: Resource<StatusModel>
     private lateinit var resultSignInTask: Resource<StatusModel>
+
+    override suspend fun verifyLogin(): Resource<FirebaseUser?> {
+        val currentUser = firebaseAuth.getFirebaseAuth().currentUser
+        return if (currentUser != null) {
+            Resource.success(
+                currentUser,
+                StatusModel(
+                    true,
+                    null,
+                    R.string.auth_with_successfully
+                )
+            )
+        } else {
+            Resource.error(
+                "User is not logged in",
+                null,
+                StatusModel(
+                    false,
+                    null,
+                    R.string.user_is_not_logged_in
+                )
+            )
+        }
+    }
 
     override suspend fun signUp(signUpModel: SignUpModel): Resource<StatusModel> {
         val validatedSignUpAttributes = validateAttributes.validateSignUpAttributes(signUpModel)

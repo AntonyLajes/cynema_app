@@ -21,6 +21,9 @@
             android:exported="false" />
         <activity
             android:name="com.nomargin.cynema.ui.activity.auth_activity.AuthActivity"
+            android:exported="false"/>
+        <activity
+            android:name="com.nomargin.cynema.ui.activity.splash_activity.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,9 +31,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.nomargin.cynema.ui.activity.splash_activity.SplashActivity"
-            android:exported="false" />
         <activity
             android:name="com.nomargin.cynema.ui.activity.main_activity.MainActivity"
             android:exported="false"/>
