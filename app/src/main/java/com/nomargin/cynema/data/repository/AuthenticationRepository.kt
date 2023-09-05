@@ -11,6 +11,7 @@ import com.nomargin.cynema.util.model.StatusModel
 
 interface AuthenticationRepository {
     suspend fun verifyLogin(): Resource<FirebaseUser?>
+    suspend fun sendPasswordResetEmail(email: String): Resource<StatusModel>
     suspend fun signUp(signUpModel: SignUpModel): Resource<StatusModel>
     suspend fun signIn(signInModel: SignInModel): Resource<StatusModel>
     suspend fun authWithCredential(credential: SignInCredential): Resource<StatusModel>

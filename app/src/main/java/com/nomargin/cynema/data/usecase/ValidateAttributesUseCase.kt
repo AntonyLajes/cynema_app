@@ -8,5 +8,6 @@ interface ValidateAttributesUseCase {
 
     fun validateSignUpAttributes(signUpModel: SignUpModel): StatusModel
     fun validateSignInAttributes(signInModel: SignInModel): StatusModel
+    fun validateSendPasswordResetEmailAttributes(email: String): StatusModel
 
 }

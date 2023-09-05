@@ -70,7 +70,7 @@ class ValidateAttributesUseCaseImpl @Inject constructor() : ValidateAttributesUs
     }
 
     override fun validateSignInAttributes(signInModel: SignInModel): StatusModel {
-        return when{
+        return when {
             signInModel.email.isEmpty() -> {
                 StatusModel(
                     isValid = false,
@@ -86,6 +86,7 @@ class ValidateAttributesUseCaseImpl @Inject constructor() : ValidateAttributesUs
                     R.string.password_field_is_empty
                 )
             }
+
             else -> {
                 StatusModel(
                     isValid = true,
@@ -93,6 +94,22 @@ class ValidateAttributesUseCaseImpl @Inject constructor() : ValidateAttributesUs
                     R.string.all_fields_are_checked
                 )
             }
+        }
+    }
+
+    override fun validateSendPasswordResetEmailAttributes(email: String): StatusModel {
+        return if (email.isEmpty()) {
+            StatusModel(
+                false,
+                Constants.ERROR_TYPES.emailFieldIsEmpty,
+                R.string.email_field_is_empty
+            )
+        } else {
+            StatusModel(
+                true,
+                null,
+                R.string.sent_password_reset_email_with_success
+            )
         }
     }
 }

@@ -26,6 +26,7 @@ class AuthenticationRepositoryImpl @Inject constructor(
 
     private lateinit var resultSignUpTask: Resource<StatusModel>
     private lateinit var resultSignInTask: Resource<StatusModel>
+    private lateinit var resultSendPasswordResetEmailTask: Resource<StatusModel>
 
     override suspend fun verifyLogin(): Resource<FirebaseUser?> {
         val currentUser = firebaseAuth.getFirebaseAuth().currentUser
@@ -188,6 +189,34 @@ class AuthenticationRepositoryImpl @Inject constructor(
                 )
             )
         }
+    }
+
+    override suspend fun sendPasswordResetEmail(email: String): Resource<StatusModel> {
+        val validateSendPasswordResetEmailCredential =
+            validateAttributes.validateSendPasswordResetEmailAttributes(email)
+        if (validateSendPasswordResetEmailCredential.isValid) {
+            try {
+                firebaseAuth.getFirebaseAuth().sendPasswordResetEmail(
+                    email
+                ).addOnSuccessListener {
+                    resultSendPasswordResetEmailTask = Resource.success(
+                        null,
+                        StatusModel(
+                            true,
+                            null,
+                            R.string.sent_password_reset_email_with_success
+                        )
+                    )
+                }.addOnFailureListener {
+                    resultSendPasswordResetEmailTask = firebaseOnFailure(it)
+                }.await()
+            } catch (e: Exception) {
+                resultSendPasswordResetEmailTask = catchError(e)
+            }
+        } else {
+            resultSendPasswordResetEmailTask = Resource.error(msg = "Error", data = null, statusModel = validateSendPasswordResetEmailCredential)
+        }
+        return resultSendPasswordResetEmailTask
     }
 
     private fun catchError(exception: Exception): Resource<StatusModel> {
