@@ -1,4 +1,4 @@
-package com.nomargin.cynema.util
+package com.nomargin.cynema.util.model
 
 import androidx.annotation.StringRes
 

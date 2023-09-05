@@ -6,7 +6,7 @@ import com.nomargin.cynema.data.remote.entity.SignUpModel
 import com.nomargin.cynema.data.repository.FakeAuthenticationRepository
 import com.nomargin.cynema.util.Constants
 import com.nomargin.cynema.util.Resource
-import com.nomargin.cynema.util.StatusModel
+import com.nomargin.cynema.util.model.StatusModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Before

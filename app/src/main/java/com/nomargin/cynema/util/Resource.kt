@@ -1,5 +1,7 @@
 package com.nomargin.cynema.util
 
+import com.nomargin.cynema.util.model.StatusModel
+
 data class Resource<out T>(val status: Status, val data: T?, val message: String?, val statusModel: StatusModel?) {
     companion object {
         fun <T> success(data: T?, statusModel: StatusModel?): Resource<T> {

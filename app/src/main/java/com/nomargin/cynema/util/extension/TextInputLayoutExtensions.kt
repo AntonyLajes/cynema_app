@@ -1,4 +1,4 @@
-package com.nomargin.cynema.util
+package com.nomargin.cynema.util.extension
 
 import androidx.annotation.StringRes
 import com.google.android.material.textfield.TextInputLayout
