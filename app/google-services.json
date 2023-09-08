@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "15708406258-gvic438ug6d0hpcl3h0jc1l7fo45er7h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nomargin.cynema",
+            "certificate_hash": "5c9b45722ef94e8f6097be4762b8a75aa164ab4b"
+          }
+        },
+        {
           "client_id": "15708406258-lf16c9clmi5c3je75jrta9mje8hdp43s.apps.googleusercontent.com",
           "client_type": 3
         }
