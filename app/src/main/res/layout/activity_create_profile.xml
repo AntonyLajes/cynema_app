@@ -4,6 +4,154 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingHorizontal="16dp"
     tools:context=".ui.activity.create_profile_activity.CreateProfileActivity">
+
+    <ImageView
+        android:id="@+id/cynema_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:contentDescription="@string/cynema_logo_image"
+        android:src="@drawable/ic_cynema_logo"
+        app:layout_constraintBottom_toTopOf="@id/text_screen_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text_screen_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/about_you"
+        android:textColor="@color/custom_black"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@id/text_screen_subtitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cynema_logo" />
+
+    <TextView
+        android:id="@+id/text_screen_subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/lets_create_your_profile"
+        android:textColor="@color/custom_bold_grey"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_screen_title" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/profile_image"
+        style="@style/CircleImageView"
+        android:layout_width="88dp"
+        android:layout_height="88dp"
+        android:layout_marginVertical="32dp"
+        android:background="@drawable/stroked_circle"
+        android:scaleType="centerInside"
+        app:chainUseRtl="true"
+        app:layout_constraintBottom_toTopOf="@id/fist_name_input_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:srcCompat="@drawable/ic_profile_image" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/pick_profile_image"
+        style="@style/CircleImageView"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="@drawable/solid_circle"
+        android:scaleType="centerInside"
+        app:layout_constraintBottom_toBottomOf="@id/profile_image"
+        app:layout_constraintEnd_toEndOf="@id/profile_image"
+        app:layout_constraintStart_toStartOf="@id/profile_image"
+        app:layout_constraintTop_toBottomOf="@id/profile_image"
+        app:srcCompat="@drawable/ic_pen_edit" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/fist_name_input_layout"
+        style="@style/CustomInputTextLayoutWithPadding"
+        android:hint="@string/your_first_name"
+        app:endIconMode="clear_text"
+        app:layout_constraintBottom_toTopOf="@id/last_name_input_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/profile_image"
+        app:startIconDrawable="@drawable/ic_person">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/first_name_input"
+            style="@style/CustomInputText"
+            android:inputType="text" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/last_name_input_layout"
+        style="@style/CustomInputTextLayoutWithPadding"
+        android:hint="@string/your_last_name"
+        app:endIconMode="clear_text"
+        app:layout_constraintBottom_toTopOf="@id/username_input_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fist_name_input_layout"
+        app:startIconDrawable="@drawable/ic_person">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/last_name_input"
+            style="@style/CustomInputText"
+            android:inputType="text" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/username_input_layout"
+        style="@style/CustomInputTextLayoutWithPadding"
+        android:hint="@string/your_username"
+        app:endIconMode="clear_text"
+        app:layout_constraintBottom_toTopOf="@id/bio_input_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/last_name_input_layout"
+        app:startIconDrawable="@drawable/ic_at_sign">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/username_input"
+            style="@style/CustomInputText"
+            android:inputType="text" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/bio_input_layout"
+        style="@style/CustomInputTextLayoutWithPadding"
+        android:hint="@string/your_biography"
+        app:endIconMode="clear_text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/username_input_layout"
+        app:startIconDrawable="@drawable/ic_book_bio">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/bio_input"
+            style="@style/CustomInputText"
+            android:inputType="text" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button_finish_profile"
+        style="@style/CustomProviderButton"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/color_primary"
+        android:text="@string/finish"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintStart_toStartOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

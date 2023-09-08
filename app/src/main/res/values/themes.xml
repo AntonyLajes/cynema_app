@@ -40,6 +40,20 @@
         <item name="hintTextColor">@color/custom_bold_grey</item>
     </style>
 
+    <style name="CustomInputTextLayoutWithPadding" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:paddingVertical" tools:targetApi="o">4dp</item>
+        <item name="boxBackgroundColor">@color/custom_low_white</item>
+        <item name="boxCornerRadiusBottomEnd">16dp</item>
+        <item name="boxCornerRadiusBottomStart">16dp</item>
+        <item name="boxCornerRadiusTopEnd">16dp</item>
+        <item name="boxCornerRadiusTopStart">16dp</item>
+        <item name="boxStrokeColor">@color/custom_bold_grey</item>
+        <item name="hintTextColor">@color/custom_bold_grey</item>
+    </style>
+
     <style name="CustomInputText" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -85,6 +99,11 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@drawable/bg_image_button</item>
         <item name="android:padding">16dp</item>
+    </style>
+
+    <style name="CircleImageView" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
     </style>
 
 </resources>
