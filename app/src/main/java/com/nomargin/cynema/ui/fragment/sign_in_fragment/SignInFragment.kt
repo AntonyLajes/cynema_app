@@ -22,7 +22,7 @@ import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.identity.SignInClient
 import com.nomargin.cynema.R
-import com.nomargin.cynema.data.remote.entity.SignInModel
+import com.nomargin.cynema.util.model.SignInModel
 import com.nomargin.cynema.databinding.FragmentSignInBinding
 import com.nomargin.cynema.ui.activity.forgot_password_activity.ForgotPasswordActivity
 import com.nomargin.cynema.ui.activity.main_activity.MainActivity

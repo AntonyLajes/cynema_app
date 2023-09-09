@@ -2,7 +2,7 @@ package com.nomargin.cynema.ui.fragment.sign_up_fragment
 
 import com.google.common.truth.Truth.assertThat
 import com.nomargin.cynema.R
-import com.nomargin.cynema.data.remote.entity.SignUpModel
+import com.nomargin.cynema.util.model.SignUpModel
 import com.nomargin.cynema.data.repository.FakeAuthenticationRepository
 import com.nomargin.cynema.util.Constants
 import com.nomargin.cynema.util.Resource

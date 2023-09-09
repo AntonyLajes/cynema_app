@@ -14,6 +14,9 @@ object Constants {
         const val firebaseAuthError = 7
         const val firebaseCredentialAuthError = 8
         const val apiException = 9
+        const val firstNameIsEmpty = 10
+        const val lastNameIsEmpty = 11
+        const val usernameIsEmpty = 12
     }
 
     object AUTH_ERRORS{

@@ -1,10 +1,11 @@
 package com.nomargin.cynema.data.usecase
 
 import com.nomargin.cynema.R
-import com.nomargin.cynema.data.remote.entity.SignInModel
-import com.nomargin.cynema.data.remote.entity.SignUpModel
+import com.nomargin.cynema.util.model.SignInModel
+import com.nomargin.cynema.util.model.SignUpModel
 import com.nomargin.cynema.util.Constants
 import com.nomargin.cynema.util.model.StatusModel
+import com.nomargin.cynema.util.model.UserProfileModel
 import javax.inject.Inject
 
 class ValidateAttributesUseCaseImpl @Inject constructor() : ValidateAttributesUseCase {
@@ -110,6 +111,39 @@ class ValidateAttributesUseCaseImpl @Inject constructor() : ValidateAttributesUs
                 null,
                 R.string.sent_password_reset_email_with_success
             )
+        }
+    }
+
+    override fun validateUserProfile(userProfileModel: UserProfileModel): StatusModel {
+        return when{
+            userProfileModel.userFirstName.isEmpty() -> {
+                StatusModel(
+                    false,
+                    Constants.ERROR_TYPES.firstNameIsEmpty,
+                    R.string.first_name_is_empty
+                )
+            }
+            userProfileModel.userLastName.isEmpty() -> {
+                StatusModel(
+                    false,
+                    Constants.ERROR_TYPES.lastNameIsEmpty,
+                    R.string.last_name_is_empty
+                )
+            }
+            userProfileModel.userUsername.isEmpty() -> {
+                StatusModel(
+                    false,
+                    Constants.ERROR_TYPES.usernameIsEmpty,
+                    R.string.username_is_empty
+                )
+            }
+            else -> {
+                StatusModel(
+                    true,
+                    null,
+                    R.string.all_fields_are_checked
+                )
+            }
         }
     }
 }

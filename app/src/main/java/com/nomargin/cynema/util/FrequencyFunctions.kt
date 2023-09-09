@@ -3,8 +3,12 @@ package com.nomargin.cynema.util
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
 import android.widget.Toast
 import androidx.annotation.StringRes
+import androidx.appcompat.app.AlertDialog
+import com.nomargin.cynema.R
 
 object FrequencyFunctions {
 

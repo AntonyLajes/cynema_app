@@ -22,7 +22,7 @@ import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.nomargin.cynema.R
-import com.nomargin.cynema.data.remote.entity.SignUpModel
+import com.nomargin.cynema.util.model.SignUpModel
 import com.nomargin.cynema.databinding.FragmentSignUpBinding
 import com.nomargin.cynema.ui.activity.main_activity.MainActivity
 import com.nomargin.cynema.util.Constants

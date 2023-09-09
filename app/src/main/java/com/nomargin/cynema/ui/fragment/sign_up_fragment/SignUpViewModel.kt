@@ -10,7 +10,7 @@ import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.nomargin.cynema.R
-import com.nomargin.cynema.data.remote.entity.SignUpModel
+import com.nomargin.cynema.util.model.SignUpModel
 import com.nomargin.cynema.data.repository.AuthenticationRepository
 import com.nomargin.cynema.util.Constants
 import com.nomargin.cynema.util.model.StatusModel

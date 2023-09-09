@@ -2,7 +2,7 @@ package com.nomargin.cynema.data.usecase
 
 import com.google.common.truth.Truth.assertThat
 import com.nomargin.cynema.R
-import com.nomargin.cynema.data.remote.entity.SignUpModel
+import com.nomargin.cynema.util.model.SignUpModel
 import com.nomargin.cynema.util.Constants
 import com.nomargin.cynema.util.model.StatusModel
 import org.junit.Before

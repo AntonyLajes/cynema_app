@@ -3,8 +3,8 @@ package com.nomargin.cynema.data.repository
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.SignInCredential
 import com.google.firebase.auth.FirebaseUser
-import com.nomargin.cynema.data.remote.entity.SignInModel
-import com.nomargin.cynema.data.remote.entity.SignUpModel
+import com.nomargin.cynema.util.model.SignInModel
+import com.nomargin.cynema.util.model.SignUpModel
 import com.nomargin.cynema.util.Resource
 import com.nomargin.cynema.util.model.StatusModel
 

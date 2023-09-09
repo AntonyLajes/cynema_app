@@ -7,8 +7,8 @@ import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.nomargin.cynema.R
-import com.nomargin.cynema.data.remote.entity.SignInModel
-import com.nomargin.cynema.data.remote.entity.SignUpModel
+import com.nomargin.cynema.util.model.SignInModel
+import com.nomargin.cynema.util.model.SignUpModel
 import com.nomargin.cynema.data.remote.firebase.authentication.FirebaseAuthUseCase
 import com.nomargin.cynema.data.remote.google.AuthenticationRequestUseCase
 import com.nomargin.cynema.data.usecase.ValidateAttributesUseCase

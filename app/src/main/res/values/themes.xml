@@ -101,9 +101,4 @@
         <item name="android:padding">16dp</item>
     </style>
 
-    <style name="CircleImageView" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">50%</item>
-    </style>
-
 </resources>

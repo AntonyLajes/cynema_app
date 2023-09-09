@@ -87,4 +87,11 @@
     <string name="your_username">Your username <font color='#FF9B3F'>*</font></string>
     <string name="your_biography">Your biography</string>
     <string name="finish">Finish</string>
+    <string name="permission_attention_advise">The app needs access to your gallery for this action. Do you want to allow it now?</string>
+    <string name="attention">Attention</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="first_name_is_empty">Insert your first name.</string>
+    <string name="last_name_is_empty">Insert your last name.</string>
+    <string name="username_is_empty">Insert your username.</string>
 </resources>

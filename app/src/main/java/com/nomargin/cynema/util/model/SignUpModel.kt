@@ -1,4 +1,4 @@
-package com.nomargin.cynema.data.remote.entity
+package com.nomargin.cynema.util.model
 
 data class SignUpModel(
     var email: String = "",
