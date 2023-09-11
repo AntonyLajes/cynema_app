@@ -96,4 +96,5 @@
     <string name="username_is_empty">Insert your username.</string>
     <string name="success">Success!</string>
     <string name="profile_updated_with_success">Profile updated with success!</string>
+    <string name="password_is_not_valid">The password isn\'t valid. Please follow the instructions.</string>
 </resources>

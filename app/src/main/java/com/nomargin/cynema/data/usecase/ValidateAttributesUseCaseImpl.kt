@@ -1,9 +1,9 @@
 package com.nomargin.cynema.data.usecase
 
 import com.nomargin.cynema.R
+import com.nomargin.cynema.util.Constants
 import com.nomargin.cynema.util.model.SignInModel
 import com.nomargin.cynema.util.model.SignUpModel
-import com.nomargin.cynema.util.Constants
 import com.nomargin.cynema.util.model.StatusModel
 import com.nomargin.cynema.util.model.UserProfileModel
 import javax.inject.Inject
@@ -49,6 +49,14 @@ class ValidateAttributesUseCaseImpl @Inject constructor() : ValidateAttributesUs
                     isValid = false,
                     Constants.ERROR_TYPES.passwordsDoNotMatch,
                     R.string.password_do_not_match
+                )
+            }
+
+            !Regex(Constants.REGEX.passwordRegexPattern).containsMatchIn(signUpModel.password) -> {
+                StatusModel(
+                    isValid = false,
+                    Constants.ERROR_TYPES.passwordsDoNotMatch,
+                    R.string.password_is_not_valid
                 )
             }
 

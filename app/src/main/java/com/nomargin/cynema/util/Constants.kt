@@ -18,6 +18,7 @@ object Constants {
         const val lastNameIsEmpty = 11
         const val usernameIsEmpty = 12
         const val firebaseStorageError = 13
+        const val passwordsIsNotValid = 14
     }
 
     object AUTH_ERRORS{
