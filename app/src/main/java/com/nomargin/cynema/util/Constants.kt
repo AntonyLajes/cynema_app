@@ -55,4 +55,8 @@ object Constants {
         const val profilePictureRoot = "/profile_picture/"
     }
 
+    object FIRESTORE {
+        const val usersCollection = "users"
+    }
+
 }
