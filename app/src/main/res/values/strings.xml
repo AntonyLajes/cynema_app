@@ -94,4 +94,6 @@
     <string name="first_name_is_empty">Insert your first name.</string>
     <string name="last_name_is_empty">Insert your last name.</string>
     <string name="username_is_empty">Insert your username.</string>
+    <string name="success">Success!</string>
+    <string name="profile_updated_with_success">Profile updated with success!</string>
 </resources>

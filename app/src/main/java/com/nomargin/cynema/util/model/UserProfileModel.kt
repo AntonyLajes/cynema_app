@@ -1,9 +1,9 @@
 package com.nomargin.cynema.util.model
 
-import android.graphics.Bitmap
+import android.net.Uri
 
 data class UserProfileModel(
-    val userProfilePictureBitMap: Bitmap,
+    val userProfileUri: Uri?,
     val userFirstName: String,
     val userLastName: String,
     val userUsername: String,
