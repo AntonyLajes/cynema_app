@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 class ProfileRepositoryImpl @Inject constructor(
     private val firebaseStorage: FirebaseStorageUseCase,
-    private val firebaseFirestore: FirebaseFirestoreUseCase,
+    firebaseFirestore: FirebaseFirestoreUseCase,
     private val firebaseAuth: FirebaseAuthUseCase,
     private val validateAttributes: ValidateAttributesUseCase,
 ) : ProfileRepository {
