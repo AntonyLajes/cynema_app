@@ -17,6 +17,7 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.nomargin.cynema.R
 import com.nomargin.cynema.databinding.ActivityAuthBinding
+import com.nomargin.cynema.ui.activity.create_profile_activity.CreateProfileActivity
 import com.nomargin.cynema.ui.activity.main_activity.MainActivity
 import com.nomargin.cynema.ui.adapter.view_pager.ViewPagerAdapter
 import com.nomargin.cynema.ui.fragment.sign_in_fragment.SignInFragment
@@ -84,11 +85,21 @@ class AuthActivity : AppCompatActivity() {
     private fun observers() {
         authViewModel.oneTapStatus.observe(this) { oneTapStatus ->
             if (oneTapStatus.isValid) {
-                FrequencyFunctions.makeToast(this, oneTapStatus.message)
-                FrequencyFunctions.startNewActivityFromCurrentActivity(this, MainActivity())
+                authViewModel.verifyIfProfileIsCreated()
             } else {
                 FrequencyFunctions.makeToast(this, oneTapStatus.message)
             }
         }
+        authViewModel.isProfileCreated.observe(this){isProfileCreated ->
+            if(isProfileCreated){
+                FrequencyFunctions.startNewActivityFromCurrentActivity(this, MainActivity())
+            }else{
+                FrequencyFunctions.startNewActivityFromCurrentActivity(
+                    this,
+                    CreateProfileActivity()
+                )
+            }
+        }
+
     }
 }

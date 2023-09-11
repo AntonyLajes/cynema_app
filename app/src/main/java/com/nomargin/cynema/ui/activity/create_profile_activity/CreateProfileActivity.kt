@@ -19,6 +19,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.nomargin.cynema.R
 import com.nomargin.cynema.databinding.ActivityCreateProfileBinding
+import com.nomargin.cynema.ui.activity.main_activity.MainActivity
 import com.nomargin.cynema.util.Constants
 import com.nomargin.cynema.util.FrequencyFunctions
 import com.nomargin.cynema.util.extension.TextInputLayoutExtensions.setFieldError
@@ -102,20 +103,21 @@ class CreateProfileActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun observers(){
-        createProfileViewModel.attributeStatus.observe(this){attributesStatus ->
-            attributesStatus?.let {
-                if (attributesStatus.isValid) {
-                    FrequencyFunctions.makeToast(this, attributesStatus.message)
+        createProfileViewModel.createProfileStatus.observe(this){createProfileStatus ->
+            createProfileStatus?.let {
+                if (createProfileStatus.isValid) {
+                    FrequencyFunctions.makeToast(this, createProfileStatus.message)
+                    FrequencyFunctions.startNewActivityFromCurrentActivity(this, MainActivity())
+                }else{
+                    FrequencyFunctions.makeToast(this, createProfileStatus.message)
                 }
-                fieldsHandler(attributesStatus)
+                fieldsHandler(createProfileStatus)
             }
         }
     }
 
     private fun fieldsHandler(value: StatusModel) {
-        if (value.isValid) {
-
-        } else {
+        if (!value.isValid) {
             when (value.errorType) {
                 Constants.ERROR_TYPES.firstNameIsEmpty -> {
                     firstNameInputLayout.setFieldError(value.message)

@@ -10,4 +10,6 @@ interface ProfileRepository {
     suspend fun createProfile(userProfileModel: UserProfileModel): Resource<StatusModel>
 
     suspend fun uploadProfilePicture(imageUri: Uri): Uri
+
+    suspend fun verifyProfile(): Boolean
 }

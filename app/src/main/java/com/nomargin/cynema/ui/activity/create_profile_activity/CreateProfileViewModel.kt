@@ -15,10 +15,10 @@ import javax.inject.Inject
 class CreateProfileViewModel @Inject constructor(
     private val profileRepository: ProfileRepository
 ): ViewModel() {
-    private var _attributeStatus:MutableLiveData<StatusModel> = MutableLiveData()
-    val attributeStatus: LiveData<StatusModel> = _attributeStatus
+    private var _createProfileStatus:MutableLiveData<StatusModel> = MutableLiveData()
+    val createProfileStatus: LiveData<StatusModel> = _createProfileStatus
     fun saveProfile(userProfileModel: UserProfileModel) = viewModelScope.launch {
-        _attributeStatus.value = profileRepository.createProfile(userProfileModel).statusModel!!
+        _createProfileStatus.value = profileRepository.createProfile(userProfileModel).statusModel!!
     }
 
 

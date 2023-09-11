@@ -1,7 +1,6 @@
 package com.nomargin.cynema.data.repository
 
 import android.net.Uri
-import android.util.Log
 import com.nomargin.cynema.R
 import com.nomargin.cynema.data.remote.firebase.authentication.FirebaseAuthUseCase
 import com.nomargin.cynema.data.remote.firebase.firestore.FirebaseFirestoreUseCase
@@ -22,13 +21,16 @@ class ProfileRepositoryImpl @Inject constructor(
 ) : ProfileRepository {
 
     private lateinit var createProfileResult: Resource<StatusModel>
+    private val database = firebaseFirestore.getFirebaseFirestore()
+        .collection(Constants.FIRESTORE.usersCollection)
+        .document(firebaseAuth.getFirebaseAuth().currentUser?.uid.toString())
 
     override suspend fun createProfile(userProfileModel: UserProfileModel): Resource<StatusModel> {
         val validateCreateProfileAttributes =
             validateAttributes.validateUserProfile(userProfileModel)
         if (validateCreateProfileAttributes.isValid) {
             val profilePictureLink = userProfileModel.userProfileUri?.let {
-                uploadProfilePicture(userProfileModel.userProfileUri)
+                uploadProfilePicture(it)
             } ?: ""
             val user = hashMapOf(
                 "user_id" to firebaseAuth.getFirebaseAuth().currentUser?.uid.toString(),
@@ -43,13 +45,8 @@ class ProfileRepositoryImpl @Inject constructor(
                 "user_is_profile_updated" to true,
             )
 
-            val database = firebaseFirestore.getFirebaseFirestore()
-                .collection(Constants.FIRESTORE.usersCollection)
-                .document(firebaseAuth.getFirebaseAuth().currentUser?.uid.toString())
-
             database.set(user)
-                .addOnSuccessListener { documentReference ->
-                    Log.d("createProfile", "createProfile: Success $documentReference")
+                .addOnSuccessListener {
                     createProfileResult = Resource.success(
                         null,
                         StatusModel(
@@ -59,7 +56,6 @@ class ProfileRepositoryImpl @Inject constructor(
                         )
                     )
                 }.addOnFailureListener {
-                    Log.d("createProfile", "createProfile: Failure $it")
                     createProfileResult = Resource.error(
                         "Error",
                         null,
@@ -93,5 +89,11 @@ class ProfileRepositoryImpl @Inject constructor(
             }
             profilePictureRef.downloadUrl
         }.addOnCompleteListener {}.await()
+    }
+
+    override suspend fun verifyProfile(): Boolean {
+            return database.get()
+            .addOnSuccessListener {}
+            .addOnFailureListener {}.await().exists()
     }
 }

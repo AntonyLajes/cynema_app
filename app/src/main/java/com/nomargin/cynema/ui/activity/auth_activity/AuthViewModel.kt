@@ -11,6 +11,7 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.nomargin.cynema.R
 import com.nomargin.cynema.data.repository.AuthenticationRepository
+import com.nomargin.cynema.data.repository.ProfileRepository
 import com.nomargin.cynema.util.Constants
 import com.nomargin.cynema.util.model.StatusModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,11 +20,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    private val authenticationRepository: AuthenticationRepository
+    private val authenticationRepository: AuthenticationRepository,
+    private val profileRepository: ProfileRepository
 ) : ViewModel() {
 
     private var _oneTapStatus: MutableLiveData<StatusModel> = MutableLiveData()
     val oneTapStatus: LiveData<StatusModel> = _oneTapStatus
+    private var _isProfileCreated: MutableLiveData<Boolean> = MutableLiveData()
+    val isProfileCreated: LiveData<Boolean> = _isProfileCreated
 
     suspend fun beginAuthenticationRequest(): BeginSignInRequest{
         return authenticationRepository.getAuthenticationRequest()
@@ -69,6 +73,10 @@ class AuthViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun verifyIfProfileIsCreated() = viewModelScope.launch {
+        _isProfileCreated.value = profileRepository.verifyProfile()
     }
 
 }

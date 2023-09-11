@@ -1,11 +1,12 @@
 package com.nomargin.cynema.ui.activity.splash_activity
 
 import android.annotation.SuppressLint
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import com.nomargin.cynema.databinding.ActivitySplashBinding
 import com.nomargin.cynema.ui.activity.auth_activity.AuthActivity
+import com.nomargin.cynema.ui.activity.create_profile_activity.CreateProfileActivity
 import com.nomargin.cynema.ui.activity.main_activity.MainActivity
 import com.nomargin.cynema.util.FrequencyFunctions.startNewActivityFromCurrentActivity
 import com.nomargin.cynema.util.Status
@@ -37,11 +38,18 @@ class SplashActivity : AppCompatActivity() {
         splashViewModel.currentUser.observe(this){status ->
             when(status){
                 Status.SUCCESS -> {
-                    startNewActivityFromCurrentActivity(this, MainActivity())
+                    splashViewModel.verifyIfProfileIsCreated()
                 }
                 else -> {
                     startNewActivityFromCurrentActivity(this, AuthActivity())
                 }
+            }
+        }
+        splashViewModel.isProfileCreated.observe(this){isProfileCreated ->
+            if(isProfileCreated){
+                startNewActivityFromCurrentActivity(this, MainActivity())
+            }else{
+                startNewActivityFromCurrentActivity(this, CreateProfileActivity())
             }
         }
     }
