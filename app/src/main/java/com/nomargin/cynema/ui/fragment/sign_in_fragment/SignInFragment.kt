@@ -22,13 +22,14 @@ import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.identity.SignInClient
 import com.nomargin.cynema.R
-import com.nomargin.cynema.util.model.SignInModel
 import com.nomargin.cynema.databinding.FragmentSignInBinding
+import com.nomargin.cynema.ui.activity.create_profile_activity.CreateProfileActivity
 import com.nomargin.cynema.ui.activity.forgot_password_activity.ForgotPasswordActivity
 import com.nomargin.cynema.ui.activity.main_activity.MainActivity
 import com.nomargin.cynema.util.Constants
 import com.nomargin.cynema.util.FrequencyFunctions
 import com.nomargin.cynema.util.extension.TextInputLayoutExtensions.setFieldError
+import com.nomargin.cynema.util.model.SignInModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -100,7 +101,7 @@ class SignInFragment : Fragment(), View.OnClickListener {
         signInViewModel.oneTapStatus.observe(viewLifecycleOwner) { oneTapStatus ->
             if (oneTapStatus.isValid) {
                 FrequencyFunctions.makeToast(requireContext(), oneTapStatus.message)
-                startActivity(Intent(requireContext(), MainActivity::class.java))
+                signInViewModel.verifyIfProfileIsCreated()
                 requireActivity().finish()
             } else {
                 FrequencyFunctions.makeToast(requireContext(), oneTapStatus.message)
@@ -126,6 +127,16 @@ class SignInFragment : Fragment(), View.OnClickListener {
                         }
                     }
                 }
+            }
+        }
+        signInViewModel.isProfileCreated.observe(viewLifecycleOwner){isProfileCreated ->
+            if(isProfileCreated){
+                FrequencyFunctions.startNewActivityFromCurrentActivity(requireActivity(), MainActivity())
+            }else{
+                FrequencyFunctions.startNewActivityFromCurrentActivity(
+                    requireActivity(),
+                    CreateProfileActivity()
+                )
             }
         }
     }
