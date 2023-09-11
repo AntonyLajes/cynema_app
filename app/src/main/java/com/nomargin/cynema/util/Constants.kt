@@ -17,6 +17,7 @@ object Constants {
         const val firstNameIsEmpty = 10
         const val lastNameIsEmpty = 11
         const val usernameIsEmpty = 12
+        const val firebaseStorageError = 13
     }
 
     object AUTH_ERRORS{
@@ -48,6 +49,14 @@ object Constants {
 
     object REGEX {
         const val passwordRegexPattern = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,64}"
+    }
+
+    object STORAGE {
+        const val profilePictureRoot = "/profile_picture/"
+    }
+
+    object FIRESTORE {
+        const val usersCollection = "users"
     }
 
 }

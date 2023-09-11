@@ -1,30 +1,30 @@
 package com.nomargin.cynema.ui.activity.create_profile_activity
 
 import android.Manifest
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.ImageDecoder
 import android.net.Uri
-import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.provider.Settings
 import android.util.Log
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.result.registerForActivityResult
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.widget.doAfterTextChanged
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.nomargin.cynema.R
 import com.nomargin.cynema.databinding.ActivityCreateProfileBinding
+import com.nomargin.cynema.util.Constants
+import com.nomargin.cynema.util.FrequencyFunctions
+import com.nomargin.cynema.util.extension.TextInputLayoutExtensions.setFieldError
+import com.nomargin.cynema.util.model.StatusModel
 import com.nomargin.cynema.util.model.UserProfileModel
 import dagger.hilt.android.AndroidEntryPoint
-import java.lang.Exception
-import java.security.Permission
 
 @AndroidEntryPoint
 class CreateProfileActivity : AppCompatActivity(), View.OnClickListener {
@@ -38,9 +38,15 @@ class CreateProfileActivity : AppCompatActivity(), View.OnClickListener {
             layoutInflater
         )
     }
+    private val firstNameInput: TextInputEditText by lazy {binding.firstNameInput}
+    private val lastNameInput: TextInputEditText by lazy {binding.lastNameInput}
+    private val usernameInput: TextInputEditText by lazy {binding.usernameInput}
+    private val firstNameInputLayout: TextInputLayout by lazy {binding.firstNameInputLayout}
+    private val lastNameInputLayout: TextInputLayout by lazy {binding.lastNameInputLayout}
+    private val usernameInputLayout: TextInputLayout by lazy {binding.usernameInputLayout}
     private val createProfileViewModel: CreateProfileViewModel by viewModels()
     private lateinit var alertDialog: AlertDialog
-    private lateinit var imageBitMap: Bitmap
+    private var imageUri: Uri? = null
     private val galleryRequest =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { permission ->
             if (permission) {
@@ -57,22 +63,10 @@ class CreateProfileActivity : AppCompatActivity(), View.OnClickListener {
     private val imagePickerResult =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             try {
-                imageBitMap = if (Build.VERSION.SDK_INT < 28) {
-                    MediaStore.Images.Media.getBitmap(
-                        baseContext.contentResolver,
-                        result.data?.data
-                    )
-                } else {
-                    val source = ImageDecoder.createSource(
-                        this.contentResolver,
-                        result.data?.data!!
-                    )
-                    ImageDecoder.decodeBitmap(source)
-                }
-
-                binding.profileImage.setImageBitmap(imageBitMap)
+                imageUri = result.data!!.data!!
+                binding.profileImage.setImageURI(imageUri)
             }catch (e: Exception){
-                Log.d("imageBitMap", "imageBitMap: $e")
+                Log.d("imageUri", "imageUri: $e")
             }
         }
 
@@ -83,6 +77,8 @@ class CreateProfileActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onResume() {
         super.onResume()
+        inputWatcher()
+        observers()
         initClicks()
     }
 
@@ -94,13 +90,62 @@ class CreateProfileActivity : AppCompatActivity(), View.OnClickListener {
             binding.buttonFinishProfile.id -> {
                 createProfileViewModel.saveProfile(
                     UserProfileModel(
-                        imageBitMap,
-                        binding.firstNameInput.text.toString(),
-                        binding.lastNameInput.text.toString(),
-                        binding.usernameInput.text.toString(),
+                        imageUri,
+                        firstNameInput.text.toString(),
+                        lastNameInput.text.toString(),
+                        usernameInput.text.toString(),
                         binding.bioInput.text.toString()
                     )
                 )
+            }
+        }
+    }
+
+    private fun observers(){
+        createProfileViewModel.attributeStatus.observe(this){attributesStatus ->
+            attributesStatus?.let {
+                if (attributesStatus.isValid) {
+                    FrequencyFunctions.makeToast(this, attributesStatus.message)
+                }
+                fieldsHandler(attributesStatus)
+            }
+        }
+    }
+
+    private fun fieldsHandler(value: StatusModel) {
+        if (value.isValid) {
+
+        } else {
+            when (value.errorType) {
+                Constants.ERROR_TYPES.firstNameIsEmpty -> {
+                    firstNameInputLayout.setFieldError(value.message)
+                }
+
+                Constants.ERROR_TYPES.lastNameIsEmpty -> {
+                    lastNameInputLayout.setFieldError(value.message)
+                }
+
+                Constants.ERROR_TYPES.usernameIsEmpty -> {
+                    usernameInputLayout.setFieldError(value.message)
+                }
+            }
+        }
+    }
+
+    private fun inputWatcher(){
+        firstNameInput.doAfterTextChanged { text ->
+            if (text.toString().isNotEmpty()) {
+                firstNameInputLayout.setFieldError(null)
+            }
+        }
+        lastNameInput.doAfterTextChanged { text ->
+            if (text.toString().isNotEmpty()) {
+                lastNameInputLayout.setFieldError(null)
+            }
+        }
+        usernameInput.doAfterTextChanged { text ->
+            if (text.toString().isNotEmpty()) {
+                usernameInputLayout.setFieldError(null)
             }
         }
     }
