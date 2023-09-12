@@ -5,9 +5,9 @@ import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.SignInCredential
 import com.google.firebase.auth.FirebaseUser
 import com.nomargin.cynema.R
+import com.nomargin.cynema.util.Resource
 import com.nomargin.cynema.util.model.SignInModel
 import com.nomargin.cynema.util.model.SignUpModel
-import com.nomargin.cynema.util.Resource
 import com.nomargin.cynema.util.model.StatusModel
 
 class FakeAuthenticationRepository: AuthenticationRepository {
@@ -47,6 +47,10 @@ class FakeAuthenticationRepository: AuthenticationRepository {
     }
 
     override suspend fun getAuthenticationRequest(): BeginSignInRequest {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun sendPasswordResetEmail(email: String): Resource<StatusModel> {
         TODO("Not yet implemented")
     }
 }

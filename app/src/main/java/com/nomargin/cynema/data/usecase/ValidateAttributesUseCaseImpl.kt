@@ -55,7 +55,7 @@ class ValidateAttributesUseCaseImpl @Inject constructor() : ValidateAttributesUs
             !Regex(Constants.REGEX.passwordRegexPattern).containsMatchIn(signUpModel.password) -> {
                 StatusModel(
                     isValid = false,
-                    Constants.ERROR_TYPES.passwordsDoNotMatch,
+                    Constants.ERROR_TYPES.passwordIsNotValid,
                     R.string.password_is_not_valid
                 )
             }

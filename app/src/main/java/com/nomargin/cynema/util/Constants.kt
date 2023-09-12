@@ -19,6 +19,7 @@ object Constants {
         const val usernameIsEmpty = 12
         const val usernameIsNotValid = 13
         const val userBiographyIsBiggerThanAllowed = 14
+        const val passwordIsNotValid = 15
     }
 
     object AUTH_ERRORS{
@@ -45,6 +46,7 @@ object Constants {
     }
 
     object MAX_LENGTH{
+        const val userUsernameMaxLength = 24
         const val userBiographyMaxLength = 240
     }
 
