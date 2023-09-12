@@ -130,6 +130,7 @@
         app:endIconMode="clear_text"
         app:layout_constraintBottom_toTopOf="@id/bio_input_layout"
         app:layout_constraintEnd_toEndOf="parent"
+        app:counterMaxLength="24"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/last_name_input_layout"
         app:startIconDrawable="@drawable/ic_at_sign">
@@ -148,6 +149,7 @@
         app:endIconMode="clear_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:counterMaxLength="240"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/username_input_layout"
         app:startIconDrawable="@drawable/ic_book_bio">

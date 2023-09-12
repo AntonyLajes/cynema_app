@@ -17,8 +17,9 @@ object Constants {
         const val firstNameIsEmpty = 10
         const val lastNameIsEmpty = 11
         const val usernameIsEmpty = 12
-        const val firebaseStorageError = 13
-        const val passwordsIsNotValid = 14
+        const val usernameIsNotValid = 13
+        const val userBiographyIsBiggerThanAllowed = 14
+        const val passwordIsNotValid = 15
     }
 
     object AUTH_ERRORS{
@@ -44,12 +45,14 @@ object Constants {
         const val passwordMinLength = 8
     }
 
-    object FIELD_HANDLER{
-        const val isSuccess = true
+    object MAX_LENGTH{
+        const val userUsernameMaxLength = 24
+        const val userBiographyMaxLength = 240
     }
 
     object REGEX {
         const val passwordRegexPattern = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,64}"
+        const val usernameRegexPattern = "^([\\w]){4,24}\$"
     }
 
     object STORAGE {

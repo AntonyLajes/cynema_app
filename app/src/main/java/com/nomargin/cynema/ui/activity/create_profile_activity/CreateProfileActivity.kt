@@ -42,6 +42,8 @@ class CreateProfileActivity : AppCompatActivity(), View.OnClickListener {
     private val firstNameInput: TextInputEditText by lazy {binding.firstNameInput}
     private val lastNameInput: TextInputEditText by lazy {binding.lastNameInput}
     private val usernameInput: TextInputEditText by lazy {binding.usernameInput}
+    private val userBiography: TextInputEditText by lazy {binding.bioInput}
+    private val userBiographyInputLayout: TextInputLayout by lazy {binding.bioInputLayout}
     private val firstNameInputLayout: TextInputLayout by lazy {binding.firstNameInputLayout}
     private val lastNameInputLayout: TextInputLayout by lazy {binding.lastNameInputLayout}
     private val usernameInputLayout: TextInputLayout by lazy {binding.usernameInputLayout}
@@ -111,12 +113,12 @@ class CreateProfileActivity : AppCompatActivity(), View.OnClickListener {
                 }else{
                     FrequencyFunctions.makeToast(this, createProfileStatus.message)
                 }
-                fieldsHandler(createProfileStatus)
+                errorHandler(createProfileStatus)
             }
         }
     }
 
-    private fun fieldsHandler(value: StatusModel) {
+    private fun errorHandler(value: StatusModel) {
         if (!value.isValid) {
             when (value.errorType) {
                 Constants.ERROR_TYPES.firstNameIsEmpty -> {
@@ -129,6 +131,14 @@ class CreateProfileActivity : AppCompatActivity(), View.OnClickListener {
 
                 Constants.ERROR_TYPES.usernameIsEmpty -> {
                     usernameInputLayout.setFieldError(value.message)
+                }
+
+                Constants.ERROR_TYPES.usernameIsNotValid -> {
+                    usernameInputLayout.setFieldError(value.message)
+                }
+
+                Constants.ERROR_TYPES.userBiographyIsBiggerThanAllowed -> {
+                    userBiographyInputLayout.setFieldError(value.message)
                 }
             }
         }
@@ -146,9 +156,15 @@ class CreateProfileActivity : AppCompatActivity(), View.OnClickListener {
             }
         }
         usernameInput.doAfterTextChanged { text ->
-            if (text.toString().isNotEmpty()) {
+            usernameInputLayout.isCounterEnabled = if (text.toString().isNotEmpty()) {
                 usernameInputLayout.setFieldError(null)
+                true
+            }else{
+                false
             }
+        }
+        userBiography.doAfterTextChanged { text ->
+            userBiographyInputLayout.isCounterEnabled = text.toString().isNotEmpty()
         }
     }
 
@@ -157,15 +173,15 @@ class CreateProfileActivity : AppCompatActivity(), View.OnClickListener {
         binding.profileImage.setOnClickListener(this)
     }
 
-    private fun verifyPermission(permission: String): Boolean {
+    private fun verifyPermission(): Boolean {
         return ContextCompat.checkSelfPermission(
             this,
-            permission
+            galleryPermission
         ) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun verifyGalleryPermission() {
-        val permissionAccepted = verifyPermission(galleryPermission)
+        val permissionAccepted = verifyPermission()
 
         when {
             permissionAccepted -> {
@@ -209,4 +225,5 @@ class CreateProfileActivity : AppCompatActivity(), View.OnClickListener {
         alertDialog = builder.create()
         alertDialog.show()
     }
+
 }

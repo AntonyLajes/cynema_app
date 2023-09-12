@@ -55,7 +55,7 @@ class ValidateAttributesUseCaseImpl @Inject constructor() : ValidateAttributesUs
             !Regex(Constants.REGEX.passwordRegexPattern).containsMatchIn(signUpModel.password) -> {
                 StatusModel(
                     isValid = false,
-                    Constants.ERROR_TYPES.passwordsDoNotMatch,
+                    Constants.ERROR_TYPES.passwordIsNotValid,
                     R.string.password_is_not_valid
                 )
             }
@@ -143,6 +143,20 @@ class ValidateAttributesUseCaseImpl @Inject constructor() : ValidateAttributesUs
                     false,
                     Constants.ERROR_TYPES.usernameIsEmpty,
                     R.string.username_is_empty
+                )
+            }
+            !Regex(Constants.REGEX.usernameRegexPattern).matches(userProfileModel.userUsername) -> {
+                StatusModel(
+                    false,
+                    Constants.ERROR_TYPES.usernameIsNotValid,
+                    R.string.valid_username_characters
+                )
+            }
+            userProfileModel.userBiography.length > Constants.MAX_LENGTH.userBiographyMaxLength -> {
+                StatusModel(
+                    false,
+                    Constants.ERROR_TYPES.userBiographyIsBiggerThanAllowed,
+                    R.string.valid_user_biography
                 )
             }
             else -> {
