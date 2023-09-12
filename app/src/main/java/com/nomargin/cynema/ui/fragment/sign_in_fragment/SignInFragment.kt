@@ -1,18 +1,15 @@
 package com.nomargin.cynema.ui.fragment.sign_in_fragment
 
 import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
@@ -79,7 +76,7 @@ class SignInFragment : Fragment(), View.OnClickListener {
     override fun onClick(view: View) {
         when (view.id) {
             binding.buttonForgotPassword.id -> {
-                verifyAndStartActivity(ForgotPasswordActivity())
+                FrequencyFunctions.startNewActivityFromCurrentActivity(requireActivity(), ForgotPasswordActivity())
             }
 
             binding.buttonSignIn.id -> {
@@ -110,8 +107,8 @@ class SignInFragment : Fragment(), View.OnClickListener {
         signInViewModel.attributesStatus.observe(viewLifecycleOwner) { attributeStatus ->
             attributeStatus?.let {
                 if (it.isValid) {
-                    makeToast(it.message)
-                    verifyAndStartActivity(MainActivity())
+                    FrequencyFunctions.makeToast(requireContext(), it.message)
+                    FrequencyFunctions.startNewActivityFromCurrentActivity(requireActivity(), MainActivity())
                 } else {
                     when (it.errorType) {
                         Constants.ERROR_TYPES.emailFieldIsEmpty -> {
@@ -123,7 +120,7 @@ class SignInFragment : Fragment(), View.OnClickListener {
                         }
 
                         else -> {
-                            makeToast(it.message)
+                            FrequencyFunctions.makeToast(requireContext(), it.message)
                         }
                     }
                 }
@@ -141,10 +138,6 @@ class SignInFragment : Fragment(), View.OnClickListener {
         }
     }
 
-    private fun makeToast(@StringRes messageRes: Int) {
-        Toast.makeText(requireActivity(), getText(messageRes), Toast.LENGTH_SHORT).show()
-    }
-
     private fun initOneTapAuthentication() {
         oneTapClient = Identity.getSignInClient(requireActivity())
         lifecycleScope.launch {
@@ -160,11 +153,6 @@ class SignInFragment : Fragment(), View.OnClickListener {
                     e.localizedMessage?.let { Log.d("authenticationRequest", it) }
                 }
         }
-    }
-
-    private fun verifyAndStartActivity(activity: Activity) {
-        val intent = Intent(context, activity::class.java)
-        startActivity(intent)
     }
 
     private fun initClicks() {
