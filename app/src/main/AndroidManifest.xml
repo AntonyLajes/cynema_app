@@ -19,13 +19,7 @@
         tools:targetApi="31">
         <activity
             android:name=".ui.activity.create_profile_activity.CreateProfileActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:exported="false"/>
         <activity
             android:name=".ui.activity.forgot_password_activity.ForgotPasswordActivity"
             android:exported="false" />
@@ -37,7 +31,13 @@
             android:exported="false"/>
         <activity
             android:name=".ui.activity.main_activity.MainActivity"
-            android:exported="false" />
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

@@ -23,23 +23,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/welcome_user" />
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/profile_image"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:src="@drawable/ic_person"
-        app:civ_border_color="@color/custom_black"
-        app:civ_border_width="1dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/welcome_user"
-        app:layout_constraintBottom_toBottomOf="@id/lets_relax_and_talk"/>
-
-    <TextView
-        android:id="@+id/text_categories"
-        android:layout_marginTop="32dp"
-        style="@style/CustomTitleText"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/lets_relax_and_talk"
-        android:text="@string/categories"/>
-
 </androidx.constraintlayout.widget.ConstraintLayout>
