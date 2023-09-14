@@ -12,4 +12,6 @@ interface ProfileRepository {
     suspend fun uploadProfilePicture(imageUri: Uri): Uri
 
     suspend fun verifyProfile(): Boolean
+
+    suspend fun checkUserUsername(username: String): StatusModel?
 }

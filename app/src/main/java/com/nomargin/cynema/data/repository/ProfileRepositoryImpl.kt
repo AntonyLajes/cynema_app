@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 class ProfileRepositoryImpl @Inject constructor(
     private val firebaseStorage: FirebaseStorageUseCase,
-    firebaseFirestore: FirebaseFirestoreUseCase,
+    private val firebaseFirestore: FirebaseFirestoreUseCase,
     private val firebaseAuth: FirebaseAuthUseCase,
     private val validateAttributes: ValidateAttributesUseCase,
 ) : ProfileRepository {
@@ -92,8 +92,35 @@ class ProfileRepositoryImpl @Inject constructor(
     }
 
     override suspend fun verifyProfile(): Boolean {
-            return database.get()
+        return database.get()
             .addOnSuccessListener {}
             .addOnFailureListener {}.await().exists()
+    }
+
+    override suspend fun checkUserUsername(username: String): StatusModel? {
+        if(username.length >= Constants.MIN_LENGTH.usernameMinLength && username.length <= Constants.MAX_LENGTH.userUsernameMaxLength){
+            val usernameDoNotExists = firebaseFirestore.getFirebaseFirestore()
+                .collection(Constants.FIRESTORE.usersCollection)
+                .whereEqualTo("user_username", username)
+                .get()
+                .addOnCompleteListener {  }
+                .await().isEmpty
+
+            return if(usernameDoNotExists){
+                StatusModel(
+                    true,
+                    null,
+                    R.string.user_username_is_valid
+                )
+            }else{
+                StatusModel(
+                    false,
+                    Constants.ERROR_TYPES.userUsernameAlreadyInUse,
+                    R.string.user_username_already_in_use
+                )
+            }
+        }else{
+            return null
+        }
     }
 }

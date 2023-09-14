@@ -20,6 +20,8 @@ object Constants {
         const val usernameIsNotValid = 13
         const val userBiographyIsBiggerThanAllowed = 14
         const val passwordIsNotValid = 15
+        const val userUsernameAlreadyInUse = 16
+        const val firestoreError = 17
     }
 
     object AUTH_ERRORS{
@@ -43,6 +45,7 @@ object Constants {
 
     object MIN_LENGTH{
         const val passwordMinLength = 8
+        const val usernameMinLength = 4
     }
 
     object MAX_LENGTH{

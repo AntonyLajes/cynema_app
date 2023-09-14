@@ -80,6 +80,7 @@ class CreateProfileActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onResume() {
         super.onResume()
+        focusWatcher()
         inputWatcher()
         observers()
         initClicks()
@@ -114,6 +115,16 @@ class CreateProfileActivity : AppCompatActivity(), View.OnClickListener {
                     FrequencyFunctions.makeToast(this, createProfileStatus.message)
                 }
                 errorHandler(createProfileStatus)
+            }
+        }
+        createProfileViewModel.userUsernameStatus.observe(this){userUsernameStatus ->
+            userUsernameStatus?.let {
+                if(it.isValid){
+                    usernameInputLayout.boxStrokeColor = getColor(R.color.success_green)
+                    usernameInputLayout.setFieldError(null)
+                }else{
+                    usernameInputLayout.setFieldError(it.message)
+                }
             }
         }
     }
@@ -158,14 +169,21 @@ class CreateProfileActivity : AppCompatActivity(), View.OnClickListener {
         usernameInput.doAfterTextChanged { text ->
             usernameInputLayout.isCounterEnabled = if (text.toString().isNotEmpty()) {
                 usernameInputLayout.setFieldError(null)
+                createProfileViewModel.checkUserUsername(text.toString())
                 true
             }else{
+                usernameInputLayout.boxStrokeColor = getColor(R.color.custom_bold_grey)
                 false
             }
         }
         userBiography.doAfterTextChanged { text ->
             userBiographyInputLayout.isCounterEnabled = text.toString().isNotEmpty()
         }
+    }
+
+    private fun focusWatcher(){
+        usernameInputLayout.isCounterEnabled = usernameInputLayout.hasFocus()
+        userBiographyInputLayout.isCounterEnabled = usernameInputLayout.hasFocus()
     }
 
     private fun initClicks(){

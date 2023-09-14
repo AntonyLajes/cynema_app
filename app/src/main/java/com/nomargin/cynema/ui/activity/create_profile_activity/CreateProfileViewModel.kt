@@ -17,8 +17,15 @@ class CreateProfileViewModel @Inject constructor(
 ): ViewModel() {
     private var _createProfileStatus:MutableLiveData<StatusModel> = MutableLiveData()
     val createProfileStatus: LiveData<StatusModel> = _createProfileStatus
+
+    private var _userUsernameStatus:MutableLiveData<StatusModel?> = MutableLiveData()
+    val userUsernameStatus: LiveData<StatusModel?> = _userUsernameStatus
     fun saveProfile(userProfileModel: UserProfileModel) = viewModelScope.launch {
         _createProfileStatus.value = profileRepository.createProfile(userProfileModel).statusModel!!
+    }
+
+    fun checkUserUsername(userUsername: String) = viewModelScope.launch {
+        _userUsernameStatus.value = profileRepository.checkUserUsername(userUsername)
     }
 
 
