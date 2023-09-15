@@ -46,7 +46,7 @@
         android:id="@+id/carousel_item_genre"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="Drama • History"
+        android:text="Drama • History"
         android:textColor="@color/custom_low_white"
         android:textSize="12sp"
         app:layout_constraintBottom_toTopOf="@id/more_info_item"

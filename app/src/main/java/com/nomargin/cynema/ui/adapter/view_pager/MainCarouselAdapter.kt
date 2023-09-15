@@ -8,7 +8,7 @@ import com.nomargin.cynema.databinding.ItemMainCarouselBinding
 
 class MainCarouselAdapter(private val movieList: ArrayList<MovieModel>): RecyclerView.Adapter<MainCarouselAdapter.MainCarouselViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainCarouselAdapter.MainCarouselViewHolder {
-        val view = ItemMainCarouselBinding.inflate(LayoutInflater.from(parent.context),parent, false)
+        val view = ItemMainCarouselBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MainCarouselViewHolder(view)
     }
 
