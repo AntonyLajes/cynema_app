@@ -16,6 +16,7 @@ import com.nomargin.cynema.data.remote.entity.GenreModel
 import com.nomargin.cynema.data.remote.entity.MovieModel
 import com.nomargin.cynema.databinding.FragmentHomeBinding
 import com.nomargin.cynema.ui.adapter.recycler_view.FragmentHomeGenresAdapter
+import com.nomargin.cynema.ui.adapter.recycler_view.MoviePosterAdapter
 import com.nomargin.cynema.ui.adapter.view_pager.MainCarouselAdapter
 
 class HomeFragment : Fragment() {
@@ -35,6 +36,8 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         initCarousel()
         initGenresRecyclerView()
+        initLatestMoviesRecyclerView()
+        initLatestMostWatchedMoviesRecyclerView()
         return binding.root
     }
 
@@ -87,8 +90,40 @@ class HomeFragment : Fragment() {
 
         val fragmentHomeGenresAdapter = FragmentHomeGenresAdapter(genreList)
 
-        binding.includesHomeFragment.categoriesRecyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        binding.includesHomeFragment.categoriesRecyclerView.adapter = fragmentHomeGenresAdapter
+        binding.includesHomeFragmentCategories.categoriesRecyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.includesHomeFragmentCategories.categoriesRecyclerView.adapter = fragmentHomeGenresAdapter
+    }
+
+    private fun initLatestMoviesRecyclerView(){
+        val movieList = arrayListOf(
+            MovieModel(R.drawable.rocket_1, "Rocket 1"),
+            MovieModel(R.drawable.rocket_2, "Rocket 2"),
+            MovieModel(R.drawable.rocket_3, "Rocket 3"),
+            MovieModel(R.drawable.rocket_4, "Rocket 4"),
+            MovieModel(R.drawable.rocket_5, "Rocket 5"),
+        )
+
+        val fragmentHomeLatestMoviesAdapter = MoviePosterAdapter(movieList)
+
+        binding.includesHomeFragmentMostWatchedMovies.recyclerViewTitle.text = getString(R.string.latest_movies)
+        binding.includesHomeFragmentLatestMovies.recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.includesHomeFragmentLatestMovies.recyclerView.adapter = fragmentHomeLatestMoviesAdapter
+    }
+
+    private fun initLatestMostWatchedMoviesRecyclerView(){
+        val movieList = arrayListOf(
+            MovieModel(R.drawable.rocket_1, "Rocket 1"),
+            MovieModel(R.drawable.rocket_2, "Rocket 2"),
+            MovieModel(R.drawable.rocket_3, "Rocket 3"),
+            MovieModel(R.drawable.rocket_4, "Rocket 4"),
+            MovieModel(R.drawable.rocket_5, "Rocket 5"),
+        )
+
+        val fragmentHomeMostWatchedMoviesAdapter = MoviePosterAdapter(movieList)
+
+        binding.includesHomeFragmentMostWatchedMovies.recyclerViewTitle.text = getString(R.string.most_watched)
+        binding.includesHomeFragmentMostWatchedMovies.recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.includesHomeFragmentMostWatchedMovies.recyclerView.adapter = fragmentHomeMostWatchedMoviesAdapter
     }
 
 }

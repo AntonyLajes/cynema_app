@@ -116,7 +116,7 @@
         <item name="android:padding">16dp</item>
     </style>
 
-    <style name="SpecificCornerRounded" parent="">
+    <style name="SpecificCornerRounded" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="cornerFamilyTopLeft">rounded</item>
         <item name="cornerSizeTopLeft">16dp</item>
         <item name="cornerFamilyTopRight">rounded</item>
@@ -125,6 +125,11 @@
         <item name="cornerSizeBottomLeft">8dp</item>
         <item name="cornerFamilyBottomRight">rounded</item>
         <item name="cornerSizeBottomRight">8dp</item>
+    </style>
+
+    <style name="AllCornersRounded" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">16dp</item>
     </style>
 
 </resources>
