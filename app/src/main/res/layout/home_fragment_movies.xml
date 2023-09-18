@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_marginTop="16dp"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent"
+    android:layout_marginTop="24dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/recycler_view_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/categories"
+        android:text="@string/latest_movies"
         android:textColor="@color/custom_bold_grey"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,16 +22,16 @@
         android:text="@string/view_more"
         android:textColor="@color/custom_bold_grey"
         android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="@+id/textView1"
+        app:layout_constraintBottom_toBottomOf="@+id/recycler_view_title"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/categories_recycler_view"
+        android:id="@+id/recycler_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textView1" />
+        app:layout_constraintTop_toBottomOf="@id/recycler_view_title" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
