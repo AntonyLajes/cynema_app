@@ -1,6 +1,7 @@
 package com.nomargin.cynema.data.usecase
 
 import com.nomargin.cynema.data.remote.retrofit.entity.GenreResponse
+import com.nomargin.cynema.data.remote.retrofit.entity.MovieResponse
 import com.nomargin.cynema.data.repository.TheMovieDatabaseRepository
 import javax.inject.Inject
 
@@ -13,5 +14,9 @@ class TheMovieDatabaseApiUseCaseImpl @Inject constructor(
 
     override suspend fun getTvShowGenres(): GenreResponse {
         return theMovieDatabaseRepository.getTvShowGenres()
+    }
+
+    override suspend fun getPopularMovies(): MovieResponse {
+        return theMovieDatabaseRepository.getPopularMovies()
     }
 }

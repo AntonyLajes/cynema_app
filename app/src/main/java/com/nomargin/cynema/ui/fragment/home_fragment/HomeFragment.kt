@@ -11,13 +11,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
-import com.nomargin.cynema.R
-import com.nomargin.cynema.data.remote.entity.GenreModel
-import com.nomargin.cynema.data.remote.entity.MovieModel
+import com.nomargin.cynema.data.remote.retrofit.entity.GenreModel
+import com.nomargin.cynema.data.remote.retrofit.entity.MovieModel
 import com.nomargin.cynema.databinding.FragmentHomeBinding
 import com.nomargin.cynema.ui.adapter.recycler_view.FragmentHomeGenresAdapter
-import com.nomargin.cynema.ui.adapter.recycler_view.MoviePosterAdapter
 import com.nomargin.cynema.ui.adapter.view_pager.MainCarouselAdapter
+import com.nomargin.cynema.util.extension.AdapterOnItemClickListener
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -38,16 +37,13 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         binding.includeShimmerLayout.shimmerLayout.startShimmer()
         observers()
-        initCarousel()
-        initGenresRecyclerView()
-        initLatestMoviesRecyclerView()
-        initLatestMostWatchedMoviesRecyclerView()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         homeViewModel.getGenres()
+        homeViewModel.getPopularMovies()
     }
 
     override fun onDestroyView() {
@@ -56,14 +52,22 @@ class HomeFragment : Fragment() {
     }
 
     private fun observers(){
-        homeViewModel._genres.observe(viewLifecycleOwner){genresList ->
-            binding.includeShimmerLayout.shimmerLayout.stopShimmer()
-            binding.includeShimmerLayout.shimmerLayout.visibility = View.GONE
-            binding.mainView.visibility = View.VISIBLE
+        homeViewModel.genres.observe(viewLifecycleOwner){genresResult ->
+            finishShimmerLayout()
+            initGenresRecyclerView(genresResult.genreList)
+        }
+        homeViewModel.popularMovies.observe(viewLifecycleOwner){moviesResult ->
+            initCarousel(moviesResult.results)
         }
     }
 
-    private fun initCarousel(){
+    private fun finishShimmerLayout() {
+        binding.includeShimmerLayout.shimmerLayout.stopShimmer()
+        binding.includeShimmerLayout.shimmerLayout.visibility = View.GONE
+        binding.mainView.visibility = View.VISIBLE
+    }
+
+    private fun initCarousel(movies: List<MovieModel>) {
         val compositePageTransformer = CompositePageTransformer()
         compositePageTransformer.addTransformer(MarginPageTransformer((40 * Resources.getSystem().displayMetrics.density).toInt()))
         binding.viewPager.apply {
@@ -74,38 +78,22 @@ class HomeFragment : Fragment() {
             setPageTransformer(compositePageTransformer)
         }
 
-        val movieList = arrayListOf(
-            MovieModel(R.drawable.rocket_1, "Rocket 1"),
-            MovieModel(R.drawable.rocket_2, "Rocket 2"),
-            MovieModel(R.drawable.rocket_3, "Rocket 3"),
-            MovieModel(R.drawable.rocket_4, "Rocket 4"),
-            MovieModel(R.drawable.rocket_5, "Rocket 5"),
-        )
-
-        binding.viewPager.adapter = MainCarouselAdapter(movieList)
+        binding.viewPager.adapter = MainCarouselAdapter(movies, object : AdapterOnItemClickListener{
+            override fun <T> onItemClickListener(item: T, position: Int) {
+                val movie = item as MovieModel
+            }
+        })
 
     }
 
-    private fun initGenresRecyclerView(){
-        val genreList = arrayListOf(
-            GenreModel(1, "Genre 1"),
-            GenreModel(1, "Genre 2"),
-            GenreModel(1, "Genre 3"),
-            GenreModel(1, "Genre 4"),
-            GenreModel(1, "Genre 5"),
-            GenreModel(1, "Genre 6"),
-            GenreModel(1, "Genre 7"),
-            GenreModel(1, "Genre 8"),
-            GenreModel(1, "Genre 9"),
-            GenreModel(1, "Genre 10")
-        )
+    private fun initGenresRecyclerView(genres: List<GenreModel>){
 
-        val fragmentHomeGenresAdapter = FragmentHomeGenresAdapter(genreList)
+        val fragmentHomeGenresAdapter = FragmentHomeGenresAdapter(genres)
 
         binding.includesHomeFragmentCategories.categoriesRecyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.includesHomeFragmentCategories.categoriesRecyclerView.adapter = fragmentHomeGenresAdapter
     }
-
+/*
     private fun initLatestMoviesRecyclerView(){
         val movieList = arrayListOf(
             MovieModel(R.drawable.rocket_1, "Rocket 1"),
@@ -137,5 +125,5 @@ class HomeFragment : Fragment() {
         binding.includesHomeFragmentMostWatchedMovies.recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.includesHomeFragmentMostWatchedMovies.recyclerView.adapter = fragmentHomeMostWatchedMoviesAdapter
     }
-
+*/
 }

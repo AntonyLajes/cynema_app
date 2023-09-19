@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-kapt'
     id 'com.google.dagger.hilt.android'
     id 'com.google.gms.google-services'
+    id 'com.google.devtools.ksp'
 }
 
 android {
@@ -96,4 +97,7 @@ dependencies {
     //Shimmer
     implementation "com.facebook.shimmer:shimmer:0.5.0"
 
+    //Glide
+    ksp 'com.github.bumptech.glide:ksp:4.16.0'
+    implementation 'com.github.bumptech.glide:glide:4.16.0'
 }

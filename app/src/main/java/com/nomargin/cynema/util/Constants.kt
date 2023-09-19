@@ -66,4 +66,8 @@ object Constants {
         const val usersCollection = "users"
     }
 
+    object TMDB_PATH_URLs {
+        const val posterPathUrl = "https://image.tmdb.org/t/p/original/"
+    }
+
 }
