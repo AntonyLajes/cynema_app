@@ -1,8 +1,7 @@
 package com.nomargin.cynema.data.remote.google
 
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
-import com.nomargin.cynema.util.Constants
-import com.nomargin.cynema.util.Priv
+import com.nomargin.cynema.util.Private
 import javax.inject.Inject
 
 class AuthenticationRequestUseCaseImpl @Inject constructor(
@@ -13,7 +12,7 @@ class AuthenticationRequestUseCaseImpl @Inject constructor(
             .setGoogleIdTokenRequestOptions(
                 BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
                     .setSupported(true)
-                    .setServerClientId(Priv.webClientId)
+                    .setServerClientId(Private.webClientId)
                     // Show all accounts on the device.
                     .setFilterByAuthorizedAccounts(false)
                     .build()
