@@ -2,7 +2,6 @@ package com.nomargin.cynema.ui.fragment.home_fragment
 
 import android.content.res.Resources
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,6 +36,7 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        binding.includeShimmerLayout.shimmerLayout.startShimmer()
         observers()
         initCarousel()
         initGenresRecyclerView()
@@ -57,7 +57,9 @@ class HomeFragment : Fragment() {
 
     private fun observers(){
         homeViewModel._genres.observe(viewLifecycleOwner){genresList ->
-            Log.d("genresList", "genresList: $genresList")
+            binding.includeShimmerLayout.shimmerLayout.stopShimmer()
+            binding.includeShimmerLayout.shimmerLayout.visibility = View.GONE
+            binding.mainView.visibility = View.VISIBLE
         }
     }
 
