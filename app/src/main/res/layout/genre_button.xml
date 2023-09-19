@@ -10,6 +10,7 @@
         android:id="@+id/genre_button"
         android:layout_width="wrap_content"
         android:layout_height="32dp"
+        android:paddingHorizontal="8dp"
         android:background="@drawable/bg_genre_button"
         android:elevation="0dp"
         android:textAllCaps="false"

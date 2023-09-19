@@ -66,4 +66,16 @@ object Constants {
         const val usersCollection = "users"
     }
 
+    object TMDB_PATH_URLs {
+        const val posterPathUrl = "https://image.tmdb.org/t/p/original/"
+    }
+
+    object LOCAL_DATABASE {
+        const val databaseName = "gender"
+        const val databaseVersion = 1
+        const val genreTableName = "genre"
+        const val genreIdColumnName = "id"
+        const val genreDescColumnName = "desc"
+    }
+
 }

@@ -28,9 +28,6 @@
             android:exported="false" />
         <activity
             android:name=".ui.activity.splash_activity.SplashActivity"
-            android:exported="false"/>
-        <activity
-            android:name=".ui.activity.main_activity.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,6 +35,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.activity.main_activity.MainActivity"
+            android:exported="false"/>
     </application>
 
 </manifest>

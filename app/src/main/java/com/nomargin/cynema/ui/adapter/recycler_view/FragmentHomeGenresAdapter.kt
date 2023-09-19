@@ -3,10 +3,10 @@ package com.nomargin.cynema.ui.adapter.recycler_view
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.nomargin.cynema.data.remote.entity.GenreModel
+import com.nomargin.cynema.data.remote.retrofit.entity.GenreModel
 import com.nomargin.cynema.databinding.GenreButtonBinding
 
-class FragmentHomeGenresAdapter(private val genreList: ArrayList<GenreModel>): RecyclerView.Adapter<FragmentHomeGenresAdapter.FragmentHomeGenresViewHolder>() {
+class FragmentHomeGenresAdapter(private val genreList: List<GenreModel>): RecyclerView.Adapter<FragmentHomeGenresAdapter.FragmentHomeGenresViewHolder>() {
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -18,7 +18,7 @@ class FragmentHomeGenresAdapter(private val genreList: ArrayList<GenreModel>): R
 
     override fun onBindViewHolder(holder: FragmentHomeGenresViewHolder, position: Int) {
         val currentGenre = genreList[position]
-        holder.item.genreButton.text = currentGenre.genreName
+        holder.item.genreButton.text = currentGenre.genreDesc
     }
 
     override fun getItemCount(): Int = genreList.size
