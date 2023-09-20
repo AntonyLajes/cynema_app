@@ -11,9 +11,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
+import com.nomargin.cynema.R
 import com.nomargin.cynema.data.remote.retrofit.entity.GenreModel
+import com.nomargin.cynema.data.remote.retrofit.entity.MovieModel
 import com.nomargin.cynema.databinding.FragmentHomeBinding
 import com.nomargin.cynema.ui.adapter.recycler_view.FragmentHomeGenresAdapter
+import com.nomargin.cynema.ui.adapter.recycler_view.MoviePosterAdapter
 import com.nomargin.cynema.ui.adapter.view_pager.MainCarouselAdapter
 import com.nomargin.cynema.util.extension.AdapterOnItemClickListener
 import com.nomargin.cynema.util.model.CarouselModel
@@ -38,8 +41,7 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        homeViewModel.getGenres()
-        homeViewModel.getPopularMovies()
+        homeViewModel.getHomeScreenData()
     }
 
     override fun onDestroyView() {
@@ -54,6 +56,15 @@ class HomeFragment : Fragment() {
         }
         homeViewModel.movieModelToCarouselModel.observe(viewLifecycleOwner){movieList ->
             initCarousel(movieList)
+        }
+        homeViewModel.nowPlayingMovies.observe(viewLifecycleOwner){nowPlaying ->
+            initNowPlayingRecyclerView(nowPlaying)
+        }
+        homeViewModel.topRatedMovies.observe(viewLifecycleOwner){topRated ->
+            initTopRatedMoviesRecyclerView(topRated)
+        }
+        homeViewModel.upcomingMovies.observe(viewLifecycleOwner){upcoming ->
+            initUpcomingMoviesRecyclerView(upcoming)
         }
     }
 
@@ -75,7 +86,7 @@ class HomeFragment : Fragment() {
         }
 
         binding.viewPager.adapter =
-            MainCarouselAdapter(movies, object : AdapterOnItemClickListener {
+            MainCarouselAdapter(movies.take(7), object : AdapterOnItemClickListener {
                 override fun <T> onItemClickListener(item: T, position: Int) {
 
                 }
@@ -83,69 +94,31 @@ class HomeFragment : Fragment() {
     }
 
     private fun initGenresRecyclerView(genres: List<GenreModel>){
-        val fragmentHomeGenresAdapter = FragmentHomeGenresAdapter(genres)
-
         binding.includesHomeFragmentCategories.categoriesRecyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        binding.includesHomeFragmentCategories.categoriesRecyclerView.adapter = fragmentHomeGenresAdapter
-    }
-/*
-    private fun initLatestMoviesRecyclerView(){
-        val movieList = arrayListOf(
-            MovieModel(R.drawable.rocket_1, "Rocket 1"),
-            MovieModel(R.drawable.rocket_2, "Rocket 2"),
-            MovieModel(R.drawable.rocket_3, "Rocket 3"),
-            MovieModel(R.drawable.rocket_4, "Rocket 4"),
-            MovieModel(R.drawable.rocket_5, "Rocket 5"),
-        )
-
-        val fragmentHomeLatestMoviesAdapter = MoviePosterAdapter(movieList)
-
-        binding.includesHomeFragmentMostWatchedMovies.recyclerViewTitle.text = getString(R.string.latest_movies)
-        binding.includesHomeFragmentLatestMovies.recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        binding.includesHomeFragmentLatestMovies.recyclerView.adapter = fragmentHomeLatestMoviesAdapter
+        binding.includesHomeFragmentCategories.categoriesRecyclerView.adapter = FragmentHomeGenresAdapter(genres.take(10))
     }
 
-<<<<<<< HEAD
     private fun initNowPlayingRecyclerView(movies: List<MovieModel>) {
         binding.includesHomeFragmentNowPlayingMovies.recyclerViewTitle.text =
             getString(R.string.now_playing)
         binding.includesHomeFragmentNowPlayingMovies.recyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        binding.includesHomeFragmentNowPlayingMovies.recyclerView.adapter = MoviePosterAdapter(movies)
+        binding.includesHomeFragmentNowPlayingMovies.recyclerView.adapter = MoviePosterAdapter(movies.take(7))
     }
-
     private fun initTopRatedMoviesRecyclerView(movies: List<MovieModel>) {
         binding.includesHomeFragmentTopRatedMovies.recyclerViewTitle.text =
             getString(R.string.top_rated)
         binding.includesHomeFragmentTopRatedMovies.recyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.includesHomeFragmentTopRatedMovies.recyclerView.adapter =
-            MoviePosterAdapter(movies)
+            MoviePosterAdapter(movies.take(7))
     }
-
     private fun initUpcomingMoviesRecyclerView(movies: List<MovieModel>) {
         binding.includesHomeFragmentUpcomingMovies.recyclerViewTitle.text =
             getString(R.string.upcoming)
         binding.includesHomeFragmentUpcomingMovies.recyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.includesHomeFragmentUpcomingMovies.recyclerView.adapter =
-            MoviePosterAdapter(movies)
-=======
-    private fun initLatestMostWatchedMoviesRecyclerView(){
-        val movieList = arrayListOf(
-            MovieModel(R.drawable.rocket_1, "Rocket 1"),
-            MovieModel(R.drawable.rocket_2, "Rocket 2"),
-            MovieModel(R.drawable.rocket_3, "Rocket 3"),
-            MovieModel(R.drawable.rocket_4, "Rocket 4"),
-            MovieModel(R.drawable.rocket_5, "Rocket 5"),
-        )
-
-        val fragmentHomeMostWatchedMoviesAdapter = MoviePosterAdapter(movieList)
-
-        binding.includesHomeFragmentMostWatchedMovies.recyclerViewTitle.text = getString(R.string.most_watched)
-        binding.includesHomeFragmentMostWatchedMovies.recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        binding.includesHomeFragmentMostWatchedMovies.recyclerView.adapter = fragmentHomeMostWatchedMoviesAdapter
->>>>>>> efcdbe1cb076ad9820033b899417ce5693e22553
-    }
-*/
+            MoviePosterAdapter(movies.take(7))
+}
 }

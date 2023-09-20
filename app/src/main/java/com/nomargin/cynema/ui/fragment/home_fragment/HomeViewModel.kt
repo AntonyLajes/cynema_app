@@ -24,8 +24,22 @@ class HomeViewModel @Inject constructor(
     val genres: LiveData<List<GenreModel>> = _genres
     private val _movieModelToCarouselModel: MutableLiveData<List<CarouselModel>> = MutableLiveData()
     val movieModelToCarouselModel: LiveData<List<CarouselModel>> = _movieModelToCarouselModel
+    private val _nowPlayingMovies: MutableLiveData<List<MovieModel>> = MutableLiveData()
+    val nowPlayingMovies: LiveData<List<MovieModel>> = _nowPlayingMovies
+    private val _topRatedMovies: MutableLiveData<List<MovieModel>> = MutableLiveData()
+    val topRatedMovies: LiveData<List<MovieModel>> = _topRatedMovies
+    private val _upcomingMovies: MutableLiveData<List<MovieModel>> = MutableLiveData()
+    val upcomingMovies: LiveData<List<MovieModel>> = _upcomingMovies
 
-    fun getGenres() = viewModelScope.launch {
+    fun getHomeScreenData(){
+        getGenres()
+        getPopularMovies()
+        getNowPlayingMovies()
+        getTopRatedMovies()
+        getUpcomingMovies()
+    }
+
+    private fun getGenres() = viewModelScope.launch {
         appLocalDatabaseUseCase.insertGenres(theMovieDatabaseApiUseCase.getMovieGenres().genreList)
         _genres.value = appLocalDatabaseUseCase.selectAllGenres()
     }
@@ -51,8 +65,20 @@ class HomeViewModel @Inject constructor(
         _movieModelToCarouselModel.value = movieCarouselModel
     }
 
-    fun getPopularMovies() = viewModelScope.launch {
+    private fun getPopularMovies() = viewModelScope.launch {
         async { getMovieModelToCarouselModel(theMovieDatabaseApiUseCase.getPopularMovies().results) }.await()
+    }
+
+    private fun getNowPlayingMovies() = viewModelScope.launch {
+        _nowPlayingMovies.value = theMovieDatabaseApiUseCase.getNowPlayingMovies().results
+    }
+
+    private fun getTopRatedMovies() = viewModelScope.launch {
+        _topRatedMovies.value = theMovieDatabaseApiUseCase.getTopRatedMovies().results
+    }
+
+    private fun getUpcomingMovies() = viewModelScope.launch {
+        _upcomingMovies.value = theMovieDatabaseApiUseCase.getUpcomingMovies().results
     }
 
 }
