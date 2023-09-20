@@ -22,29 +22,12 @@ class HomeViewModel @Inject constructor(
 
     private val _genres: MutableLiveData<List<GenreModel>> = MutableLiveData()
     val genres: LiveData<List<GenreModel>> = _genres
-    private val _nowPlayingMovies: MutableLiveData<List<MovieModel>> = MutableLiveData()
-    val nowPlayingMovies: LiveData<List<MovieModel>> = _nowPlayingMovies
-    private val _topRatedMovies: MutableLiveData<List<MovieModel>> = MutableLiveData()
-    val topRatedMovies: LiveData<List<MovieModel>> = _topRatedMovies
-    private val _upComingMovies: MutableLiveData<List<MovieModel>> = MutableLiveData()
-    val upComingMovies: LiveData<List<MovieModel>> = _upComingMovies
     private val _movieModelToCarouselModel: MutableLiveData<List<CarouselModel>> = MutableLiveData()
     val movieModelToCarouselModel: LiveData<List<CarouselModel>> = _movieModelToCarouselModel
-    fun getHomePageData(){
-        getGenres()
-        getPopularMovies()
-        getNowPlayingMovies()
-        getTopRatedMovies()
-        getUpcomingMovies()
-    }
 
-    private fun getGenres() = viewModelScope.launch {
+    fun getGenres() = viewModelScope.launch {
         appLocalDatabaseUseCase.insertGenres(theMovieDatabaseApiUseCase.getMovieGenres().genreList)
         _genres.value = appLocalDatabaseUseCase.selectAllGenres()
-    }
-
-    private fun getNowPlayingMovies() = viewModelScope.launch{
-        _nowPlayingMovies.value = theMovieDatabaseApiUseCase.getNowPlayingMovies().results
     }
 
     private fun getMovieModelToCarouselModel(movieList: List<MovieModel>) = viewModelScope.launch{
@@ -68,16 +51,8 @@ class HomeViewModel @Inject constructor(
         _movieModelToCarouselModel.value = movieCarouselModel
     }
 
-    private fun getPopularMovies() = viewModelScope.launch {
+    fun getPopularMovies() = viewModelScope.launch {
         async { getMovieModelToCarouselModel(theMovieDatabaseApiUseCase.getPopularMovies().results) }.await()
-    }
-
-    private fun getTopRatedMovies() = viewModelScope.launch {
-        _topRatedMovies.value = theMovieDatabaseApiUseCase.getTopRatedMovies().results
-    }
-
-    private fun getUpcomingMovies() = viewModelScope.launch {
-        _upComingMovies.value = theMovieDatabaseApiUseCase.getUpcomingMovies().results
     }
 
 }
