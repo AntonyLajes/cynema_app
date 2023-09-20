@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nomargin.cynema.data.remote.retrofit.entity.GenreModel
 import com.nomargin.cynema.data.remote.retrofit.entity.MovieModel
-import com.nomargin.cynema.data.remote.retrofit.entity.MovieResponse
 import com.nomargin.cynema.data.usecase.AppLocalDatabaseUseCase
 import com.nomargin.cynema.data.usecase.TheMovieDatabaseApiUseCase
 import com.nomargin.cynema.util.model.CarouselModel
@@ -23,13 +22,29 @@ class HomeViewModel @Inject constructor(
 
     private val _genres: MutableLiveData<List<GenreModel>> = MutableLiveData()
     val genres: LiveData<List<GenreModel>> = _genres
-    private val _popularMovies: MutableLiveData<MovieResponse> = MutableLiveData()
+    private val _nowPlayingMovies: MutableLiveData<List<MovieModel>> = MutableLiveData()
+    val nowPlayingMovies: LiveData<List<MovieModel>> = _nowPlayingMovies
+    private val _topRatedMovies: MutableLiveData<List<MovieModel>> = MutableLiveData()
+    val topRatedMovies: LiveData<List<MovieModel>> = _topRatedMovies
+    private val _upComingMovies: MutableLiveData<List<MovieModel>> = MutableLiveData()
+    val upComingMovies: LiveData<List<MovieModel>> = _upComingMovies
     private val _movieModelToCarouselModel: MutableLiveData<List<CarouselModel>> = MutableLiveData()
     val movieModelToCarouselModel: LiveData<List<CarouselModel>> = _movieModelToCarouselModel
+    fun getHomePageData(){
+        getGenres()
+        getPopularMovies()
+        getNowPlayingMovies()
+        getTopRatedMovies()
+        getUpcomingMovies()
+    }
 
-    fun getGenres() = viewModelScope.launch {
+    private fun getGenres() = viewModelScope.launch {
         appLocalDatabaseUseCase.insertGenres(theMovieDatabaseApiUseCase.getMovieGenres().genreList)
         _genres.value = appLocalDatabaseUseCase.selectAllGenres()
+    }
+
+    private fun getNowPlayingMovies() = viewModelScope.launch{
+        _nowPlayingMovies.value = theMovieDatabaseApiUseCase.getNowPlayingMovies().results
     }
 
     private fun getMovieModelToCarouselModel(movieList: List<MovieModel>) = viewModelScope.launch{
@@ -53,8 +68,16 @@ class HomeViewModel @Inject constructor(
         _movieModelToCarouselModel.value = movieCarouselModel
     }
 
-    fun getPopularMovies() = viewModelScope.launch {
+    private fun getPopularMovies() = viewModelScope.launch {
         async { getMovieModelToCarouselModel(theMovieDatabaseApiUseCase.getPopularMovies().results) }.await()
+    }
+
+    private fun getTopRatedMovies() = viewModelScope.launch {
+        _topRatedMovies.value = theMovieDatabaseApiUseCase.getTopRatedMovies().results
+    }
+
+    private fun getUpcomingMovies() = viewModelScope.launch {
+        _upComingMovies.value = theMovieDatabaseApiUseCase.getUpcomingMovies().results
     }
 
 }

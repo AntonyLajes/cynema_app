@@ -1,22 +1,31 @@
 package com.nomargin.cynema.ui.adapter.recycler_view
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.nomargin.cynema.data.remote.entity.MovieModel
+import com.bumptech.glide.Glide
+import com.nomargin.cynema.data.remote.retrofit.entity.MovieModel
 import com.nomargin.cynema.databinding.ItemMoviePosterBinding
+import com.nomargin.cynema.util.Constants
 
 class MoviePosterAdapter(private val movieList: List<MovieModel>) : RecyclerView.Adapter<MoviePosterAdapter.MoviePosterViewHolder>() {
 
+    private lateinit var parentContext: Context
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviePosterViewHolder {
+        parentContext = parent.context
         val view = ItemMoviePosterBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MoviePosterViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: MoviePosterViewHolder, position: Int) {
-        val currentMovie = movieList[position]
-        holder.moviePoster.posterItemImage.setImageResource(currentMovie.poster)
-        holder.moviePoster.posterItemName.text = currentMovie.name
+        val currentItem = movieList[position]
+        Glide.with(parentContext)
+            .load(Constants.TMDB_PATH_URLs.posterPathUrl + currentItem.posterPath)
+            .centerCrop()
+            .into(holder.moviePoster.posterItemImage)
+        holder.moviePoster.posterItemName.text = currentItem.title
     }
 
     override fun getItemCount(): Int = movieList.size
