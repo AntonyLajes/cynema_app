@@ -15,7 +15,7 @@ class AppLocalDatabaseUseCaseImpl @Inject constructor(
         return appLocalDatabaseRepository.selectAllGenres()
     }
 
-    override suspend fun selectGenreById(genreId: Int): List<GenreModel> {
+    override suspend fun selectGenreById(genreId: Int): GenreModel {
         return appLocalDatabaseRepository.selectGenreById(genreId)
     }
 }

@@ -15,7 +15,7 @@ class AppLocalDatabaseRepositoryImpl @Inject constructor(
         return appLocalDatabaseDao.selectAllGenres()
     }
 
-    override suspend fun selectGenreById(genreId: Int): List<GenreModel> {
+    override suspend fun selectGenreById(genreId: Int): GenreModel {
         return appLocalDatabaseDao.selectGenreById(genreId)
     }
 }

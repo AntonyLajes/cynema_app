@@ -17,6 +17,7 @@ import com.nomargin.cynema.databinding.FragmentHomeBinding
 import com.nomargin.cynema.ui.adapter.recycler_view.FragmentHomeGenresAdapter
 import com.nomargin.cynema.ui.adapter.view_pager.MainCarouselAdapter
 import com.nomargin.cynema.util.extension.AdapterOnItemClickListener
+import com.nomargin.cynema.util.model.CarouselModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -56,8 +57,8 @@ class HomeFragment : Fragment() {
             finishShimmerLayout()
             initGenresRecyclerView(genreList)
         }
-        homeViewModel.popularMovies.observe(viewLifecycleOwner){moviesResult ->
-            initCarousel(moviesResult.results)
+        homeViewModel.movieModelToCarouselModel.observe(viewLifecycleOwner){movieList ->
+            initCarousel(movieList)
         }
     }
 
@@ -67,7 +68,7 @@ class HomeFragment : Fragment() {
         binding.mainView.visibility = View.VISIBLE
     }
 
-    private fun initCarousel(movies: List<MovieModel>) {
+    private fun initCarousel(movies: List<CarouselModel>) {
         val compositePageTransformer = CompositePageTransformer()
         compositePageTransformer.addTransformer(MarginPageTransformer((40 * Resources.getSystem().displayMetrics.density).toInt()))
         binding.viewPager.apply {

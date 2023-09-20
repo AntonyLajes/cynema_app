@@ -8,6 +8,6 @@ interface AppLocalDatabaseRepository {
 
     suspend fun selectAllGenres(): List<GenreModel>
 
-    suspend fun selectGenreById(genreId: Int): List<GenreModel>
+    suspend fun selectGenreById(genreId: Int): GenreModel
 
 }
