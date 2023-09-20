@@ -70,4 +70,11 @@ object Constants {
         const val posterPathUrl = "https://image.tmdb.org/t/p/original/"
     }
 
+    object LOCAL_STORAGE{
+        const val databaseName = "application_local_database"
+        const val databaseVersion = 1
+        const val genreTableName = "genre"
+        const val genreIdColumnName = "id"
+        const val genreDescColumnName = "desc"
+    }
 }
