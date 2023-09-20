@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.nomargin.cynema.data.remote.retrofit.entity.GenreModel
-import com.nomargin.cynema.data.remote.retrofit.entity.MovieModel
 import com.nomargin.cynema.databinding.FragmentHomeBinding
 import com.nomargin.cynema.ui.adapter.recycler_view.FragmentHomeGenresAdapter
 import com.nomargin.cynema.ui.adapter.view_pager.MainCarouselAdapter
@@ -50,6 +49,7 @@ class HomeFragment : Fragment() {
 
     private fun observers(){
         homeViewModel.genres.observe(viewLifecycleOwner){genreList ->
+            initGenresRecyclerView(genreList)
             finishShimmerLayout()
         }
         homeViewModel.movieModelToCarouselModel.observe(viewLifecycleOwner){movieList ->
