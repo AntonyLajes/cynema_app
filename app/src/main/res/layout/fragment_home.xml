@@ -91,11 +91,11 @@
                     layout="@layout/home_fragment_categories" />
 
                 <include
-                    android:id="@+id/includes_home_fragment_latest_movies"
+                    android:id="@+id/includes_home_fragment_now_playing_movies"
                     layout="@layout/home_fragment_movies" />
 
                 <include
-                    android:id="@+id/includes_home_fragment_most_watched_movies"
+                    android:id="@+id/includes_home_fragment_top_rated_movies"
                     layout="@layout/home_fragment_movies" />
 
                 <include

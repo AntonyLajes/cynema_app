@@ -25,10 +25,6 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = HomeFragment()
-    }
-
     private val homeViewModel: HomeViewModel by viewModels()
     private var _binding: FragmentHomeBinding? = null
     private val binding: FragmentHomeBinding get() = _binding!!
@@ -40,12 +36,8 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         binding.includeShimmerLayout.shimmerLayout.startShimmer()
         observers()
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         homeViewModel.getHomePageData()
+        return binding.root
     }
 
     override fun onDestroyView() {
@@ -95,11 +87,9 @@ class HomeFragment : Fragment() {
 
                 }
             })
-
     }
 
     private fun initGenresRecyclerView(genres: List<GenreModel>) {
-
         val fragmentHomeGenresAdapter = FragmentHomeGenresAdapter(genres)
 
         binding.includesHomeFragmentCategories.categoriesRecyclerView.layoutManager =
@@ -109,21 +99,20 @@ class HomeFragment : Fragment() {
     }
 
     private fun initNowPlayingRecyclerView(movies: List<MovieModel>) {
-        binding.includesHomeFragmentMostWatchedMovies.recyclerViewTitle.text =
+        binding.includesHomeFragmentNowPlayingMovies.recyclerViewTitle.text =
             getString(R.string.now_playing)
-        binding.includesHomeFragmentLatestMovies.recyclerView.layoutManager =
+        binding.includesHomeFragmentNowPlayingMovies.recyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        binding.includesHomeFragmentLatestMovies.recyclerView.adapter =
-            MoviePosterAdapter(movies.take(6))
+        binding.includesHomeFragmentNowPlayingMovies.recyclerView.adapter = MoviePosterAdapter(movies)
     }
 
     private fun initTopRatedMoviesRecyclerView(movies: List<MovieModel>) {
-        binding.includesHomeFragmentMostWatchedMovies.recyclerViewTitle.text =
+        binding.includesHomeFragmentTopRatedMovies.recyclerViewTitle.text =
             getString(R.string.top_rated)
-        binding.includesHomeFragmentMostWatchedMovies.recyclerView.layoutManager =
+        binding.includesHomeFragmentTopRatedMovies.recyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        binding.includesHomeFragmentMostWatchedMovies.recyclerView.adapter =
-            MoviePosterAdapter(movies.take(6))
+        binding.includesHomeFragmentTopRatedMovies.recyclerView.adapter =
+            MoviePosterAdapter(movies)
     }
 
     private fun initUpcomingMoviesRecyclerView(movies: List<MovieModel>) {
@@ -132,6 +121,6 @@ class HomeFragment : Fragment() {
         binding.includesHomeFragmentUpcomingMovies.recyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.includesHomeFragmentUpcomingMovies.recyclerView.adapter =
-            MoviePosterAdapter(movies.take(6))
+            MoviePosterAdapter(movies)
     }
 }
