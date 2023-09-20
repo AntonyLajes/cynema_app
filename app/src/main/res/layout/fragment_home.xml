@@ -98,6 +98,10 @@
                     android:id="@+id/includes_home_fragment_most_watched_movies"
                     layout="@layout/home_fragment_movies" />
 
+                <include
+                    android:id="@+id/includes_home_fragment_upcoming_movies"
+                    layout="@layout/home_fragment_movies" />
+
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
