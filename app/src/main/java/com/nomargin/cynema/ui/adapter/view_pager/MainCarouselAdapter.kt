@@ -5,13 +5,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.nomargin.cynema.data.remote.retrofit.entity.MovieModel
 import com.nomargin.cynema.databinding.ItemMainCarouselBinding
 import com.nomargin.cynema.util.Constants
 import com.nomargin.cynema.util.extension.AdapterOnItemClickListener
+import com.nomargin.cynema.util.model.CarouselModel
 
 class MainCarouselAdapter(
-    private val movieList: List<MovieModel>,
+    private val movieList: List<CarouselModel>,
     private val adapterOnItemClickListener: AdapterOnItemClickListener
 ): RecyclerView.Adapter<MainCarouselAdapter.MainCarouselViewHolder>() {
 
@@ -28,7 +28,7 @@ class MainCarouselAdapter(
         val currentItem = movieList[position]
         holder.itemMainCarouselBinding.carouselItemName.text = currentItem.title
         Glide.with(parentContext)
-            .load(Constants.TMDB_PATH_URLs.posterPathUrl + currentItem.posterPath)
+            .load(Constants.TMDB_PATH_URLs.posterPathUrl + currentItem.backgroundPath)
             .centerCrop()
             .into(holder.itemMainCarouselBinding.carouselItemImage)
         holder.itemMainCarouselBinding.moreInfoItem.setOnClickListener{
@@ -37,7 +37,11 @@ class MainCarouselAdapter(
                 position
             )
         }
-
+        val genreDesc: MutableList<String> = mutableListOf()
+        for(genre in currentItem.genres){
+            genreDesc.add(genre.genreDesc)
+        }
+        holder.itemMainCarouselBinding.carouselItemGenre.text = genreDesc.take(2).joinToString(" • ")
     }
 
     class MainCarouselViewHolder(val itemMainCarouselBinding: ItemMainCarouselBinding): RecyclerView.ViewHolder(itemMainCarouselBinding.root)

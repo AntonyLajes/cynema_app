@@ -19,4 +19,16 @@ class TheMovieDatabaseApiUseCaseImpl @Inject constructor(
     override suspend fun getPopularMovies(): MovieResponse {
         return theMovieDatabaseRepository.getPopularMovies()
     }
+
+    override suspend fun getNowPlayingMovies(): MovieResponse {
+        return theMovieDatabaseRepository.getNowPlayingMovies()
+    }
+
+    override suspend fun getTopRatedMovies(): MovieResponse {
+        return theMovieDatabaseRepository.getTopRatedMovies()
+    }
+
+    override suspend fun getUpcomingMovies(): MovieResponse {
+        return theMovieDatabaseRepository.getUpcomingMovies()
+    }
 }

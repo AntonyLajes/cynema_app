@@ -6,13 +6,13 @@ import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import com.nomargin.cynema.util.Constants
 
-@Entity(tableName = Constants.LOCAL_DATABASE.genreTableName)
+@Entity(tableName = Constants.LOCAL_STORAGE.genreTableName)
 data class GenreModel (
     @SerializedName("id")
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = Constants.LOCAL_DATABASE.genreIdColumnName)
-    val genreId: Int?,
+    @PrimaryKey(autoGenerate = false)
+    @ColumnInfo(name = Constants.LOCAL_STORAGE.genreIdColumnName)
+    val genreId: Int,
     @SerializedName("name")
-    @ColumnInfo(name = Constants.LOCAL_DATABASE.genreDescColumnName)
-    val genreDesc: String?
+    @ColumnInfo(name = Constants.LOCAL_STORAGE.genreDescColumnName)
+    val genreDesc: String
 )
