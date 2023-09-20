@@ -52,9 +52,9 @@ class HomeFragment : Fragment() {
     }
 
     private fun observers(){
-        homeViewModel.genres.observe(viewLifecycleOwner){genresResult ->
+        homeViewModel.genres.observe(viewLifecycleOwner){genreList ->
             finishShimmerLayout()
-            initGenresRecyclerView(genresResult.genreList)
+            initGenresRecyclerView(genreList)
         }
         homeViewModel.popularMovies.observe(viewLifecycleOwner){moviesResult ->
             initCarousel(moviesResult.results)

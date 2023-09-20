@@ -1,13 +1,10 @@
-package com.nomargin.cynema.data.repository
+package com.nomargin.cynema.data.usecase
 
 import com.nomargin.cynema.data.remote.retrofit.entity.GenreModel
 
-interface AppLocalDatabaseRepository {
-
+interface AppLocalDatabaseUseCase {
     suspend fun insertGenres(genres: List<GenreModel>)
-
     suspend fun selectAllGenres(): List<GenreModel>
-
     suspend fun selectGenreById(genreId: Int): List<GenreModel>
 
 }
