@@ -11,12 +11,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
-import com.nomargin.cynema.R
 import com.nomargin.cynema.data.remote.retrofit.entity.GenreModel
 import com.nomargin.cynema.data.remote.retrofit.entity.MovieModel
 import com.nomargin.cynema.databinding.FragmentHomeBinding
 import com.nomargin.cynema.ui.adapter.recycler_view.FragmentHomeGenresAdapter
-import com.nomargin.cynema.ui.adapter.recycler_view.MoviePosterAdapter
 import com.nomargin.cynema.ui.adapter.view_pager.MainCarouselAdapter
 import com.nomargin.cynema.util.extension.AdapterOnItemClickListener
 import com.nomargin.cynema.util.model.CarouselModel
@@ -45,7 +43,8 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        homeViewModel.getHomePageData()
+        homeViewModel.getGenres()
+        homeViewModel.getPopularMovies()
     }
 
     override fun onDestroyView() {
@@ -53,22 +52,13 @@ class HomeFragment : Fragment() {
         _binding = null
     }
 
-    private fun observers() {
-        homeViewModel.genres.observe(viewLifecycleOwner) { genreList ->
+    private fun observers(){
+        homeViewModel.genres.observe(viewLifecycleOwner){genreList ->
             finishShimmerLayout()
             initGenresRecyclerView(genreList)
         }
-        homeViewModel.movieModelToCarouselModel.observe(viewLifecycleOwner) { movieList ->
+        homeViewModel.movieModelToCarouselModel.observe(viewLifecycleOwner){movieList ->
             initCarousel(movieList)
-        }
-        homeViewModel.nowPlayingMovies.observe(viewLifecycleOwner) { nowPlaying ->
-            initNowPlayingRecyclerView(nowPlaying)
-        }
-        homeViewModel.topRatedMovies.observe(viewLifecycleOwner) { topRated ->
-            initTopRatedMoviesRecyclerView(topRated)
-        }
-        homeViewModel.upComingMovies.observe(viewLifecycleOwner) { upComing ->
-            initUpcomingMoviesRecyclerView(upComing)
         }
     }
 
@@ -89,49 +79,52 @@ class HomeFragment : Fragment() {
             setPageTransformer(compositePageTransformer)
         }
 
-        binding.viewPager.adapter =
-            MainCarouselAdapter(movies, object : AdapterOnItemClickListener {
-                override fun <T> onItemClickListener(item: T, position: Int) {
-
-                }
-            })
+        binding.viewPager.adapter = MainCarouselAdapter(movies, object : AdapterOnItemClickListener{
+            override fun <T> onItemClickListener(item: T, position: Int) {
+                val movie = item as MovieModel
+            }
+        })
 
     }
 
-    private fun initGenresRecyclerView(genres: List<GenreModel>) {
+    private fun initGenresRecyclerView(genres: List<GenreModel>){
 
         val fragmentHomeGenresAdapter = FragmentHomeGenresAdapter(genres)
 
-        binding.includesHomeFragmentCategories.categoriesRecyclerView.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        binding.includesHomeFragmentCategories.categoriesRecyclerView.adapter =
-            fragmentHomeGenresAdapter
+        binding.includesHomeFragmentCategories.categoriesRecyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.includesHomeFragmentCategories.categoriesRecyclerView.adapter = fragmentHomeGenresAdapter
+    }
+/*
+    private fun initLatestMoviesRecyclerView(){
+        val movieList = arrayListOf(
+            MovieModel(R.drawable.rocket_1, "Rocket 1"),
+            MovieModel(R.drawable.rocket_2, "Rocket 2"),
+            MovieModel(R.drawable.rocket_3, "Rocket 3"),
+            MovieModel(R.drawable.rocket_4, "Rocket 4"),
+            MovieModel(R.drawable.rocket_5, "Rocket 5"),
+        )
+
+        val fragmentHomeLatestMoviesAdapter = MoviePosterAdapter(movieList)
+
+        binding.includesHomeFragmentMostWatchedMovies.recyclerViewTitle.text = getString(R.string.latest_movies)
+        binding.includesHomeFragmentLatestMovies.recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.includesHomeFragmentLatestMovies.recyclerView.adapter = fragmentHomeLatestMoviesAdapter
     }
 
-    private fun initNowPlayingRecyclerView(movies: List<MovieModel>) {
-        binding.includesHomeFragmentMostWatchedMovies.recyclerViewTitle.text =
-            getString(R.string.now_playing)
-        binding.includesHomeFragmentLatestMovies.recyclerView.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        binding.includesHomeFragmentLatestMovies.recyclerView.adapter =
-            MoviePosterAdapter(movies.take(6))
-    }
+    private fun initLatestMostWatchedMoviesRecyclerView(){
+        val movieList = arrayListOf(
+            MovieModel(R.drawable.rocket_1, "Rocket 1"),
+            MovieModel(R.drawable.rocket_2, "Rocket 2"),
+            MovieModel(R.drawable.rocket_3, "Rocket 3"),
+            MovieModel(R.drawable.rocket_4, "Rocket 4"),
+            MovieModel(R.drawable.rocket_5, "Rocket 5"),
+        )
 
-    private fun initTopRatedMoviesRecyclerView(movies: List<MovieModel>) {
-        binding.includesHomeFragmentMostWatchedMovies.recyclerViewTitle.text =
-            getString(R.string.top_rated)
-        binding.includesHomeFragmentMostWatchedMovies.recyclerView.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        binding.includesHomeFragmentMostWatchedMovies.recyclerView.adapter =
-            MoviePosterAdapter(movies.take(6))
-    }
+        val fragmentHomeMostWatchedMoviesAdapter = MoviePosterAdapter(movieList)
 
-    private fun initUpcomingMoviesRecyclerView(movies: List<MovieModel>) {
-        binding.includesHomeFragmentUpcomingMovies.recyclerViewTitle.text =
-            getString(R.string.upcoming)
-        binding.includesHomeFragmentUpcomingMovies.recyclerView.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        binding.includesHomeFragmentUpcomingMovies.recyclerView.adapter =
-            MoviePosterAdapter(movies.take(6))
+        binding.includesHomeFragmentMostWatchedMovies.recyclerViewTitle.text = getString(R.string.most_watched)
+        binding.includesHomeFragmentMostWatchedMovies.recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.includesHomeFragmentMostWatchedMovies.recyclerView.adapter = fragmentHomeMostWatchedMoviesAdapter
     }
+*/
 }
