@@ -10,5 +10,8 @@ interface TheMovieDatabaseRepository {
     suspend fun getTvShowGenres(): GenreResponse
 
     suspend fun getPopularMovies(): MovieResponse
+    suspend fun getNowPlayingMovies(): MovieResponse
+    suspend fun getTopRatedMovies(): MovieResponse
+    suspend fun getUpcomingMovies(): MovieResponse
 
 }

@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 class TheMovieDatabaseRepositoryImpl @Inject constructor(
     private val theMovieDatabaseEndpoints: TheMovieDatabaseEndpoints
-): TheMovieDatabaseRepository {
+) : TheMovieDatabaseRepository {
     override suspend fun getMovieGenres(): GenreResponse {
         return theMovieDatabaseEndpoints.getMovieGenres()
     }
@@ -18,5 +18,17 @@ class TheMovieDatabaseRepositoryImpl @Inject constructor(
 
     override suspend fun getPopularMovies(): MovieResponse {
         return theMovieDatabaseEndpoints.getPopularMovies()
+    }
+
+    override suspend fun getNowPlayingMovies(): MovieResponse {
+        return theMovieDatabaseEndpoints.getNowPlayingMovies()
+    }
+
+    override suspend fun getTopRatedMovies(): MovieResponse {
+        return theMovieDatabaseEndpoints.getTopRatedMovies()
+    }
+
+    override suspend fun getUpcomingMovies(): MovieResponse {
+        return theMovieDatabaseEndpoints.getUpcomingMovies()
     }
 }

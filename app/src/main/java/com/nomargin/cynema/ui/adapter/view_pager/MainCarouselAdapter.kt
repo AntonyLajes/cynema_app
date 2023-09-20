@@ -28,7 +28,7 @@ class MainCarouselAdapter(
         val currentItem = movieList[position]
         holder.itemMainCarouselBinding.carouselItemName.text = currentItem.title
         Glide.with(parentContext)
-            .load(Constants.TMDB_PATH_URLs.posterPathUrl + currentItem.posterPath)
+            .load(Constants.TMDB_PATH_URLs.posterPathUrl + currentItem.backdropPath)
             .centerCrop()
             .into(holder.itemMainCarouselBinding.carouselItemImage)
         holder.itemMainCarouselBinding.moreInfoItem.setOnClickListener{

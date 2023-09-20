@@ -15,4 +15,13 @@ interface TheMovieDatabaseEndpoints {
     @GET("movie/popular?language=en-US")
     suspend fun getPopularMovies(): MovieResponse
 
+    @GET("movie/now_playing?language=en-US")
+    suspend fun getNowPlayingMovies(): MovieResponse
+
+    @GET("movie/top_rated?language=en-US")
+    suspend fun getTopRatedMovies(): MovieResponse
+
+    @GET("movie/upcoming?language=en-US")
+    suspend fun getUpcomingMovies(): MovieResponse
+
 }
