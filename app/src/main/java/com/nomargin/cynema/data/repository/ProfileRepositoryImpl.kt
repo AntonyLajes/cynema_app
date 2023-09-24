@@ -1,8 +1,10 @@
 package com.nomargin.cynema.data.repository
 
 import android.net.Uri
+import com.google.firebase.firestore.ktx.toObject
 import com.nomargin.cynema.R
 import com.nomargin.cynema.data.remote.firebase.authentication.FirebaseAuthUseCase
+import com.nomargin.cynema.data.remote.firebase.entity.UserProfileDataModel
 import com.nomargin.cynema.data.remote.firebase.firestore.FirebaseFirestoreUseCase
 import com.nomargin.cynema.data.remote.firebase.storage.FirebaseStorageUseCase
 import com.nomargin.cynema.data.usecase.ValidateAttributesUseCase
@@ -32,8 +34,8 @@ class ProfileRepositoryImpl @Inject constructor(
             val profilePictureLink = userProfileModel.userProfileUri?.let {
                 uploadProfilePicture(it)
             } ?: ""
-            val user = hashMapOf(
-                "user_id" to firebaseAuth.getFirebaseAuth().currentUser?.uid.toString(),
+            val usear = hashMapOf(
+                "user_id" to firebaseAuth.getFirebaseAuth().currentUser!!.uid,
                 "user_username" to userProfileModel.userUsername,
                 "user_email" to firebaseAuth.getFirebaseAuth().currentUser!!.email,
                 "user_first_name" to userProfileModel.userFirstName,
@@ -43,6 +45,19 @@ class ProfileRepositoryImpl @Inject constructor(
                 "user_posts" to arrayListOf<Int>(),
                 "user_posts_quantity" to 0,
                 "user_is_profile_updated" to true,
+            )
+
+            val user = UserProfileDataModel(
+                id = firebaseAuth.getFirebaseAuth().currentUser!!.uid,
+                username = userProfileModel.userUsername,
+                email = firebaseAuth.getFirebaseAuth().currentUser!!.email,
+                firstName = userProfileModel.userFirstName,
+                lastName = userProfileModel.userLastName,
+                biography = userProfileModel.userBiography,
+                profilePicture = profilePictureLink.toString(),
+                posts = arrayListOf(),
+                postsQuantity = 0,
+                isProfileUpdated = true
             )
 
             database.set(user)
@@ -98,29 +113,61 @@ class ProfileRepositoryImpl @Inject constructor(
     }
 
     override suspend fun checkUserUsername(username: String): StatusModel? {
-        if(username.length >= Constants.MIN_LENGTH.usernameMinLength && username.length <= Constants.MAX_LENGTH.userUsernameMaxLength){
+        if (username.length >= Constants.MIN_LENGTH.usernameMinLength && username.length <= Constants.MAX_LENGTH.userUsernameMaxLength) {
             val usernameDoNotExists = firebaseFirestore.getFirebaseFirestore()
                 .collection(Constants.FIRESTORE.usersCollection)
                 .whereEqualTo("user_username", username)
                 .get()
-                .addOnCompleteListener {  }
+                .addOnCompleteListener { }
                 .await().isEmpty
 
-            return if(usernameDoNotExists){
+            return if (usernameDoNotExists) {
                 StatusModel(
                     true,
                     null,
                     R.string.user_username_is_valid
                 )
-            }else{
+            } else {
                 StatusModel(
                     false,
                     Constants.ERROR_TYPES.userUsernameAlreadyInUse,
                     R.string.user_username_already_in_use
                 )
             }
-        }else{
+        } else {
             return null
+        }
+    }
+
+    override suspend fun getUserData(): Resource<UserProfileDataModel> {
+        val user = firebaseFirestore
+            .getFirebaseFirestore()
+            .collection(
+                Constants.FIRESTORE.usersCollection
+            ).document(
+                firebaseAuth.getFirebaseAuth().uid!!
+            ).get()
+            .addOnCompleteListener {  }.await()
+
+        return if(user.exists()){
+            Resource.success(
+                user.toObject<UserProfileDataModel>(),
+                StatusModel(
+                    true,
+                    null,
+                    R.string.user_data_reached_with_success
+                )
+            )
+        }else{
+            Resource.error(
+                "Error",
+                null,
+                StatusModel(
+                    false,
+                    Constants.ERROR_TYPES.couldNotReachTheUserData,
+                    R.string.could_not_reach_the_user_data
+                )
+            )
         }
     }
 }

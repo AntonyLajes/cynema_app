@@ -22,6 +22,7 @@ object Constants {
         const val passwordIsNotValid = 15
         const val userUsernameAlreadyInUse = 16
         const val firestoreError = 17
+        const val couldNotReachTheUserData = 18
     }
 
     object AUTH_ERRORS{

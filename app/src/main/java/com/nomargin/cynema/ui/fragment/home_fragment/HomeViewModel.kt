@@ -4,8 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.nomargin.cynema.data.remote.firebase.entity.UserProfileDataModel
 import com.nomargin.cynema.data.remote.retrofit.entity.GenreModel
 import com.nomargin.cynema.data.remote.retrofit.entity.MovieModel
+import com.nomargin.cynema.data.repository.ProfileRepository
 import com.nomargin.cynema.data.usecase.AppLocalDatabaseUseCase
 import com.nomargin.cynema.data.usecase.TheMovieDatabaseApiUseCase
 import com.nomargin.cynema.util.model.CarouselModel
@@ -17,7 +19,8 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val theMovieDatabaseApiUseCase: TheMovieDatabaseApiUseCase,
-    private val appLocalDatabaseUseCase: AppLocalDatabaseUseCase
+    private val appLocalDatabaseUseCase: AppLocalDatabaseUseCase,
+    private val profileRepository: ProfileRepository
 ) : ViewModel() {
 
     private val _genres: MutableLiveData<List<GenreModel>> = MutableLiveData()
@@ -30,6 +33,8 @@ class HomeViewModel @Inject constructor(
     val topRatedMovies: LiveData<List<MovieModel>> = _topRatedMovies
     private val _upcomingMovies: MutableLiveData<List<MovieModel>> = MutableLiveData()
     val upcomingMovies: LiveData<List<MovieModel>> = _upcomingMovies
+    private val _userProfileData: MutableLiveData<UserProfileDataModel> = MutableLiveData()
+    val userProfileData: LiveData<UserProfileDataModel> = _userProfileData
 
     fun getHomeScreenData(){
         getGenres()
@@ -37,6 +42,7 @@ class HomeViewModel @Inject constructor(
         getNowPlayingMovies()
         getTopRatedMovies()
         getUpcomingMovies()
+        getUserProfileData()
     }
 
     private fun getGenres() = viewModelScope.launch {
@@ -79,6 +85,10 @@ class HomeViewModel @Inject constructor(
 
     private fun getUpcomingMovies() = viewModelScope.launch {
         _upcomingMovies.value = theMovieDatabaseApiUseCase.getUpcomingMovies().results
+    }
+
+    private fun getUserProfileData() = viewModelScope.launch{
+        _userProfileData.value = profileRepository.getUserData().data ?: UserProfileDataModel()
     }
 
 }

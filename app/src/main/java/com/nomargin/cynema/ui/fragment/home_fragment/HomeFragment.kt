@@ -2,6 +2,7 @@ package com.nomargin.cynema.ui.fragment.home_fragment
 
 import android.content.res.Resources
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +12,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
+import com.bumptech.glide.Glide
 import com.nomargin.cynema.R
+import com.nomargin.cynema.data.remote.firebase.entity.UserProfileDataModel
 import com.nomargin.cynema.data.remote.retrofit.entity.GenreModel
 import com.nomargin.cynema.data.remote.retrofit.entity.MovieModel
 import com.nomargin.cynema.databinding.FragmentHomeBinding
@@ -49,22 +52,25 @@ class HomeFragment : Fragment() {
         _binding = null
     }
 
-    private fun observers(){
-        homeViewModel.genres.observe(viewLifecycleOwner){genreList ->
+    private fun observers() {
+        homeViewModel.genres.observe(viewLifecycleOwner) { genreList ->
             initGenresRecyclerView(genreList)
             finishShimmerLayout()
         }
-        homeViewModel.movieModelToCarouselModel.observe(viewLifecycleOwner){movieList ->
+        homeViewModel.movieModelToCarouselModel.observe(viewLifecycleOwner) { movieList ->
             initCarousel(movieList)
         }
-        homeViewModel.nowPlayingMovies.observe(viewLifecycleOwner){nowPlaying ->
+        homeViewModel.nowPlayingMovies.observe(viewLifecycleOwner) { nowPlaying ->
             initNowPlayingRecyclerView(nowPlaying)
         }
-        homeViewModel.topRatedMovies.observe(viewLifecycleOwner){topRated ->
+        homeViewModel.topRatedMovies.observe(viewLifecycleOwner) { topRated ->
             initTopRatedMoviesRecyclerView(topRated)
         }
-        homeViewModel.upcomingMovies.observe(viewLifecycleOwner){upcoming ->
+        homeViewModel.upcomingMovies.observe(viewLifecycleOwner) { upcoming ->
             initUpcomingMoviesRecyclerView(upcoming)
+        }
+        homeViewModel.userProfileData.observe(viewLifecycleOwner) { userProfile ->
+            userProfileHandler(userProfile)
         }
     }
 
@@ -93,9 +99,11 @@ class HomeFragment : Fragment() {
             })
     }
 
-    private fun initGenresRecyclerView(genres: List<GenreModel>){
-        binding.includesHomeFragmentCategories.categoriesRecyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        binding.includesHomeFragmentCategories.categoriesRecyclerView.adapter = FragmentHomeGenresAdapter(genres.take(10))
+    private fun initGenresRecyclerView(genres: List<GenreModel>) {
+        binding.includesHomeFragmentCategories.categoriesRecyclerView.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.includesHomeFragmentCategories.categoriesRecyclerView.adapter =
+            FragmentHomeGenresAdapter(genres.take(10))
     }
 
     private fun initNowPlayingRecyclerView(movies: List<MovieModel>) {
@@ -103,8 +111,10 @@ class HomeFragment : Fragment() {
             getString(R.string.now_playing)
         binding.includesHomeFragmentNowPlayingMovies.recyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        binding.includesHomeFragmentNowPlayingMovies.recyclerView.adapter = MoviePosterAdapter(movies.take(7))
+        binding.includesHomeFragmentNowPlayingMovies.recyclerView.adapter =
+            MoviePosterAdapter(movies.take(7))
     }
+
     private fun initTopRatedMoviesRecyclerView(movies: List<MovieModel>) {
         binding.includesHomeFragmentTopRatedMovies.recyclerViewTitle.text =
             getString(R.string.top_rated)
@@ -113,6 +123,7 @@ class HomeFragment : Fragment() {
         binding.includesHomeFragmentTopRatedMovies.recyclerView.adapter =
             MoviePosterAdapter(movies.take(7))
     }
+
     private fun initUpcomingMoviesRecyclerView(movies: List<MovieModel>) {
         binding.includesHomeFragmentUpcomingMovies.recyclerViewTitle.text =
             getString(R.string.upcoming)
@@ -120,5 +131,49 @@ class HomeFragment : Fragment() {
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.includesHomeFragmentUpcomingMovies.recyclerView.adapter =
             MoviePosterAdapter(movies.take(7))
-}
+    }
+
+    private fun userProfileHandler(userProfile: UserProfileDataModel?) {
+        userProfile?.let {
+            Log.d("userProfileHandlerFunc", "userProfileHandler: $it")
+            when {
+                it.firstName.isNullOrEmpty() && it.profilePicture.isNullOrEmpty() -> {
+                    binding.welcomeGreetings.text = buildString {
+                        append(getString(R.string.welcome))
+                        append("! ")
+                        append(getString(R.string.hi_emoji))
+                    }
+                }
+
+                it.firstName.isNullOrEmpty() && !it.profilePicture.isNullOrEmpty() -> {
+                    binding.welcomeGreetings.text = buildString {
+                        append(getString(R.string.welcome))
+                        append("! ")
+                        append(getString(R.string.hi_emoji))
+                    }
+
+                    Glide.with(this)
+                        .load(it.profilePicture)
+                        .error(R.drawable.pic_profile_picture)
+                        .into(binding.profilePicture)
+                }
+
+                else -> {
+                    binding.welcomeGreetings.text =
+                        buildString {
+                            append(getString(R.string.welcome))
+                            append(", ")
+                            append(userProfile.firstName)
+                            append("! ")
+                            append(getString(R.string.hi_emoji))
+                        }
+
+                    Glide.with(this)
+                        .load(it.profilePicture)
+                        .error(R.drawable.pic_profile_picture)
+                        .into(binding.profilePicture)
+                }
+            }
+        }
+    }
 }

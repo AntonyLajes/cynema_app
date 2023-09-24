@@ -1,6 +1,7 @@
 package com.nomargin.cynema.data.repository
 
 import android.net.Uri
+import com.nomargin.cynema.data.remote.firebase.entity.UserProfileDataModel
 import com.nomargin.cynema.util.Resource
 import com.nomargin.cynema.util.model.StatusModel
 import com.nomargin.cynema.util.model.UserProfileModel
@@ -14,4 +15,6 @@ interface ProfileRepository {
     suspend fun verifyProfile(): Boolean
 
     suspend fun checkUserUsername(username: String): StatusModel?
+
+    suspend fun getUserData(): Resource<UserProfileDataModel>
 }
