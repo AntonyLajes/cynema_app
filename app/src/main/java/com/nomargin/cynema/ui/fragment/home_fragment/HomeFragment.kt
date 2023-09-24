@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
@@ -94,7 +95,7 @@ class HomeFragment : Fragment() {
         binding.viewPager.adapter =
             MainCarouselAdapter(movies.take(7), object : AdapterOnItemClickListener {
                 override fun <T> onItemClickListener(item: T, position: Int) {
-
+                    requireActivity().findNavController(R.id.fragmentContainerView).navigate(HomeFragmentDirections.actionHomeFragmentToMovieFragment())
                 }
             })
     }
@@ -175,5 +176,8 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun initClicks() {
     }
 }

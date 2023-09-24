@@ -116,4 +116,6 @@
     <string name="user_data_reached_with_success">User data reached with success!</string>
     <string name="welcome">Welcome</string>
     <string name="hi_emoji">👋</string>
+    <string name="details">Details</string>
+    <string name="discussion">Discussion</string>
 </resources>

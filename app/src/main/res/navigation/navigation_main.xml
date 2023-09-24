@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_home_fragment_to_profile_fragment"
             app:destination="@id/profile_fragment" />
+        <action
+            android:id="@+id/action_home_fragment_to_movieFragment"
+            app:destination="@id/movieFragment" />
     </fragment>
     <fragment
         android:id="@+id/search_fragment"
@@ -35,4 +38,9 @@
         android:name="com.nomargin.cynema.ui.fragment.profile_fragment.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/movieFragment"
+        android:name="com.nomargin.cynema.ui.fragment.movie_fragment.MovieFragment"
+        android:label="fragment_movie"
+        tools:layout="@layout/fragment_movie" />
 </navigation>
