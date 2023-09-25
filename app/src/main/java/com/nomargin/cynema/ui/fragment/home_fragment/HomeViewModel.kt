@@ -36,7 +36,7 @@ class HomeViewModel @Inject constructor(
     private val _userProfileData: MutableLiveData<UserProfileDataModel> = MutableLiveData()
     val userProfileData: LiveData<UserProfileDataModel> = _userProfileData
 
-    fun getHomeScreenData(){
+    fun getHomeScreenData() {
         getGenres()
         getPopularMovies()
         getNowPlayingMovies()
@@ -50,11 +50,11 @@ class HomeViewModel @Inject constructor(
         _genres.value = appLocalDatabaseUseCase.selectAllGenres()
     }
 
-    private fun getMovieModelToCarouselModel(movieList: List<MovieModel>) = viewModelScope.launch{
+    private fun getMovieModelToCarouselModel(movieList: List<MovieModel>) = viewModelScope.launch {
         val movieCarouselModel: MutableList<CarouselModel> = mutableListOf()
-        for(movie in movieList){
+        for (movie in movieList) {
             val movieGenres: MutableList<GenreModel> = mutableListOf()
-            for(movieGenre in movie.genreIds){
+            for (movieGenre in movie.genreIds) {
                 val genre = async { appLocalDatabaseUseCase.selectGenreById(movieGenre) }.await()
                 movieGenres.add(genre)
             }
@@ -87,7 +87,7 @@ class HomeViewModel @Inject constructor(
         _upcomingMovies.value = theMovieDatabaseApiUseCase.getUpcomingMovies().results
     }
 
-    private fun getUserProfileData() = viewModelScope.launch{
+    private fun getUserProfileData() = viewModelScope.launch {
         _userProfileData.value = profileRepository.getUserData().data ?: UserProfileDataModel()
     }
 

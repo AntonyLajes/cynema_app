@@ -2,6 +2,7 @@ package com.nomargin.cynema.data.repository
 
 import com.nomargin.cynema.data.remote.retrofit.endpoint.TheMovieDatabaseEndpoints
 import com.nomargin.cynema.data.remote.retrofit.entity.GenreResponse
+import com.nomargin.cynema.data.remote.retrofit.entity.MovieDetailsModel
 import com.nomargin.cynema.data.remote.retrofit.entity.MovieResponse
 import javax.inject.Inject
 
@@ -30,5 +31,9 @@ class TheMovieDatabaseRepositoryImpl @Inject constructor(
 
     override suspend fun getUpcomingMovies(): MovieResponse {
         return theMovieDatabaseEndpoints.getUpcomingMovies()
+    }
+
+    override suspend fun getMovieDetails(movieId: String): MovieDetailsModel {
+        return theMovieDatabaseEndpoints.getMovieDetails(movieId)
     }
 }

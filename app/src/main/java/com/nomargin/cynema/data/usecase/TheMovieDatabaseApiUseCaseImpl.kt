@@ -1,13 +1,14 @@
 package com.nomargin.cynema.data.usecase
 
 import com.nomargin.cynema.data.remote.retrofit.entity.GenreResponse
+import com.nomargin.cynema.data.remote.retrofit.entity.MovieDetailsModel
 import com.nomargin.cynema.data.remote.retrofit.entity.MovieResponse
 import com.nomargin.cynema.data.repository.TheMovieDatabaseRepository
 import javax.inject.Inject
 
 class TheMovieDatabaseApiUseCaseImpl @Inject constructor(
     private val theMovieDatabaseRepository: TheMovieDatabaseRepository
-): TheMovieDatabaseApiUseCase {
+) : TheMovieDatabaseApiUseCase {
     override suspend fun getMovieGenres(): GenreResponse {
         return theMovieDatabaseRepository.getMovieGenres()
     }
@@ -30,5 +31,9 @@ class TheMovieDatabaseApiUseCaseImpl @Inject constructor(
 
     override suspend fun getUpcomingMovies(): MovieResponse {
         return theMovieDatabaseRepository.getUpcomingMovies()
+    }
+
+    override suspend fun getMovieDetails(movieId: String): MovieDetailsModel {
+        return theMovieDatabaseRepository.getMovieDetails(movieId)
     }
 }

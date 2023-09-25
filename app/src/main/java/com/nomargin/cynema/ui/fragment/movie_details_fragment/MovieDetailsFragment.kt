@@ -1,32 +1,32 @@
 package com.nomargin.cynema.ui.fragment.movie_details_fragment
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.nomargin.cynema.R
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import com.nomargin.cynema.databinding.FragmentMovieDetailsBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MovieDetailsFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = MovieDetailsFragment()
-    }
-
-    private lateinit var viewModel: MovieDetailsViewModel
+    private var _binding: FragmentMovieDetailsBinding? = null
+    private val binding: FragmentMovieDetailsBinding get() = _binding!!
+    private val movieDetailsViewModel: MovieDetailsViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_movie_details, container, false)
+    ): View {
+        _binding = FragmentMovieDetailsBinding.inflate(inflater)
+        return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(MovieDetailsViewModel::class.java)
-        // TODO: Use the ViewModel
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }

@@ -1,6 +1,7 @@
 package com.nomargin.cynema.data.usecase
 
 import com.nomargin.cynema.data.remote.retrofit.entity.GenreResponse
+import com.nomargin.cynema.data.remote.retrofit.entity.MovieDetailsModel
 import com.nomargin.cynema.data.remote.retrofit.entity.MovieResponse
 
 interface TheMovieDatabaseApiUseCase {
@@ -10,4 +11,5 @@ interface TheMovieDatabaseApiUseCase {
     suspend fun getNowPlayingMovies(): MovieResponse
     suspend fun getTopRatedMovies(): MovieResponse
     suspend fun getUpcomingMovies(): MovieResponse
+    suspend fun getMovieDetails(movieId: String): MovieDetailsModel
 }

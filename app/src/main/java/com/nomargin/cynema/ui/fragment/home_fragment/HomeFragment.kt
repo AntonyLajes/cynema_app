@@ -95,7 +95,8 @@ class HomeFragment : Fragment() {
         binding.viewPager.adapter =
             MainCarouselAdapter(movies.take(7), object : AdapterOnItemClickListener {
                 override fun <T> onItemClickListener(item: T, position: Int) {
-                    requireActivity().findNavController(R.id.fragmentContainerView).navigate(HomeFragmentDirections.actionHomeFragmentToMovieFragment())
+                    val movie = item as CarouselModel
+
                 }
             })
     }
