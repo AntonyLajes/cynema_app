@@ -9,7 +9,7 @@ data class MovieDetailsModel(
     val adult: Boolean,
     @SerializedName("backdrop_path")
     val backdropPath: String,
-    @SerializedName("belongs_to_collection")
+    //@SerializedName("belongs_to_collection")
     val belongsToCollection: String,
     @SerializedName("budget")
     val budget: Int,
@@ -32,7 +32,7 @@ data class MovieDetailsModel(
     @SerializedName("production_companies")
     val productionCompanies: List<CompanyModel>,
     @SerializedName("production_countries")
-    val productionCountries: List<CompanyModel>,
+    val productionCountries: List<CountryModel>,
     @SerializedName("release_date")
     val releaseDate: String,
     @SerializedName("revenue")

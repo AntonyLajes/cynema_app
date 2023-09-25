@@ -42,6 +42,5 @@
         android:id="@+id/movieFragment"
         android:name="com.nomargin.cynema.ui.fragment.movie_fragment.MovieFragment"
         android:label="fragment_movie"
-        tools:layout="@layout/fragment_movie" >
-    </fragment>
+        tools:layout="@layout/fragment_movie" />
 </navigation>

@@ -26,7 +26,7 @@ interface TheMovieDatabaseEndpoints {
     @GET("movie/upcoming?language=en-US")
     suspend fun getUpcomingMovies(): MovieResponse
 
-    @GET("{movie_id}/123?language=en-US")
+    @GET("movie/{movie_id}?language=en-US")
     suspend fun getMovieDetails(@Path("movie_id") movieId: String): MovieDetailsModel
 
 }

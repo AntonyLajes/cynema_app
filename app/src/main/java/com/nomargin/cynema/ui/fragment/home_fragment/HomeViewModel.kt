@@ -8,6 +8,7 @@ import com.nomargin.cynema.data.remote.firebase.entity.UserProfileDataModel
 import com.nomargin.cynema.data.remote.retrofit.entity.GenreModel
 import com.nomargin.cynema.data.remote.retrofit.entity.MovieModel
 import com.nomargin.cynema.data.repository.ProfileRepository
+import com.nomargin.cynema.data.repository.SharedPreferencesRepository
 import com.nomargin.cynema.data.usecase.AppLocalDatabaseUseCase
 import com.nomargin.cynema.data.usecase.TheMovieDatabaseApiUseCase
 import com.nomargin.cynema.util.model.CarouselModel
@@ -20,7 +21,8 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val theMovieDatabaseApiUseCase: TheMovieDatabaseApiUseCase,
     private val appLocalDatabaseUseCase: AppLocalDatabaseUseCase,
-    private val profileRepository: ProfileRepository
+    private val profileRepository: ProfileRepository,
+    private val sharedPreferencesRepository: SharedPreferencesRepository
 ) : ViewModel() {
 
     private val _genres: MutableLiveData<List<GenreModel>> = MutableLiveData()
@@ -89,6 +91,10 @@ class HomeViewModel @Inject constructor(
 
     private fun getUserProfileData() = viewModelScope.launch {
         _userProfileData.value = profileRepository.getUserData().data ?: UserProfileDataModel()
+    }
+
+    fun saveDataToSharedPreferences(key: String, movieId: String){
+        sharedPreferencesRepository.putString(key, movieId)
     }
 
 }

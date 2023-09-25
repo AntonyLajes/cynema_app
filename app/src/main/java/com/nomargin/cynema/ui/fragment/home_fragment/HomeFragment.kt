@@ -2,7 +2,6 @@ package com.nomargin.cynema.ui.fragment.home_fragment
 
 import android.content.res.Resources
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +21,7 @@ import com.nomargin.cynema.databinding.FragmentHomeBinding
 import com.nomargin.cynema.ui.adapter.recycler_view.FragmentHomeGenresAdapter
 import com.nomargin.cynema.ui.adapter.recycler_view.MoviePosterAdapter
 import com.nomargin.cynema.ui.adapter.view_pager.MainCarouselAdapter
+import com.nomargin.cynema.util.Constants
 import com.nomargin.cynema.util.extension.AdapterOnItemClickListener
 import com.nomargin.cynema.util.model.CarouselModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -95,8 +95,18 @@ class HomeFragment : Fragment() {
         binding.viewPager.adapter =
             MainCarouselAdapter(movies.take(7), object : AdapterOnItemClickListener {
                 override fun <T> onItemClickListener(item: T, position: Int) {
-                    val movie = item as CarouselModel
-
+                    val movieModel = item as CarouselModel
+                    homeViewModel.saveDataToSharedPreferences(
+                        Constants.LOCAL_STORAGE.sharedPreferencesMovieIdKey,
+                        movieModel.id.toString()
+                    )
+                    requireActivity()
+                        .findNavController(
+                            R.id.fragmentContainerView
+                        )
+                        .navigate(
+                            HomeFragmentDirections.actionHomeFragmentToMovieFragment()
+                        )
                 }
             })
     }
@@ -137,7 +147,6 @@ class HomeFragment : Fragment() {
 
     private fun userProfileHandler(userProfile: UserProfileDataModel?) {
         userProfile?.let {
-            Log.d("userProfileHandlerFunc", "userProfileHandler: $it")
             when {
                 it.firstName.isNullOrEmpty() && it.profilePicture.isNullOrEmpty() -> {
                     binding.welcomeGreetings.text = buildString {
@@ -177,8 +186,5 @@ class HomeFragment : Fragment() {
                 }
             }
         }
-    }
-
-    private fun initClicks() {
     }
 }

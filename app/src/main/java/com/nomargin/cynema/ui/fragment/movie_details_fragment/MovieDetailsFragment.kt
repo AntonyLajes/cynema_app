@@ -6,7 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.bumptech.glide.Glide
+import com.nomargin.cynema.data.remote.retrofit.entity.MovieDetailsModel
 import com.nomargin.cynema.databinding.FragmentMovieDetailsBinding
+import com.nomargin.cynema.util.Constants
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -24,9 +27,29 @@ class MovieDetailsFragment : Fragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        movieDetailsViewModel.getDataFromSharedPreferences(
+            Constants.LOCAL_STORAGE.sharedPreferencesMovieIdKey,
+            ""
+        )
+        observers()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun observers() {
+        movieDetailsViewModel.movieDetails.observe(viewLifecycleOwner){movieDetails ->
+            fieldsHandler(movieDetails)
+        }
+    }
+
+    private fun fieldsHandler(movieDetails: MovieDetailsModel) {
+        
+
     }
 
 }

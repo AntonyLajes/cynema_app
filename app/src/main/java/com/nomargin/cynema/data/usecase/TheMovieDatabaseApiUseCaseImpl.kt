@@ -4,6 +4,8 @@ import com.nomargin.cynema.data.remote.retrofit.entity.GenreResponse
 import com.nomargin.cynema.data.remote.retrofit.entity.MovieDetailsModel
 import com.nomargin.cynema.data.remote.retrofit.entity.MovieResponse
 import com.nomargin.cynema.data.repository.TheMovieDatabaseRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class TheMovieDatabaseApiUseCaseImpl @Inject constructor(
@@ -34,6 +36,9 @@ class TheMovieDatabaseApiUseCaseImpl @Inject constructor(
     }
 
     override suspend fun getMovieDetails(movieId: String): MovieDetailsModel {
-        return theMovieDatabaseRepository.getMovieDetails(movieId)
+        val movieDetails = withContext(Dispatchers.IO){
+            theMovieDatabaseRepository.getMovieDetails(movieId)
+        }
+        return movieDetails
     }
 }
