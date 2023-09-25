@@ -77,5 +77,7 @@ object Constants {
         const val genreTableName = "genre"
         const val genreIdColumnName = "id"
         const val genreDescColumnName = "desc"
+        const val sharedPreferencesGeneralKey = "movieIdGeneralKey"
+        const val sharedPreferencesMovieIdKey = "movieId"
     }
 }

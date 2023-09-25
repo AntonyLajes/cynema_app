@@ -5,6 +5,8 @@ plugins {
     id 'com.google.dagger.hilt.android'
     id 'com.google.gms.google-services'
     id 'com.google.devtools.ksp'
+    id 'androidx.navigation.safeargs.kotlin'
+    id 'kotlin-parcelize'
 }
 
 android {
@@ -92,6 +94,7 @@ dependencies {
     //Retrofit
     implementation "com.squareup.retrofit2:retrofit:2.9.0"
     implementation "com.squareup.retrofit2:converter-gson:2.9.0"
+    implementation "com.squareup.retrofit2:converter-scalars:2.9.0"
     implementation "com.squareup.okhttp3:logging-interceptor:4.11.0"
 
     //Shimmer

@@ -34,19 +34,6 @@ class ProfileRepositoryImpl @Inject constructor(
             val profilePictureLink = userProfileModel.userProfileUri?.let {
                 uploadProfilePicture(it)
             } ?: ""
-            val usear = hashMapOf(
-                "user_id" to firebaseAuth.getFirebaseAuth().currentUser!!.uid,
-                "user_username" to userProfileModel.userUsername,
-                "user_email" to firebaseAuth.getFirebaseAuth().currentUser!!.email,
-                "user_first_name" to userProfileModel.userFirstName,
-                "user_last_name" to userProfileModel.userLastName,
-                "user_biography" to userProfileModel.userBiography,
-                "user_profile_picture" to profilePictureLink,
-                "user_posts" to arrayListOf<Int>(),
-                "user_posts_quantity" to 0,
-                "user_is_profile_updated" to true,
-            )
-
             val user = UserProfileDataModel(
                 id = firebaseAuth.getFirebaseAuth().currentUser!!.uid,
                 username = userProfileModel.userUsername,

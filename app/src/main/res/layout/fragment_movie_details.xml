@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/custom_low_white"
+    android:fillViewport="true"
+    android:fitsSystemWindows="true"
+    tools:context=".ui.fragment.movie_details_fragment.MovieDetailsFragment">
+
+    <include
+        android:id="@+id/include_shimmer_movie_details_fragment_layout"
+        layout="@layout/shimmer_movie_details_fragment_layout" />
+
+    <ScrollView
+        android:id="@+id/fragment_movie_details_main_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true"
+        android:fitsSystemWindows="true"
+        android:visibility="gone">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/movie_poster"
+                android:layout_width="0dp"
+                android:layout_height="236dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearanceOverlay="@style/MoviePosterSpecificCornerRounded"
+                tools:src="@drawable/rocket_1" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginHorizontal="16dp"
+                android:background="@drawable/bg_bookmark_button"
+                android:src="@drawable/ic_add_bookmark"
+                app:layout_constraintBottom_toBottomOf="@id/movie_poster"
+                app:layout_constraintEnd_toEndOf="@id/movie_poster"
+                app:layout_constraintTop_toBottomOf="@id/movie_poster" />
+
+            <TextView
+                android:id="@+id/movie_name"
+                android:layout_width="121dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:textColor="@color/custom_black"
+                android:textSize="22sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/movie_poster"
+                tools:text="@string/movie_name" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/rate_icon"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_marginTop="4dp"
+                android:src="@drawable/ic_star_rate"
+                app:layout_constraintStart_toStartOf="@id/movie_name"
+                app:layout_constraintTop_toBottomOf="@id/movie_name" />
+
+            <TextView
+                android:id="@+id/movie_rate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:textColor="@color/custom_bold_grey"
+                app:layout_constraintBottom_toBottomOf="@id/rate_icon"
+                app:layout_constraintStart_toEndOf="@id/rate_icon"
+                app:layout_constraintTop_toTopOf="@id/rate_icon"
+                tools:text="80% Match" />
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/first_divider"
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginVertical="16dp"
+                android:background="@color/custom_bold_grey"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/movie_rate" />
+
+            <TextView
+                android:id="@+id/release_date_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/release_date"
+                android:textColor="@color/custom_black"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/first_divider" />
+
+            <TextView
+                android:id="@+id/movie_release_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="4dp"
+                android:textColor="@color/custom_bold_grey"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/release_date_title"
+                tools:text="July 19, 2023" />
+
+            <TextView
+                android:id="@+id/genre_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/genre"
+                android:textColor="@color/custom_black"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/movie_release_date" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/movie_genres"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/genre_title"
+                tools:listitem="@layout/movie_genre_button" />
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/second_divider"
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginVertical="16dp"
+                android:background="@color/custom_bold_grey"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/movie_genres" />
+
+            <TextView
+                android:id="@+id/synopsys_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/synopsys"
+                android:textColor="@color/custom_black"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/second_divider" />
+
+            <TextView
+                android:id="@+id/movie_synopsys"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="16dp"
+                android:textColor="@color/custom_bold_grey"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/synopsys_title"
+                tools:text="@string/lorem_ipsum" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

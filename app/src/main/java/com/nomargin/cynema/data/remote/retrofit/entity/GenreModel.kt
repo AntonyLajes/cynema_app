@@ -8,11 +8,11 @@ import com.nomargin.cynema.util.Constants
 
 @Entity(tableName = Constants.LOCAL_STORAGE.genreTableName)
 data class GenreModel (
-    @SerializedName("id")
     @PrimaryKey(autoGenerate = false)
     @ColumnInfo(name = Constants.LOCAL_STORAGE.genreIdColumnName)
+    @SerializedName("id")
     val genreId: Int,
-    @SerializedName("name")
     @ColumnInfo(name = Constants.LOCAL_STORAGE.genreDescColumnName)
+    @SerializedName("name")
     val genreDesc: String
 )
