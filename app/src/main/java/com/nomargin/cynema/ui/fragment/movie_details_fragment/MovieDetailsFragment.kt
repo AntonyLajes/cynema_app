@@ -64,7 +64,7 @@ class MovieDetailsFragment : Fragment() {
             .load(Constants.TMDB_PATH_URLs.posterPathUrl + movieDetails.backdropPath)
             .centerCrop()
             .into(binding.moviePoster)
-        binding.movieName.text = movieDetails.originalTitle
+        binding.movieName.text = movieDetails.title
         val decimalFormat = DecimalFormat("#.#")
         val movieRateRounded = decimalFormat.format(movieDetails.voteAverage)
         binding.movieRate.text = buildString {

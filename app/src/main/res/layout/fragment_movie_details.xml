@@ -14,12 +14,12 @@
         layout="@layout/shimmer_movie_details_fragment_layout" />
 
     <ScrollView
+        android:visibility="gone"
         android:id="@+id/fragment_movie_details_main_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fillViewport="true"
-        android:fitsSystemWindows="true"
-        android:visibility="gone">
+        android:fitsSystemWindows="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -39,6 +39,7 @@
             <androidx.appcompat.widget.AppCompatImageButton
                 android:layout_width="48dp"
                 android:layout_height="48dp"
+                android:id="@+id/button_bookmark"
                 android:layout_marginHorizontal="16dp"
                 android:background="@drawable/bg_bookmark_button"
                 android:src="@drawable/ic_add_bookmark"
@@ -48,15 +49,17 @@
 
             <TextView
                 android:id="@+id/movie_name"
-                android:layout_width="121dp"
+                android:layout_width="0dp"
                 android:layout_height="30dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:textColor="@color/custom_black"
+                app:layout_constraintEnd_toStartOf="@id/button_bookmark"
+                android:maxLines="1"
+                android:ellipsize="end"
                 android:textSize="22sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/movie_poster"
-                tools:text="@string/movie_name" />
+                app:layout_constraintTop_toBottomOf="@id/movie_poster" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/rate_icon"

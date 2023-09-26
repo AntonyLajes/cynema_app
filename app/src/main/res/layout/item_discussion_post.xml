@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/post"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="8dp"
+    android:background="@drawable/bg_discussion_post">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/button_up_vote"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/ic_up_vote"
+        app:layout_constraintBottom_toTopOf="@id/up_vote_value"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/up_vote_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:textColor="@color/custom_black"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/button_down_vote"
+        app:layout_constraintEnd_toEndOf="@+id/button_up_vote"
+        app:layout_constraintStart_toStartOf="@id/button_up_vote"
+        app:layout_constraintTop_toBottomOf="@id/button_up_vote"
+        tools:text="21" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/button_down_vote"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:src="@drawable/ic_down_vote"
+        app:layout_constraintEnd_toEndOf="@id/up_vote_value"
+        app:layout_constraintStart_toStartOf="@id/up_vote_value"
+        app:layout_constraintTop_toBottomOf="@id/up_vote_value" />
+
+    <TextView
+        android:id="@+id/post_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="@color/custom_black"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/button_up_vote"
+        app:layout_constraintTop_toTopOf="@id/button_up_vote"
+        tools:text="@string/lorem_ipsum" />
+
+    <TextView
+        android:id="@+id/post_body"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="8dp"
+        android:ellipsize="end"
+        android:maxLines="5"
+        android:textColor="@color/custom_normal_grey"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@id/divider"
+        app:layout_constraintEnd_toEndOf="@id/post_title"
+        app:layout_constraintStart_toStartOf="@id/post_title"
+        app:layout_constraintTop_toBottomOf="@id/post_title"
+        tools:text="@string/lorem_ipsum" />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/divider"
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/custom_normal_grey"
+        app:layout_constraintEnd_toEndOf="@id/post_body"
+        app:layout_constraintStart_toStartOf="@id/post_body"
+        app:layout_constraintTop_toBottomOf="@id/post_body" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/profile_picture"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
+        android:scaleType="centerCrop"
+        app:chainUseRtl="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/post_owner"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="@id/divider"
+        app:layout_constraintTop_toBottomOf="@id/divider"
+        app:shapeAppearanceOverlay="@style/RoundedPostProfilePicture"
+        tools:src="@drawable/rocket_1" />
+
+    <TextView
+        android:id="@+id/post_owner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/custom_normal_grey"
+        android:textSize="14sp"
+        android:maxLines="1"
+        android:ellipsize="end"
+        app:layout_constraintBottom_toBottomOf="@id/profile_picture"
+        app:layout_constraintEnd_toStartOf="@id/post_date"
+        app:layout_constraintStart_toEndOf="@id/profile_picture"
+        app:layout_constraintTop_toTopOf="@id/profile_picture"
+        tools:text="Posted by Lorem Ipsum" />
+
+    <TextView
+        android:id="@+id/post_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textColor="@color/custom_normal_grey"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@id/post_owner"
+        app:layout_constraintEnd_toStartOf="@id/answer_icon"
+        app:layout_constraintStart_toEndOf="@id/post_owner"
+        app:layout_constraintTop_toTopOf="@id/post_owner"
+        tools:text="12hr ago" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/answer_icon"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginStart="16dp"
+        android:src="@drawable/ic_answer"
+        app:layout_constraintBottom_toBottomOf="@id/post_date"
+        app:layout_constraintEnd_toStartOf="@id/answer_value"
+        app:layout_constraintStart_toEndOf="@id/post_date"
+        app:layout_constraintTop_toTopOf="@id/post_date" />
+
+    <TextView
+        android:id="@+id/answer_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:textColor="@color/custom_normal_grey"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@id/answer_icon"
+        app:layout_constraintEnd_toEndOf="@id/divider"
+        app:layout_constraintStart_toEndOf="@id/answer_icon"
+        app:layout_constraintTop_toTopOf="@id/answer_icon"
+        tools:text="50+" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

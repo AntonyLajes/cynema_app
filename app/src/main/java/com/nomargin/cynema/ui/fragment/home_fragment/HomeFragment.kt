@@ -95,18 +95,7 @@ class HomeFragment : Fragment() {
         binding.viewPager.adapter =
             MainCarouselAdapter(movies.take(7), object : AdapterOnItemClickListener {
                 override fun <T> onItemClickListener(item: T, position: Int) {
-                    val movieModel = item as CarouselModel
-                    homeViewModel.saveDataToSharedPreferences(
-                        Constants.LOCAL_STORAGE.sharedPreferencesMovieIdKey,
-                        movieModel.id.toString()
-                    )
-                    requireActivity()
-                        .findNavController(
-                            R.id.fragmentContainerView
-                        )
-                        .navigate(
-                            HomeFragmentDirections.actionHomeFragmentToMovieFragment()
-                        )
+                    navigateToMovieDetails(Constants.CLASS_TYPE.carouselModel, item, position)
                 }
             })
     }
@@ -124,7 +113,11 @@ class HomeFragment : Fragment() {
         binding.includesHomeFragmentNowPlayingMovies.recyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.includesHomeFragmentNowPlayingMovies.recyclerView.adapter =
-            MoviePosterAdapter(movies.take(7))
+            MoviePosterAdapter(movies.take(7), object : AdapterOnItemClickListener {
+                override fun <T> onItemClickListener(item: T, position: Int) {
+                    navigateToMovieDetails(Constants.CLASS_TYPE.movieModel, item, position)
+                }
+            })
     }
 
     private fun initTopRatedMoviesRecyclerView(movies: List<MovieModel>) {
@@ -133,7 +126,11 @@ class HomeFragment : Fragment() {
         binding.includesHomeFragmentTopRatedMovies.recyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.includesHomeFragmentTopRatedMovies.recyclerView.adapter =
-            MoviePosterAdapter(movies.take(7))
+            MoviePosterAdapter(movies.take(7), object : AdapterOnItemClickListener {
+                override fun <T> onItemClickListener(item: T, position: Int) {
+                    navigateToMovieDetails(Constants.CLASS_TYPE.movieModel, item, position)
+                }
+            })
     }
 
     private fun initUpcomingMoviesRecyclerView(movies: List<MovieModel>) {
@@ -142,7 +139,11 @@ class HomeFragment : Fragment() {
         binding.includesHomeFragmentUpcomingMovies.recyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.includesHomeFragmentUpcomingMovies.recyclerView.adapter =
-            MoviePosterAdapter(movies.take(7))
+            MoviePosterAdapter(movies.take(7), object : AdapterOnItemClickListener {
+                override fun <T> onItemClickListener(item: T, position: Int) {
+                    navigateToMovieDetails(Constants.CLASS_TYPE.movieModel, item, position)
+                }
+            })
     }
 
     private fun userProfileHandler(userProfile: UserProfileDataModel?) {
@@ -186,5 +187,31 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun <T> navigateToMovieDetails(transactionType: Int, item: T, position: Int){
+        when(transactionType){
+            Constants.CLASS_TYPE.carouselModel -> {
+                val itemToCarousel = item as CarouselModel
+                homeViewModel.saveDataToSharedPreferences(
+                    Constants.LOCAL_STORAGE.sharedPreferencesMovieIdKey,
+                    itemToCarousel.id.toString()
+                )
+            }
+            Constants.CLASS_TYPE.movieModel -> {
+                val itemToMovieModel = item as MovieModel
+                homeViewModel.saveDataToSharedPreferences(
+                    Constants.LOCAL_STORAGE.sharedPreferencesMovieIdKey,
+                    itemToMovieModel.movieId.toString()
+                )
+            }
+        }
+        requireActivity()
+            .findNavController(
+                R.id.fragmentContainerView
+            )
+            .navigate(
+                HomeFragmentDirections.actionHomeFragmentToMovieFragment()
+            )
     }
 }
