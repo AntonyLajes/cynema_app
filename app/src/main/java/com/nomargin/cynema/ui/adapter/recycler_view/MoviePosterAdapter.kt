@@ -8,8 +8,12 @@ import com.bumptech.glide.Glide
 import com.nomargin.cynema.data.remote.retrofit.entity.MovieModel
 import com.nomargin.cynema.databinding.ItemMoviePosterBinding
 import com.nomargin.cynema.util.Constants
+import com.nomargin.cynema.util.extension.AdapterOnItemClickListener
 
-class MoviePosterAdapter(private val movieList: List<MovieModel>) : RecyclerView.Adapter<MoviePosterAdapter.MoviePosterViewHolder>() {
+class MoviePosterAdapter(
+    private val movieList: List<MovieModel>,
+    private val adapterOnItemClickListener: AdapterOnItemClickListener
+    ) : RecyclerView.Adapter<MoviePosterAdapter.MoviePosterViewHolder>() {
 
     private lateinit var parentContext: Context
 
@@ -26,6 +30,12 @@ class MoviePosterAdapter(private val movieList: List<MovieModel>) : RecyclerView
             .centerCrop()
             .into(holder.moviePoster.posterItemImage)
         holder.moviePoster.posterItemName.text = currentItem.title
+        holder.moviePoster.posterItem.setOnClickListener {
+            adapterOnItemClickListener.onItemClickListener(
+                currentItem,
+                position
+            )
+        }
     }
 
     override fun getItemCount(): Int = movieList.size

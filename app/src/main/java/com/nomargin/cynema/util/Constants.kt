@@ -80,4 +80,9 @@ object Constants {
         const val sharedPreferencesGeneralKey = "movieIdGeneralKey"
         const val sharedPreferencesMovieIdKey = "movieId"
     }
+
+    object CLASS_TYPE{
+        const val carouselModel = 1
+        const val movieModel = 2
+    }
 }
