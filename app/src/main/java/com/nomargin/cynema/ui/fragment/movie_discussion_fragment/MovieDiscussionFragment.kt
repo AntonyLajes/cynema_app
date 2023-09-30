@@ -8,8 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nomargin.cynema.databinding.FragmentMovieDiscussionBinding
 import com.nomargin.cynema.ui.adapter.recycler_view.MovieDiscussionPostAdapter
+import com.nomargin.cynema.ui.fragment.create_post_sheet_fragment.CreatePostBottomSheetFragment
 
-class MovieDiscussionFragment : Fragment() {
+class MovieDiscussionFragment : Fragment(), View.OnClickListener {
 
     private var _binding: FragmentMovieDiscussionBinding? = null
     private val binding: FragmentMovieDiscussionBinding get() = _binding!!
@@ -23,14 +24,32 @@ class MovieDiscussionFragment : Fragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initClicks()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
+    override fun onClick(view: View) {
+        when(view.id){
+            binding.buttonCreatePost.id -> {
+                val createPostBottomSheetDialogFragment = CreatePostBottomSheetFragment()
+                createPostBottomSheetDialogFragment.show(requireActivity().supportFragmentManager, "createPostBottomSheetDialogFragment")
+            }
+        }
+    }
+
     private fun initMovieDiscussionPostRecyclerView(){
         binding.movieDiscussionPostRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.movieDiscussionPostRecyclerView.adapter = MovieDiscussionPostAdapter()
+    }
+
+    private fun initClicks(){
+        binding.buttonCreatePost.setOnClickListener(this)
     }
 
 }
