@@ -5,16 +5,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
+import com.google.android.material.textfield.TextInputLayout
 import com.nomargin.cynema.R
 import com.nomargin.cynema.databinding.FragmentCreatePostBottomSheetBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class CreatePostBottomSheetFragment : BottomSheetDialogFragment(), View.OnClickListener {
 
     private var _binding: FragmentCreatePostBottomSheetBinding? = null
     private val binding: FragmentCreatePostBottomSheetBinding get() = _binding!!
+    private val createPostBottomSheetViewModel: CreatePostBottomSheetViewModel by viewModels()
     private val chipSpoiler: Chip by lazy { binding.chipSpoiler }
+    private val postTitleInputLayout: TextInputLayout by lazy { binding.postTitleInputLayout }
+    private val postBodyInputLayout: TextInputLayout by lazy { binding.postBodyInputLayout }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,6 +38,7 @@ class CreatePostBottomSheetFragment : BottomSheetDialogFragment(), View.OnClickL
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        focusWatcher()
         initClicks()
     }
 
@@ -38,6 +46,13 @@ class CreatePostBottomSheetFragment : BottomSheetDialogFragment(), View.OnClickL
         when (view.id) {
             chipSpoiler.id -> {
                 handlerChipIcon(chipSpoiler.isChecked)
+            }
+
+            binding.buttonPublish.id -> {
+                createPostBottomSheetViewModel.publishPost(
+                    binding.postTitleInput.text.toString(),
+                    binding.postBodyInput.text.toString()
+                )
             }
         }
     }
@@ -52,5 +67,11 @@ class CreatePostBottomSheetFragment : BottomSheetDialogFragment(), View.OnClickL
 
     private fun initClicks() {
         binding.chipSpoiler.setOnClickListener(this)
+        binding.buttonPublish.setOnClickListener(this)
+    }
+
+    private fun focusWatcher() {
+        postTitleInputLayout.isCounterEnabled = postTitleInputLayout.hasFocus()
+        postBodyInputLayout.isCounterEnabled = postBodyInputLayout.hasFocus()
     }
 }

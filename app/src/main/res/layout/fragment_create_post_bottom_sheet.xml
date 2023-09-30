@@ -13,6 +13,8 @@
         style="@style/CustomInputTextLayout"
         android:hint="@string/post_title"
         app:endIconMode="clear_text"
+        app:counterEnabled="true"
+        app:counterMaxLength="128"
         app:layout_constraintBottom_toTopOf="@id/post_body_input_layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,6 +31,8 @@
         android:id="@+id/post_body_input_layout"
         style="@style/CustomInputTextLayout"
         android:layout_marginTop="16dp"
+        app:counterEnabled="true"
+        app:counterMaxLength="256"
         android:hint="@string/post_body"
         app:endIconMode="clear_text"
         app:layout_constraintBottom_toTopOf="@id/chip_group_spoiler"
@@ -38,6 +42,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/post_body_input"
+            android:maxLines="5"
             style="@style/CustomInputText"
             android:inputType="textMultiLine" />
 

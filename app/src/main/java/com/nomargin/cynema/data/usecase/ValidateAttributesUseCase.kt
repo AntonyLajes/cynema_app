@@ -1,5 +1,6 @@
 package com.nomargin.cynema.data.usecase
 
+import com.nomargin.cynema.data.local.PostModel
 import com.nomargin.cynema.util.model.SignInModel
 import com.nomargin.cynema.util.model.SignUpModel
 import com.nomargin.cynema.util.model.StatusModel
@@ -11,4 +12,5 @@ interface ValidateAttributesUseCase {
     fun validateSignInAttributes(signInModel: SignInModel): StatusModel
     fun validateSendPasswordResetEmailAttributes(email: String): StatusModel
     fun validateUserProfile(userProfileModel: UserProfileModel): StatusModel
+    fun validatePost(postModel: PostModel): StatusModel
 }
