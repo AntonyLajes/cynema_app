@@ -13,23 +13,19 @@
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
         tools:listitem="@layout/item_discussion_post" />
 
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_width="wrap_content"
-        android:id="@+id/button_new_post"
+        app:fabCustomSize="48dp"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:backgroundTint="@color/color_primary"
         android:contentDescription="@string/create_a_discussion_post"
         android:scaleType="fitXY"
-        app:icon="@drawable/ic_add"
-        android:text="@string/new_post"
-        android:textColor="@color/custom_black"
+        android:src="@drawable/ic_add"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
