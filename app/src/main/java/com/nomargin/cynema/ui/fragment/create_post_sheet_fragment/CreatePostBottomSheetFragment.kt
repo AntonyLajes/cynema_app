@@ -89,7 +89,7 @@ class CreatePostBottomSheetFragment : BottomSheetDialogFragment(), View.OnClickL
         createPostBottomSheetViewModel.createPostStatus.observe(viewLifecycleOwner) { postStatus ->
             postStatus?.let {
                 if (it.isValid) {
-                    
+
                 } else {
                     errorHandler(it)
                 }

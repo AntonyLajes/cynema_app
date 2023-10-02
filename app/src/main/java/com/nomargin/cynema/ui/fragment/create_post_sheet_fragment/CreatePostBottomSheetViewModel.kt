@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.nomargin.cynema.data.local.PostModel
+import com.nomargin.cynema.data.local.entity.PostModel
 import com.nomargin.cynema.data.repository.PostRepository
 import com.nomargin.cynema.data.repository.SharedPreferencesRepository
 import com.nomargin.cynema.util.Constants

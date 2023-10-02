@@ -1,10 +1,10 @@
 package com.nomargin.cynema.data.repository
 
 import com.nomargin.cynema.R
-import com.nomargin.cynema.data.local.PostModel
+import com.nomargin.cynema.data.local.entity.PostModel
 import com.nomargin.cynema.data.remote.firebase.authentication.FirebaseAuthUseCase
+import com.nomargin.cynema.data.remote.firebase.entity.PostDatabaseModel
 import com.nomargin.cynema.data.remote.firebase.firestore.FirebaseFirestoreUseCase
-import com.nomargin.cynema.data.remote.retrofit.entity.PostDatabaseModel
 import com.nomargin.cynema.data.usecase.ValidateAttributesUseCase
 import com.nomargin.cynema.util.Constants
 import com.nomargin.cynema.util.Resource
@@ -15,19 +15,21 @@ import java.util.UUID
 import javax.inject.Inject
 
 class PostRepositoryImpl @Inject constructor(
-    firebaseFirestore: FirebaseFirestoreUseCase,
+    private val firebaseFirestore: FirebaseFirestoreUseCase,
     private val firebaseAuth: FirebaseAuthUseCase,
     private val validateAttributes: ValidateAttributesUseCase,
 ) : PostRepository {
 
     private lateinit var createPostResult: Resource<StatusModel>
     private val randomUUID = UUID.randomUUID().toString()
-    private val database = firebaseFirestore.getFirebaseFirestore()
-        .collection(Constants.FIRESTORE.postsCollection)
-        .document(randomUUID)
 
     override suspend fun publishPost(postModel: PostModel): Resource<StatusModel> {
+        val database = firebaseFirestore.getFirebaseFirestore()
+            .collection(Constants.FIRESTORE.postsCollection)
+            .document(randomUUID)
+
         val validatePostAttributes = validateAttributes.validatePost(postModel)
+
         if (validatePostAttributes.isValid) {
 
             val currentTimeMillis = System.currentTimeMillis()
@@ -40,7 +42,6 @@ class PostRepositoryImpl @Inject constructor(
                 title = postModel.title,
                 body = postModel.body,
                 isSpoiler = postModel.isSpoiler,
-                timestamp = timeStamp,
                 votes = 0,
                 comments = listOf(),
                 commentsQuantity = 0
@@ -76,5 +77,33 @@ class PostRepositoryImpl @Inject constructor(
             )
         }
         return createPostResult
+    }
+
+    override suspend fun getAllPosts(movieId: String): Resource<List<PostDatabaseModel>> {
+        val posts = firebaseFirestore.getFirebaseFirestore()
+            .collection(Constants.FIRESTORE.postsCollection)
+            .whereEqualTo("movieId", movieId)
+            .get()
+            .addOnCompleteListener { }.await()
+        return if (posts.isEmpty) {
+            Resource.error(
+                "Error",
+                null,
+                StatusModel(
+                    false,
+                    null,
+                    R.string.unknown_error
+                )
+            )
+        } else {
+            Resource.success(
+                posts.toObjects(PostDatabaseModel::class.java),
+                StatusModel(
+                    true,
+                    null,
+                    R.string.discussion_posts_reached_with_success
+                )
+            )
+        }
     }
 }

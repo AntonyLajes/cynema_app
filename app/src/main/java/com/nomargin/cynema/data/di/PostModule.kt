@@ -2,6 +2,8 @@ package com.nomargin.cynema.data.di
 
 import com.nomargin.cynema.data.repository.PostRepository
 import com.nomargin.cynema.data.repository.PostRepositoryImpl
+import com.nomargin.cynema.data.usecase.PostUseCase
+import com.nomargin.cynema.data.usecase.PostUseCaseImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -15,5 +17,10 @@ abstract class PostModule {
     abstract fun bindsPostRepositoryImpl(
         postRepositoryImpl: PostRepositoryImpl
     ): PostRepository
+
+    @Binds
+    abstract fun bindsPostUseCaseImpl(
+        postUseCaseImpl: PostUseCaseImpl
+    ): PostUseCase
 
 }

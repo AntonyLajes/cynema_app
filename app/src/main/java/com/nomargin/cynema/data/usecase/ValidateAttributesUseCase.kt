@@ -1,6 +1,6 @@
 package com.nomargin.cynema.data.usecase
 
-import com.nomargin.cynema.data.local.PostModel
+import com.nomargin.cynema.data.local.entity.PostModel
 import com.nomargin.cynema.util.model.SignInModel
 import com.nomargin.cynema.util.model.SignUpModel
 import com.nomargin.cynema.util.model.StatusModel

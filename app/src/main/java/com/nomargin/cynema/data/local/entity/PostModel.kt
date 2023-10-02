@@ -1,4 +1,4 @@
-package com.nomargin.cynema.data.local
+package com.nomargin.cynema.data.local.entity
 
 data class PostModel(
     val title: String = "",
