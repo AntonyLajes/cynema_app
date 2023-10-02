@@ -132,7 +132,7 @@
         android:layout_width="16dp"
         android:layout_height="16dp"
         android:layout_marginStart="16dp"
-        android:src="@drawable/ic_answer"
+        android:src="@drawable/ic_reply"
         app:layout_constraintBottom_toBottomOf="@id/post_date"
         app:layout_constraintEnd_toStartOf="@id/answer_value"
         app:layout_constraintStart_toEndOf="@id/post_date"

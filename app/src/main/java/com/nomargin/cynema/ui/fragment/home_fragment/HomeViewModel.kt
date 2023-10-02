@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.nomargin.cynema.data.remote.firebase.entity.UserProfileDataModel
 import com.nomargin.cynema.data.remote.retrofit.entity.GenreModel
 import com.nomargin.cynema.data.remote.retrofit.entity.MovieModel
+import com.nomargin.cynema.data.repository.AuthenticationRepository
 import com.nomargin.cynema.data.repository.ProfileRepository
 import com.nomargin.cynema.data.repository.SharedPreferencesRepository
 import com.nomargin.cynema.data.usecase.AppLocalDatabaseUseCase
@@ -22,6 +23,7 @@ class HomeViewModel @Inject constructor(
     private val theMovieDatabaseApiUseCase: TheMovieDatabaseApiUseCase,
     private val appLocalDatabaseUseCase: AppLocalDatabaseUseCase,
     private val profileRepository: ProfileRepository,
+    private val authenticationRepository: AuthenticationRepository,
     private val sharedPreferencesRepository: SharedPreferencesRepository
 ) : ViewModel() {
 
@@ -90,7 +92,8 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getUserProfileData() = viewModelScope.launch {
-        _userProfileData.value = profileRepository.getUserData().data ?: UserProfileDataModel()
+        val userId = authenticationRepository.verifyLogin().data?.uid ?: ""
+        _userProfileData.value = profileRepository.getUserData(userId).data ?: UserProfileDataModel()
     }
 
     fun saveDataToSharedPreferences(key: String, movieId: String){

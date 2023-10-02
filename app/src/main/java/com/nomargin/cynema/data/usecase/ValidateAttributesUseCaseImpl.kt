@@ -1,6 +1,7 @@
 package com.nomargin.cynema.data.usecase
 
 import com.nomargin.cynema.R
+import com.nomargin.cynema.data.local.entity.PostModel
 import com.nomargin.cynema.util.Constants
 import com.nomargin.cynema.util.model.SignInModel
 import com.nomargin.cynema.util.model.SignUpModel
@@ -123,7 +124,7 @@ class ValidateAttributesUseCaseImpl @Inject constructor() : ValidateAttributesUs
     }
 
     override fun validateUserProfile(userProfileModel: UserProfileModel): StatusModel {
-        return when{
+        return when {
             userProfileModel.userFirstName.isEmpty() -> {
                 StatusModel(
                     false,
@@ -131,6 +132,7 @@ class ValidateAttributesUseCaseImpl @Inject constructor() : ValidateAttributesUs
                     R.string.first_name_is_empty
                 )
             }
+
             userProfileModel.userLastName.isEmpty() -> {
                 StatusModel(
                     false,
@@ -138,6 +140,7 @@ class ValidateAttributesUseCaseImpl @Inject constructor() : ValidateAttributesUs
                     R.string.last_name_is_empty
                 )
             }
+
             userProfileModel.userUsername.isEmpty() -> {
                 StatusModel(
                     false,
@@ -145,6 +148,7 @@ class ValidateAttributesUseCaseImpl @Inject constructor() : ValidateAttributesUs
                     R.string.username_is_empty
                 )
             }
+
             !Regex(Constants.REGEX.usernameRegexPattern).matches(userProfileModel.userUsername) -> {
                 StatusModel(
                     false,
@@ -152,6 +156,7 @@ class ValidateAttributesUseCaseImpl @Inject constructor() : ValidateAttributesUs
                     R.string.valid_username_characters
                 )
             }
+
             userProfileModel.userBiography.length > Constants.MAX_LENGTH.userBiographyMaxLength -> {
                 StatusModel(
                     false,
@@ -159,6 +164,67 @@ class ValidateAttributesUseCaseImpl @Inject constructor() : ValidateAttributesUs
                     R.string.valid_user_biography
                 )
             }
+
+            else -> {
+                StatusModel(
+                    true,
+                    null,
+                    R.string.all_fields_are_checked
+                )
+            }
+        }
+    }
+
+    override fun validatePost(postModel: PostModel): StatusModel {
+        return when {
+            postModel.title.isEmpty() -> {
+                StatusModel(
+                    false,
+                    Constants.ERROR_TYPES.postTitleIsEmpty,
+                    R.string.post_title_is_empty
+                )
+            }
+
+            postModel.title.length > Constants.MAX_LENGTH.postTitleMaxLength -> {
+                StatusModel(
+                    false,
+                    Constants.ERROR_TYPES.postTitleIsBiggerThanAllowed,
+                    R.string.valid_post_title
+                )
+            }
+
+            postModel.body.isEmpty() -> {
+                StatusModel(
+                    false,
+                    Constants.ERROR_TYPES.postBodyIsEmpty,
+                    R.string.post_body_is_empty
+                )
+            }
+
+            postModel.body.length > Constants.MAX_LENGTH.postBodyMaxLength -> {
+                StatusModel(
+                    false,
+                    Constants.ERROR_TYPES.postBodyIsBiggerThanAllowed,
+                    R.string.valid_post_body
+                )
+            }
+
+            postModel.title.length < Constants.MIN_LENGTH.postTitleMinLength -> {
+                StatusModel(
+                    false,
+                    Constants.ERROR_TYPES.postTitleIsLowerThanAllowed,
+                    R.string.valid_post_title
+                )
+            }
+
+            postModel.body.length < Constants.MIN_LENGTH.postBodyMinLength -> {
+                StatusModel(
+                    false,
+                    Constants.ERROR_TYPES.postBodyIsLowerThanAllowed,
+                    R.string.valid_post_body
+                )
+            }
+
             else -> {
                 StatusModel(
                     true,

@@ -126,13 +126,13 @@ class ProfileRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getUserData(): Resource<UserProfileDataModel> {
+    override suspend fun getUserData(userId: String): Resource<UserProfileDataModel> {
         val user = firebaseFirestore
             .getFirebaseFirestore()
             .collection(
                 Constants.FIRESTORE.usersCollection
             ).document(
-                firebaseAuth.getFirebaseAuth().uid!!
+                userId
             ).get()
             .addOnCompleteListener {  }.await()
 

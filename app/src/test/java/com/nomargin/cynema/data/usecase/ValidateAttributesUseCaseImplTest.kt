@@ -2,6 +2,7 @@ package com.nomargin.cynema.data.usecase
 
 import com.google.common.truth.Truth.assertThat
 import com.nomargin.cynema.R
+import com.nomargin.cynema.data.local.entity.PostModel
 import com.nomargin.cynema.util.Constants
 import com.nomargin.cynema.util.model.SignUpModel
 import com.nomargin.cynema.util.model.StatusModel
@@ -175,7 +176,7 @@ class ValidateAttributesUseCaseImplTest {
     @Test
     fun `Username bigger than allowed returns Resource-Error`() {
         var username = ""
-        for(i in 0..Constants.MAX_LENGTH.userUsernameMaxLength + 10){
+        for (i in 0..Constants.MAX_LENGTH.userUsernameMaxLength + 10) {
             username += "a"
         }
         val userProfileModel = UserProfileModel(null, "first", "last", username, "")
@@ -193,7 +194,7 @@ class ValidateAttributesUseCaseImplTest {
     @Test
     fun `User biography bigger than allowed returns Resource-Error`() {
         var biography = ""
-        for(i in 0..Constants.MAX_LENGTH.userBiographyMaxLength + 10){
+        for (i in 0..Constants.MAX_LENGTH.userBiographyMaxLength + 10) {
             biography += "a"
         }
         val userProfileModel = UserProfileModel(null, "first", "last", "userusername", biography)
@@ -209,7 +210,7 @@ class ValidateAttributesUseCaseImplTest {
     }
 
     @Test
-    fun `Required field OK returns Resource-Success`() {
+    fun `User profile required field OK returns Resource-Success`() {
         val userProfileModel = UserProfileModel(null, "first", "lastname", "userusername", "")
         val result = validateAttributesUseCase.validateUserProfile(userProfileModel)
         assertThat(result)
@@ -220,5 +221,177 @@ class ValidateAttributesUseCaseImplTest {
                     R.string.all_fields_are_checked
                 )
             )
+    }
+
+    @Test
+    fun `Discussion post title is empty returns Resource-Error`() {
+        val postModel = PostModel(
+            "",
+            "lorem ipsum",
+            false,
+            "1000"
+        )
+        val result = validateAttributesUseCase.validatePost(postModel)
+        assertThat(
+            result
+        ).isEqualTo(
+            StatusModel(
+                false,
+                Constants.ERROR_TYPES.postTitleIsEmpty,
+                R.string.post_title_is_empty
+            )
+        )
+    }
+
+    @Test
+    fun `Discussion post body is empty returns Resource-Error`() {
+        val postModel = PostModel(
+            "lorem ipsum",
+            "",
+            false,
+            "1000"
+        )
+        val result = validateAttributesUseCase.validatePost(postModel)
+        assertThat(
+            result
+        ).isEqualTo(
+            StatusModel(
+                false,
+                Constants.ERROR_TYPES.postBodyIsEmpty,
+                R.string.post_body_is_empty
+            )
+        )
+    }
+
+    @Test
+    fun `Discussion post title is bigger than allowed returns Resource-Error`() {
+        var postTitle = ""
+        for (i in 0..Constants.MAX_LENGTH.postTitleMaxLength + 10) {
+            postTitle += "a"
+        }
+        val postModel = PostModel(
+            postTitle,
+            "",
+            false,
+            "1000"
+        )
+        val result = validateAttributesUseCase.validatePost(postModel)
+        assertThat(
+            result
+        ).isEqualTo(
+            StatusModel(
+                false,
+                Constants.ERROR_TYPES.postTitleIsBiggerThanAllowed,
+                R.string.valid_post_title
+            )
+        )
+    }
+
+    @Test
+    fun `Discussion post body is bigger than allowed empty returns Resource-Error`() {
+        var postBody = ""
+        for (i in 0..Constants.MAX_LENGTH.postBodyMaxLength + 10) {
+            postBody += "a"
+        }
+        val postModel = PostModel(
+            "lorem ipsum",
+            postBody,
+            false,
+            "1000"
+        )
+        val result = validateAttributesUseCase.validatePost(postModel)
+        assertThat(
+            result
+        ).isEqualTo(
+            StatusModel(
+                false,
+                Constants.ERROR_TYPES.postBodyIsBiggerThanAllowed,
+                R.string.valid_post_body
+            )
+        )
+    }
+
+    @Test
+    fun `Discussion post title is lower than allowed returns Resource-Error`() {
+        var postTitle = ""
+        var postBody = ""
+        for (i in 0 until Constants.MIN_LENGTH.postTitleMinLength - 1) {
+            postTitle += "a"
+        }
+        for (i in 0..Constants.MIN_LENGTH.postBodyMinLength + 10) {
+            postBody += "a"
+        }
+        val postModel = PostModel(
+            postTitle,
+            postBody,
+            false,
+            "1000"
+        )
+        val result = validateAttributesUseCase.validatePost(postModel)
+        assertThat(
+            result
+        ).isEqualTo(
+            StatusModel(
+                false,
+                Constants.ERROR_TYPES.postTitleIsLowerThanAllowed,
+                R.string.valid_post_title
+            )
+        )
+    }
+
+    @Test
+    fun `Discussion post body is lower than allowed returns Resource-Error`() {
+        var postTitle = ""
+        var postBody = ""
+        for (i in 0..Constants.MIN_LENGTH.postTitleMinLength + 10) {
+            postTitle += "a"
+        }
+        for (i in 0 until Constants.MIN_LENGTH.postBodyMinLength - 1) {
+            postBody += "a"
+        }
+        val postModel = PostModel(
+            postTitle,
+            postBody,
+            false,
+            "1000"
+        )
+        val result = validateAttributesUseCase.validatePost(postModel)
+        assertThat(
+            result
+        ).isEqualTo(
+            StatusModel(
+                false,
+                Constants.ERROR_TYPES.postBodyIsLowerThanAllowed,
+                R.string.valid_post_body
+            )
+        )
+    }
+
+    @Test
+    fun `Discussion post all fields are OK returns Resource-Success`() {
+        var postTitle = ""
+        var postBody = ""
+        for (i in 0..Constants.MIN_LENGTH.postTitleMinLength + 10) {
+            postTitle += "a"
+        }
+        for (i in 0..Constants.MIN_LENGTH.postBodyMinLength + 10) {
+            postBody += "a"
+        }
+        val postModel = PostModel(
+            postTitle,
+            postBody,
+            false,
+            "1000"
+        )
+        val result = validateAttributesUseCase.validatePost(postModel)
+        assertThat(
+            result
+        ).isEqualTo(
+            StatusModel(
+                true,
+                null,
+                R.string.all_fields_are_checked
+            )
+        )
     }
 }

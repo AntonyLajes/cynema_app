@@ -92,13 +92,18 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="first_name_is_empty">Insert your first name.</string>
+    <string name="post_title_is_empty">Insert the post title.</string>
+    <string name="post_body_is_empty">Insert the post body.</string>
     <string name="last_name_is_empty">Insert your last name.</string>
     <string name="username_is_empty">Insert your username.</string>
     <string name="success">Success!</string>
     <string name="profile_updated_with_success">Profile updated with success!</string>
+    <string name="profile_created_with_success">Post created with success!</string>
     <string name="password_is_not_valid">The password isn\'t valid. Please follow the instructions.</string>
     <string name="valid_username_characters">Your should have at least 4 characters, only alphanumerics and underscores.</string>
-    <string name="valid_user_biography">Your biography should have  max. 240 characters.</string>
+    <string name="valid_user_biography">Your biography should have max. 240 characters.</string>
+    <string name="valid_post_title">Your post title should have at least 4 characters, and max. 80 characters.</string>
+    <string name="valid_post_body">Your post body should have at least 8 characters, and max. 256 characters.</string>
     <string name="user_username_already_in_use">This username is already in use.</string>
     <string name="user_username_is_valid">Valid username!</string>
     <string name="home_screen">Home Screen</string>
@@ -114,6 +119,7 @@
     <string name="upcoming">Upcoming</string>
     <string name="could_not_reach_the_user_data">Couldn\'t reach the user data.</string>
     <string name="user_data_reached_with_success">User data reached with success!</string>
+    <string name="discussion_posts_reached_with_success">Discussion posts reached with success!</string>
     <string name="welcome">Welcome</string>
     <string name="hi_emoji">👋</string>
     <string name="details">Details</string>
@@ -126,4 +132,10 @@
     <string name="lorem_ipsum">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</string>
     <string name="movie_id">movieId</string>
     <string name="create_a_discussion_post">Create a discussion post</string>
+    <string name="title">Title</string>
+    <string name="post_title">Post title</string>
+    <string name="post_body">Post body</string>
+    <string name="spoiler">Spoiler</string>
+    <string name="publish">Publish</string>
+    <string name="posted_by">Posted by</string>
 </resources>
