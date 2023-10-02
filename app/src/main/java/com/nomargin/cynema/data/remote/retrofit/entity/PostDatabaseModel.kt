@@ -8,6 +8,7 @@ data class PostDatabaseModel(
     val movieId: String,
     val title: String,
     val body: String,
+    val isSpoiler: Boolean,
     val timestamp: Timestamp,
     val votes: Int,
     val comments: List<String>,

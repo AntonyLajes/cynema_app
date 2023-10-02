@@ -25,9 +25,10 @@ object Constants {
         const val couldNotReachTheUserData = 18
         const val postTitleIsEmpty = 19
         const val postTitleIsBiggerThanAllowed = 20
-        const val postBodyIsBiggerThanAllowed = 20
-
-
+        const val postBodyIsEmpty = 21
+        const val postBodyIsBiggerThanAllowed = 22
+        const val postTitleIsLowerThanAllowed = 23
+        const val postBodyIsLowerThanAllowed = 24
     }
 
     object AUTH_ERRORS{
@@ -52,13 +53,15 @@ object Constants {
     object MIN_LENGTH{
         const val passwordMinLength = 8
         const val usernameMinLength = 4
+        const val postTitleMinLength = 4
+        const val postBodyMinLength = 8
     }
 
     object MAX_LENGTH{
         const val userUsernameMaxLength = 24
         const val userBiographyMaxLength = 240
         const val postTitleMaxLength = 80
-        const val postBodyMaxLength = 300
+        const val postBodyMaxLength = 256
     }
 
     object REGEX {

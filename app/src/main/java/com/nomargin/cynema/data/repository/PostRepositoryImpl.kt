@@ -39,6 +39,7 @@ class PostRepositoryImpl @Inject constructor(
                 movieId = postModel.movieId,
                 title = postModel.title,
                 body = postModel.body,
+                isSpoiler = postModel.isSpoiler,
                 timestamp = timeStamp,
                 votes = 0,
                 comments = listOf(),

@@ -193,10 +193,34 @@ class ValidateAttributesUseCaseImpl @Inject constructor() : ValidateAttributesUs
                 )
             }
 
+            postModel.body.isEmpty() -> {
+                StatusModel(
+                    false,
+                    Constants.ERROR_TYPES.postBodyIsEmpty,
+                    R.string.post_body_is_empty
+                )
+            }
+
             postModel.body.length > Constants.MAX_LENGTH.postBodyMaxLength -> {
                 StatusModel(
                     false,
                     Constants.ERROR_TYPES.postBodyIsBiggerThanAllowed,
+                    R.string.valid_post_body
+                )
+            }
+
+            postModel.title.length < Constants.MIN_LENGTH.postTitleMinLength -> {
+                StatusModel(
+                    false,
+                    Constants.ERROR_TYPES.postTitleIsLowerThanAllowed,
+                    R.string.valid_post_title
+                )
+            }
+
+            postModel.body.length < Constants.MIN_LENGTH.postBodyMinLength -> {
+                StatusModel(
+                    false,
+                    Constants.ERROR_TYPES.postBodyIsLowerThanAllowed,
                     R.string.valid_post_body
                 )
             }

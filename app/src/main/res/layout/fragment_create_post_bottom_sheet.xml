@@ -14,7 +14,7 @@
         android:hint="@string/post_title"
         app:endIconMode="clear_text"
         app:counterEnabled="true"
-        app:counterMaxLength="128"
+        app:counterMaxLength="80"
         app:layout_constraintBottom_toTopOf="@id/post_body_input_layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

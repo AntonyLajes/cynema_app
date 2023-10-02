@@ -93,6 +93,7 @@
     <string name="no">No</string>
     <string name="first_name_is_empty">Insert your first name.</string>
     <string name="post_title_is_empty">Insert the post title.</string>
+    <string name="post_body_is_empty">Insert the post body.</string>
     <string name="last_name_is_empty">Insert your last name.</string>
     <string name="username_is_empty">Insert your username.</string>
     <string name="success">Success!</string>
@@ -100,9 +101,9 @@
     <string name="profile_created_with_success">Post created with success!</string>
     <string name="password_is_not_valid">The password isn\'t valid. Please follow the instructions.</string>
     <string name="valid_username_characters">Your should have at least 4 characters, only alphanumerics and underscores.</string>
-    <string name="valid_user_biography">Your biography should have  max. 240 characters.</string>
-    <string name="valid_post_title">Your post title should have  max. 80 characters.</string>
-    <string name="valid_post_body">Your post body should have  max. 300 characters.</string>
+    <string name="valid_user_biography">Your biography should have max. 240 characters.</string>
+    <string name="valid_post_title">Your post title should have at least 4 characters, and max. 80 characters.</string>
+    <string name="valid_post_body">Your post body should have at least 8 characters, and max. 256 characters.</string>
     <string name="user_username_already_in_use">This username is already in use.</string>
     <string name="user_username_is_valid">Valid username!</string>
     <string name="home_screen">Home Screen</string>
