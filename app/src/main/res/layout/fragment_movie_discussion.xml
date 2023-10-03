@@ -7,26 +7,33 @@
     android:background="@color/custom_low_grey"
     tools:context=".ui.fragment.movie_discussion_fragment.MovieDiscussionFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/movie_discussion_post_recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/movie_discussion_post_swipe_to_refresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/item_discussion_post" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/movie_discussion_post_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem="@layout/item_discussion_post" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:layout_width="wrap_content"
-        app:fabCustomSize="48dp"
         android:id="@+id/button_create_post"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:backgroundTint="@color/color_primary"
         android:contentDescription="@string/create_a_discussion_post"
         android:scaleType="fitXY"
         android:src="@drawable/ic_add"
+        app:fabCustomSize="48dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

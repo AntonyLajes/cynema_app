@@ -33,7 +33,7 @@ class MovieDiscussionFragment : Fragment(), View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        movieDiscussionViewModel.getPosts()
+        getMovieDiscussionPosts()
         initClicks()
     }
 
@@ -62,6 +62,10 @@ class MovieDiscussionFragment : Fragment(), View.OnClickListener {
 
     private fun initClicks() {
         binding.buttonCreatePost.setOnClickListener(this)
+        binding.movieDiscussionPostSwipeToRefresh.setOnRefreshListener {
+            getMovieDiscussionPosts()
+            binding.movieDiscussionPostSwipeToRefresh.isRefreshing = false
+        }
     }
 
     private fun observers() {
@@ -74,6 +78,10 @@ class MovieDiscussionFragment : Fragment(), View.OnClickListener {
 
     private fun updateMovieDiscussionPostRecyclerView(postDatabaseModels: List<PostAppearanceModel>) {
         movieDiscussionPostAdapter.getDiscussionPosts(postDatabaseModels)
+    }
+
+    private fun getMovieDiscussionPosts() {
+        movieDiscussionViewModel.getPosts()
     }
 
 }
