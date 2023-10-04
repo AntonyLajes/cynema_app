@@ -8,9 +8,10 @@ import com.nomargin.cynema.util.model.StatusModel
 interface PostRepository {
 
     suspend fun publishPost(
-        post: PostModel
+        postModel: PostModel
     ): Resource<StatusModel>
 
     suspend fun getAllPosts(movieId: String): Resource<List<PostDatabaseModel>>
+    suspend fun getPostById(postId: String): Resource<PostDatabaseModel>
 
 }

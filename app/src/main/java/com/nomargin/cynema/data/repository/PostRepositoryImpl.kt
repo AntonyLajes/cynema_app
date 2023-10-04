@@ -10,7 +10,6 @@ import com.nomargin.cynema.util.Constants
 import com.nomargin.cynema.util.Resource
 import com.nomargin.cynema.util.model.StatusModel
 import kotlinx.coroutines.tasks.await
-import java.sql.Timestamp
 import java.util.UUID
 import javax.inject.Inject
 
@@ -32,8 +31,6 @@ class PostRepositoryImpl @Inject constructor(
 
         if (validatePostAttributes.isValid) {
 
-            val currentTimeMillis = System.currentTimeMillis()
-            val timeStamp = Timestamp(currentTimeMillis)
 
             val post = PostDatabaseModel(
                 id = randomUUID,
@@ -98,6 +95,34 @@ class PostRepositoryImpl @Inject constructor(
         } else {
             Resource.success(
                 posts.toObjects(PostDatabaseModel::class.java),
+                StatusModel(
+                    true,
+                    null,
+                    R.string.discussion_posts_reached_with_success
+                )
+            )
+        }
+    }
+
+    override suspend fun getPostById(postId: String): Resource<PostDatabaseModel> {
+        val post = firebaseFirestore.getFirebaseFirestore()
+            .collection(Constants.FIRESTORE.postsCollection)
+            .whereEqualTo("id", postId)
+            .get()
+            .addOnCompleteListener { }.await()
+        return if (post.isEmpty) {
+            Resource.error(
+                "Error",
+                null,
+                StatusModel(
+                    false,
+                    null,
+                    R.string.unknown_error
+                )
+            )
+        } else {
+            Resource.success(
+                post.documents[0].toObject(PostDatabaseModel::class.java),
                 StatusModel(
                     true,
                     null,

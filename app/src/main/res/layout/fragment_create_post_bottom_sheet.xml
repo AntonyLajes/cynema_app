@@ -32,7 +32,7 @@
         style="@style/CustomInputTextLayout"
         android:layout_marginTop="16dp"
         app:counterEnabled="true"
-        app:counterMaxLength="256"
+        app:counterMaxLength="800"
         android:hint="@string/post_body"
         app:endIconMode="clear_text"
         app:layout_constraintBottom_toTopOf="@id/chip_group_spoiler"

@@ -18,8 +18,11 @@
         android:theme="@style/Theme.Cynema_app"
         tools:targetApi="31">
         <activity
+            android:name=".ui.activity.movie_discussion_post_activity.MovieDiscussionPostActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.activity.create_profile_activity.CreateProfileActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".ui.activity.forgot_password_activity.ForgotPasswordActivity"
             android:exported="false" />
@@ -37,7 +40,7 @@
         </activity>
         <activity
             android:name=".ui.activity.main_activity.MainActivity"
-            android:exported="false"/>
+            android:exported="false" />
     </application>
 
 </manifest>

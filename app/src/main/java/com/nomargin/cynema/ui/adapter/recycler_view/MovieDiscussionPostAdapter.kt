@@ -8,8 +8,9 @@ import com.bumptech.glide.Glide
 import com.nomargin.cynema.R
 import com.nomargin.cynema.data.local.entity.PostAppearanceModel
 import com.nomargin.cynema.databinding.ItemDiscussionPostBinding
+import com.nomargin.cynema.util.extension.AdapterOnItemClickListener
 
-class MovieDiscussionPostAdapter :
+class MovieDiscussionPostAdapter(private val onItemClickListener: AdapterOnItemClickListener) :
     RecyclerView.Adapter<MovieDiscussionPostAdapter.MovieDiscussionPostViewHolder>() {
 
     private var postsList: List<PostAppearanceModel> = listOf()
@@ -40,9 +41,12 @@ class MovieDiscussionPostAdapter :
             append(" ")
             append(currentItem.user?.lastName)
         }
-        holder.item.postDate.text = currentItem.timestamp.toString()
-        holder.item.upVoteValue.text = currentItem.votes.toString()
-        holder.item.answerValue.text = currentItem.commentsQuantity.toString()
+        holder.item.postDate.text = currentItem.timestamp
+        holder.item.upVoteValue.text = currentItem.votes
+        holder.item.answerValue.text = currentItem.commentsQuantity
+        holder.item.post.setOnClickListener {
+            onItemClickListener.onItemClickListener(currentItem, position)
+        }
     }
 
     override fun getItemCount(): Int = postsList.size

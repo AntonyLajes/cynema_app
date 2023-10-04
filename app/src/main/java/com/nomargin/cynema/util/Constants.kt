@@ -61,7 +61,7 @@ object Constants {
         const val userUsernameMaxLength = 24
         const val userBiographyMaxLength = 240
         const val postTitleMaxLength = 80
-        const val postBodyMaxLength = 256
+        const val postBodyMaxLength = 720
     }
 
     object REGEX {
@@ -90,6 +90,10 @@ object Constants {
         const val genreDescColumnName = "desc"
         const val sharedPreferencesGeneralKey = "movieIdGeneralKey"
         const val sharedPreferencesMovieIdKey = "movieId"
+    }
+
+    enum class BUNDLE_KEYS {
+        MovieDiscussionPostId
     }
 
     object CLASS_TYPE{
