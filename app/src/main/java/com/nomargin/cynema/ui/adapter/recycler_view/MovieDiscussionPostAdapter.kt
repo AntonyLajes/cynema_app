@@ -8,11 +8,12 @@ import com.bumptech.glide.Glide
 import com.nomargin.cynema.R
 import com.nomargin.cynema.data.local.entity.PostAppearanceModel
 import com.nomargin.cynema.databinding.ItemDiscussionPostBinding
+import com.nomargin.cynema.util.extension.AdapterOnItemClickListenerWithView
 
-class MovieDiscussionPostAdapter :
+class MovieDiscussionPostAdapter(private val onItemClickListener: AdapterOnItemClickListenerWithView) :
     RecyclerView.Adapter<MovieDiscussionPostAdapter.MovieDiscussionPostViewHolder>() {
 
-    private var postsList: List<PostAppearanceModel> = listOf()
+    private var postsList: MutableList<PostAppearanceModel> = mutableListOf()
     private lateinit var parentContext: Context
 
     override fun onCreateViewHolder(
@@ -40,16 +41,30 @@ class MovieDiscussionPostAdapter :
             append(" ")
             append(currentItem.user?.lastName)
         }
-        holder.item.postDate.text = currentItem.timestamp.toString()
-        holder.item.upVoteValue.text = currentItem.votes.toString()
-        holder.item.answerValue.text = currentItem.commentsQuantity.toString()
+        holder.item.postDate.text = currentItem.timestamp
+        holder.item.upVoteValue.text = currentItem.votes
+        holder.item.answerValue.text = currentItem.commentsQuantity
+        holder.item.post.setOnClickListener {
+            onItemClickListener.onItemClickListener(it, currentItem, position)
+        }
+        holder.item.buttonUpVote.setOnClickListener {
+            onItemClickListener.onItemClickListener(it, currentItem, position)
+        }
+        holder.item.buttonDownVote.setOnClickListener {
+            onItemClickListener.onItemClickListener(it, currentItem, position)
+        }
     }
 
     override fun getItemCount(): Int = postsList.size
 
     fun getDiscussionPosts(posts: List<PostAppearanceModel>) {
-        postsList = posts
+        postsList = posts.toMutableList()
         notifyDataSetChanged()
+    }
+
+    fun getUpdatedPost(post: PostAppearanceModel, position: Int) {
+        postsList[position] = post
+        notifyItemChanged(position)
     }
 
     inner class MovieDiscussionPostViewHolder(

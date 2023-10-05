@@ -24,9 +24,15 @@ class MovieDiscussionViewModel @Inject constructor(
     )
     private var _getPosts: MutableLiveData<List<PostAppearanceModel>> = MutableLiveData()
     val getPosts: LiveData<List<PostAppearanceModel>> = _getPosts
+    private var _getUpdatedPost: MutableLiveData<PostAppearanceModel?> = MutableLiveData()
+    val getUpdatedPost: LiveData<PostAppearanceModel?> = _getUpdatedPost
 
     fun getPosts() = viewModelScope.launch {
         _getPosts.value = postUseCase.getPosts(movieId ?: "")
+    }
+
+    fun updatePostVote(updateType: Constants.UPDATE_TYPE, postId: String) = viewModelScope.launch {
+        _getUpdatedPost.value = postUseCase.updatePostVote(updateType, postId)
     }
 
 }
