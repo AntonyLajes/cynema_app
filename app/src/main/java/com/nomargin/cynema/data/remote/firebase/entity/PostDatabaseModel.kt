@@ -12,6 +12,9 @@ data class PostDatabaseModel(
     val isSpoiler: Boolean? = null,
     @ServerTimestamp
     var timestamp: Timestamp? = null,
+    val usersWhoVoted: List<String> = arrayListOf(),
+    val usersWhoUpVoted: List<String> = arrayListOf(),
+    val usersWhoDownVoted: List<String> = arrayListOf(),
     val votes: Int = 0,
     val comments: List<String> = arrayListOf(),
     val commentsQuantity: Int = 0

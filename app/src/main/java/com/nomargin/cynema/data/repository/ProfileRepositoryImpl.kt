@@ -134,9 +134,9 @@ class ProfileRepositoryImpl @Inject constructor(
             ).document(
                 userId
             ).get()
-            .addOnCompleteListener {  }.await()
+            .addOnCompleteListener { }.await()
 
-        return if(user.exists()){
+        return if (user.exists()) {
             Resource.success(
                 user.toObject<UserProfileDataModel>(),
                 StatusModel(
@@ -145,7 +145,7 @@ class ProfileRepositoryImpl @Inject constructor(
                     R.string.user_data_reached_with_success
                 )
             )
-        }else{
+        } else {
             Resource.error(
                 "Error",
                 null,

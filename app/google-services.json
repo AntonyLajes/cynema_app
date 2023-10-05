@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "15708406258-3gji0gvsh4joj0nqghblsvj35t96fqrj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nomargin.cynema",
+            "certificate_hash": "de10d4269f6bf9d4efff6a09815cd6df1f1b17a6"
+          }
+        },
+        {
           "client_id": "15708406258-ddro042qk41uh0482ai7rh87app728ij.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

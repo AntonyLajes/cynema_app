@@ -4,7 +4,7 @@ import com.nomargin.cynema.R
 
 object Constants {
 
-    object ERROR_TYPES{
+    object ERROR_TYPES {
         const val emailFieldIsEmpty = 1
         const val passwordFieldIsEmpty = 2
         const val confirmPasswordFieldIsEmpty = 3
@@ -29,10 +29,13 @@ object Constants {
         const val postBodyIsBiggerThanAllowed = 22
         const val postTitleIsLowerThanAllowed = 23
         const val postBodyIsLowerThanAllowed = 24
+        const val couldNotReachTheDiscussionPost = 25
+        const val userIsNotLoggedIn = 26
     }
 
-    object AUTH_ERRORS{
-        val authErrors = mapOf("ERROR_INVALID_CUSTOM_TOKEN" to R.string.error_login_custom_token,
+    object AUTH_ERRORS {
+        val authErrors = mapOf(
+            "ERROR_INVALID_CUSTOM_TOKEN" to R.string.error_login_custom_token,
             "ERROR_CUSTOM_TOKEN_MISMATCH" to R.string.error_login_custom_token_mismatch,
             "ERROR_INVALID_CREDENTIAL" to R.string.error_login_credential_malformed_or_expired,
             "ERROR_INVALID_EMAIL" to R.string.error_login_invalid_email,
@@ -40,24 +43,25 @@ object Constants {
             "ERROR_USER_MISMATCH" to R.string.error_login_user_mismatch,
             "ERROR_REQUIRES_RECENT_LOGIN" to R.string.error_login_requires_recent_login,
             "ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL" to R.string.error_login_accounts_exits_with_different_credential,
-            "ERROR_EMAIL_ALREADY_IN_USE" to  R.string.error_login_email_already_in_use,
+            "ERROR_EMAIL_ALREADY_IN_USE" to R.string.error_login_email_already_in_use,
             "ERROR_CREDENTIAL_ALREADY_IN_USE" to R.string.error_login_credential_already_in_use,
             "ERROR_USER_DISABLED" to R.string.error_login_user_disabled,
             "ERROR_USER_TOKEN_EXPIRED" to R.string.error_login_user_token_expired,
             "ERROR_USER_NOT_FOUND" to R.string.error_login_user_not_found,
             "ERROR_INVALID_USER_TOKEN" to R.string.error_login_invalid_user_token,
             "ERROR_OPERATION_NOT_ALLOWED" to R.string.error_login_operation_not_allowed,
-            "ERROR_WEAK_PASSWORD" to R.string.error_login_password_is_weak)
+            "ERROR_WEAK_PASSWORD" to R.string.error_login_password_is_weak
+        )
     }
 
-    object MIN_LENGTH{
+    object MIN_LENGTH {
         const val passwordMinLength = 8
         const val usernameMinLength = 4
         const val postTitleMinLength = 4
         const val postBodyMinLength = 8
     }
 
-    object MAX_LENGTH{
+    object MAX_LENGTH {
         const val userUsernameMaxLength = 24
         const val userBiographyMaxLength = 240
         const val postTitleMaxLength = 80
@@ -76,13 +80,16 @@ object Constants {
     object FIRESTORE {
         const val usersCollection = "users"
         const val postsCollection = "posts"
+        const val usersWhoVoted = "usersWhoVoted"
+        const val usersWhoUpVoted = "usersWhoUpVoted"
+        const val usersWhoDownVoted = "usersWhoDownVoted"
     }
 
     object TMDB_PATH_URLs {
         const val posterPathUrl = "https://image.tmdb.org/t/p/original/"
     }
 
-    object LOCAL_STORAGE{
+    object LOCAL_STORAGE {
         const val databaseName = "application_local_database"
         const val databaseVersion = 1
         const val genreTableName = "genre"
@@ -96,7 +103,17 @@ object Constants {
         MovieDiscussionPostId
     }
 
-    object CLASS_TYPE{
+    enum class UPDATE_TYPE {
+        Upvote,
+        Downvote
+    }
+
+    enum class VOTE_TYPE {
+        Upvote,
+        Downvote
+    }
+
+    object CLASS_TYPE {
         const val carouselModel = 1
         const val movieModel = 2
     }

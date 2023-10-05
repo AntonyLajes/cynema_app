@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/comment_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_button"
+    android:paddingHorizontal="16dp"
+    android:paddingVertical="8dp">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/profile_picture"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
+        android:scaleType="centerCrop"
+        app:chainUseRtl="true"
+        app:layout_constraintEnd_toStartOf="@id/comment_owner"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/RoundedPostProfilePicture"
+        tools:src="@drawable/rocket_1" />
+
+    <TextView
+        android:id="@+id/comment_owner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxWidth="180dp"
+        android:maxLines="1"
+        android:textColor="@color/custom_bold_grey"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@id/profile_picture"
+        app:layout_constraintEnd_toStartOf="@id/comment_title_divider"
+        app:layout_constraintStart_toEndOf="@id/profile_picture"
+        app:layout_constraintTop_toTopOf="@id/profile_picture"
+        tools:text="Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum " />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/comment_title_divider"
+        android:layout_width="12dp"
+        android:layout_height="2dp"
+        app:layout_constraintBottom_toBottomOf="@id/comment_owner"
+        app:layout_constraintEnd_toStartOf="@id/comment_date"
+        app:layout_constraintStart_toEndOf="@id/comment_owner"
+        app:layout_constraintTop_toTopOf="@id/comment_owner" />
+
+    <TextView
+        android:id="@+id/comment_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textColor="@color/custom_normal_grey"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@id/comment_title_divider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/comment_title_divider"
+        app:layout_constraintTop_toTopOf="@id/comment_title_divider"
+        tools:text="12hr ago" />
+
+    <TextView
+        android:id="@+id/comment_body"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/custom_normal_grey"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/comment_owner"
+        app:layout_constraintTop_toBottomOf="@id/comment_owner"
+        tools:maxLength="320"
+        tools:text="@string/lorem_ipsum" />
+
+    <LinearLayout
+        android:id="@+id/view_vote"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_button"
+        android:backgroundTint="@color/custom_low_grey"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="4dp"
+        app:layout_constraintStart_toStartOf="@id/comment_body"
+        app:layout_constraintTop_toBottomOf="@id/comment_body">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/button_up_vote"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_up_vote"
+            android:tint="@color/custom_bold_grey" />
+
+        <TextView
+            android:id="@+id/vote_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="4dp"
+            android:textColor="@color/custom_bold_grey"
+            android:textStyle="bold"
+            tools:text="21" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/button_down_vote"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_down_vote"
+            android:tint="@color/custom_bold_grey" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:background="@drawable/bg_button"
+        android:backgroundTint="@color/custom_low_grey"
+        android:id="@+id/view_answer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="4dp"
+        app:layout_constraintBottom_toBottomOf="@id/view_vote"
+        app:layout_constraintStart_toEndOf="@id/view_vote"
+        app:layout_constraintTop_toTopOf="@id/view_vote">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/button_answer"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:paddingEnd="4dp"
+            android:src="@drawable/ic_answer"
+            android:tint="@color/custom_bold_grey" />
+
+        <TextView
+            android:id="@+id/text_answer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="4dp"
+            android:textColor="@color/custom_bold_grey"
+            android:textStyle="bold"
+            android:text="@string/answer" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

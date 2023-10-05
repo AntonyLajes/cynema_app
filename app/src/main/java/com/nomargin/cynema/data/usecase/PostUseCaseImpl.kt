@@ -5,7 +5,9 @@ import androidx.annotation.RequiresApi
 import com.nomargin.cynema.data.local.entity.PostAppearanceModel
 import com.nomargin.cynema.data.repository.PostRepository
 import com.nomargin.cynema.data.repository.ProfileRepository
+import com.nomargin.cynema.util.Constants
 import com.nomargin.cynema.util.FrequencyFunctions
+import com.nomargin.cynema.util.Status
 import javax.inject.Inject
 
 class PostUseCaseImpl @Inject constructor(
@@ -64,6 +66,19 @@ class PostUseCaseImpl @Inject constructor(
                 comments = it.comments,
                 commentsQuantity = it.commentsQuantity.toString()
             )
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override suspend fun updatePostVote(
+        updateType: Constants.UPDATE_TYPE,
+        postId: String
+    ): PostAppearanceModel? {
+        val updatePostVote = postRepository.updatePostVote(updateType, postId)
+        return if (updatePostVote.status == Status.SUCCESS) {
+            getPostById(postId)
+        } else {
+            null
         }
     }
 }

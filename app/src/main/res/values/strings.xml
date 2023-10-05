@@ -57,6 +57,7 @@
     <string name="please_confirm_your_password">Please, confirm your password.</string>
     <string name="the_passwords_do_not_match">The passwords don\'t match</string>
     <string name="unknown_error">An unknown error occurred.</string>
+    <string name="post_does_not_exists">Post doesn\'t exists.</string>
     <string name="terms_of_use_and_privacy_policy_did_not_accepted">You cannot continue without accepting our Terms of Use and Privacy Policy</string>
     <string name="one_tap_dialog_was_closed">One-tap dialog was closed.</string>
     <string name="one_tap_encountered_a_network_error">One-tap encountered a network error.</string>
@@ -120,6 +121,7 @@
     <string name="could_not_reach_the_user_data">Couldn\'t reach the user data.</string>
     <string name="user_data_reached_with_success">User data reached with success!</string>
     <string name="discussion_posts_reached_with_success">Discussion posts reached with success!</string>
+    <string name="discussion_posts_was_not_reached">Discussion posts wasn\'t reached.</string>
     <string name="welcome">Welcome</string>
     <string name="hi_emoji">👋</string>
     <string name="details">Details</string>
@@ -138,6 +140,11 @@
     <string name="spoiler">Spoiler</string>
     <string name="publish">Publish</string>
     <string name="posted_by">Posted by</string>
-    <string name="comment">"comment"</string>
+    <string name="comment">comment</string>
     <string name="comments">comments</string>
+    <string name="add_comment">Add Comment</string>
+    <string name="answer">Answer</string>
+    <string name="publish_you_comment">Publish you comment</string>
+    <string name="nothing_to_show_consider_creating_a_post"><b>Nothing to show.</b>\nConsider <font color="#FF9B3F">creating a post!</font></string>
+    <string name="the_user_is_not_logged_in">Please, signIn before vote.</string>
 </resources>

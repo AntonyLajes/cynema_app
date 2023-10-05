@@ -10,6 +10,7 @@ data class UserProfileDataModel(
     val profilePicture: String? = null,
     val posts: List<Int>? = null,
     val postsQuantity: Int? = null,
+    val votedPosts: List<String?> = listOf(),
     @field:JvmField
     val isProfileUpdated: Boolean? = null,
 )

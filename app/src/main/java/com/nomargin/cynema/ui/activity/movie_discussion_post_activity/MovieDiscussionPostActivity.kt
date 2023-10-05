@@ -8,11 +8,12 @@ import com.bumptech.glide.Glide
 import com.nomargin.cynema.R
 import com.nomargin.cynema.data.local.entity.PostAppearanceModel
 import com.nomargin.cynema.databinding.ActivityMovieDiscussionPostBinding
+import com.nomargin.cynema.ui.fragment.create_comment_post_sheet_fragment.CreateCommentPostBottomSheetFragment
 import com.nomargin.cynema.util.Constants
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MovieDiscussionPostActivity : AppCompatActivity() {
+class MovieDiscussionPostActivity : AppCompatActivity(), View.OnClickListener {
 
     private var movieDiscussionPostId: String? = null
     private val binding: ActivityMovieDiscussionPostBinding by lazy {
@@ -25,6 +26,24 @@ class MovieDiscussionPostActivity : AppCompatActivity() {
         setContentView(binding.root)
         observers()
         getMovieDiscussionPostId()
+        initClicks()
+    }
+
+    override fun onClick(view: View) {
+        when (view.id) {
+            binding.addComment.id -> {
+                val createCommentPostBottomSheetFragment = CreateCommentPostBottomSheetFragment()
+                createCommentPostBottomSheetFragment.show(
+                    this.supportFragmentManager,
+                    "createCommentPostBottomSheetFragment"
+                )
+
+            }
+        }
+    }
+
+    private fun initClicks(){
+        binding.addComment.setOnClickListener(this)
     }
 
     private fun getMovieDiscussionPostId() {

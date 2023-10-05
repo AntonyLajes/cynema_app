@@ -8,7 +8,7 @@ import com.nomargin.cynema.data.local.entity.PostModel
 import com.nomargin.cynema.data.repository.PostRepository
 import com.nomargin.cynema.data.repository.SharedPreferencesRepository
 import com.nomargin.cynema.util.Constants
-import com.nomargin.cynema.util.model.StatusModel
+import com.nomargin.cynema.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -24,8 +24,8 @@ class CreatePostBottomSheetViewModel @Inject constructor(
         Constants.LOCAL_STORAGE.sharedPreferencesMovieIdKey,
         ""
     )
-    private var _createPostStatus: MutableLiveData<StatusModel> = MutableLiveData()
-    val createPostStatus: LiveData<StatusModel> = _createPostStatus
+    private var _createPostStatus: MutableLiveData<Resource<String>> = MutableLiveData()
+    val createPostStatus: LiveData<Resource<String>> = _createPostStatus
     fun publishPost(title: String, body: String, checked: Boolean) = viewModelScope.launch {
 
         val postModel = PostModel(
@@ -34,7 +34,7 @@ class CreatePostBottomSheetViewModel @Inject constructor(
             checked,
             movieId ?: ""
         )
-        _createPostStatus.value = postRepository.publishPost(postModel).statusModel!!
+        _createPostStatus.value = postRepository.publishPost(postModel)
 
     }
 

@@ -5,21 +5,55 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingHorizontal="16dp"
-    android:paddingBottom="32dp"
     android:paddingTop="16dp"
-    tools:context=".ui.fragment.create_post_sheet_fragment.CreatePostBottomSheetFragment">
+    android:paddingBottom="32dp"
+    tools:context=".ui.fragment.create_comment_post_sheet_fragment.CreateCommentPostBottomSheetFragment">
+
+    <LinearLayout
+        android:id="@+id/view_info_field"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        app:chainUseRtl="true"
+        app:layout_constraintBottom_toTopOf="@id/comment_body"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed">
+
+        <TextView
+            android:id="@+id/desc_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/custom_normal_grey"
+            tools:text="Commenting on " />
+
+        <TextView
+            android:id="@+id/parent_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_primary"
+            tools:text="Lorem Ipsum\'s" />
+
+        <TextView
+            android:id="@+id/desc_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/custom_normal_grey"
+            tools:text=" post" />
+
+    </LinearLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/post_title_input_layout"
+        android:id="@+id/comment_body"
         style="@style/CustomInputTextLayout"
-        android:hint="@string/post_title"
-        app:endIconMode="clear_text"
+        android:hint="@string/comment"
         app:counterEnabled="true"
-        app:counterMaxLength="80"
-        app:layout_constraintBottom_toTopOf="@id/post_body_input_layout"
+        app:counterMaxLength="240"
+        app:endIconMode="clear_text"
+        app:layout_constraintBottom_toTopOf="@id/chip_group_spoiler"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/view_info_field">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/post_title_input"
@@ -28,41 +62,20 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/post_body_input_layout"
-        style="@style/CustomInputTextLayout"
-        android:layout_marginTop="16dp"
-        app:counterEnabled="true"
-        app:counterMaxLength="800"
-        android:hint="@string/post_body"
-        app:endIconMode="clear_text"
-        app:layout_constraintBottom_toTopOf="@id/chip_group_spoiler"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/post_title_input_layout">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/post_body_input"
-            android:maxLines="5"
-            style="@style/CustomInputText"
-            android:inputType="textMultiLine" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/chip_group_spoiler"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginVertical="8dp"
-        app:layout_constraintBottom_toTopOf="@id/button_publish"
+        app:layout_constraintBottom_toTopOf="@id/button_comment"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/post_body_input_layout">
+        app:layout_constraintTop_toBottomOf="@id/comment_body">
 
         <com.google.android.material.chip.Chip
-            android:checkable="true"
             android:id="@+id/chip_spoiler"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:checkable="true"
             android:text="@string/spoiler"
             android:textColor="@color/custom_bold_grey"
             app:chipBackgroundColor="@color/custom_chip_background"
@@ -71,10 +84,10 @@
     </com.google.android.material.chip.ChipGroup>
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/button_publish"
+        android:id="@+id/button_comment"
         style="@style/CustomProviderButton"
         android:backgroundTint="@color/color_primary"
-        android:text="@string/publish"
+        android:text="@string/add_comment"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
