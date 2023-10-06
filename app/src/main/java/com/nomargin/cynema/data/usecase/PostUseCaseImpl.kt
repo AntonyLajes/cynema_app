@@ -3,6 +3,7 @@ package com.nomargin.cynema.data.usecase
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.nomargin.cynema.data.local.entity.PostAppearanceModel
+import com.nomargin.cynema.data.remote.firebase.authentication.FirebaseAuthUseCase
 import com.nomargin.cynema.data.repository.PostRepository
 import com.nomargin.cynema.data.repository.ProfileRepository
 import com.nomargin.cynema.util.Constants
@@ -14,7 +15,10 @@ class PostUseCaseImpl @Inject constructor(
     private val postRepository: PostRepository,
     private val profileRepository: ProfileRepository,
     private val theMovieDatabaseApiUseCase: TheMovieDatabaseApiUseCase,
+    firebaseAuth: FirebaseAuthUseCase,
 ) : PostUseCase {
+    private val currentUser = firebaseAuth.getFirebaseAuth().currentUser
+
     @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun getPosts(movieId: String): List<PostAppearanceModel> {
         val posts: MutableList<PostAppearanceModel> = mutableListOf()
@@ -39,7 +43,8 @@ class PostUseCaseImpl @Inject constructor(
                         timestamp = postedTime,
                         votes = post.votes.toString(),
                         comments = post.comments,
-                        commentsQuantity = commentsQuantity
+                        commentsQuantity = commentsQuantity,
+                        currentUser = currentUser
                     )
                 )
             }
@@ -64,7 +69,11 @@ class PostUseCaseImpl @Inject constructor(
                 timestamp = postedTime,
                 votes = it.votes.toString(),
                 comments = it.comments,
-                commentsQuantity = it.commentsQuantity.toString()
+                commentsQuantity = it.commentsQuantity.toString(),
+                usersWhoVoted = it.usersWhoVoted,
+                usersWhoUpVoted = it.usersWhoUpVoted,
+                usersWhoDownVoted = it.usersWhoDownVoted,
+                currentUser = currentUser
             )
         }
     }
@@ -72,7 +81,7 @@ class PostUseCaseImpl @Inject constructor(
     @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun updatePostVote(
         updateType: Constants.UPDATE_TYPE,
-        postId: String
+        postId: String,
     ): PostAppearanceModel? {
         val updatePostVote = postRepository.updatePostVote(updateType, postId)
         return if (updatePostVote.status == Status.SUCCESS) {
