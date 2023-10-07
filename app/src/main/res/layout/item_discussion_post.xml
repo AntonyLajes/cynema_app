@@ -15,7 +15,6 @@
         android:layout_height="32dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:src="@drawable/ic_up_vote"
         app:layout_constraintBottom_toTopOf="@id/up_vote_value"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -25,7 +24,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:textColor="@color/custom_black"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/button_down_vote"
@@ -38,7 +36,6 @@
         android:id="@+id/button_down_vote"
         android:layout_width="32dp"
         android:layout_height="32dp"
-        android:src="@drawable/ic_down_vote"
         app:layout_constraintEnd_toEndOf="@id/up_vote_value"
         app:layout_constraintStart_toStartOf="@id/up_vote_value"
         app:layout_constraintTop_toBottomOf="@id/up_vote_value" />

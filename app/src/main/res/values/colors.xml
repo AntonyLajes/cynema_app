@@ -18,4 +18,5 @@
     <color name="custom_normal_grey">#9F9F9F</color>
     <color name="success_green">#4BB543</color>
     <color name="shimmer_color">#AAAAAA</color>
+    <color name="red">#E91E1E</color>
 </resources>

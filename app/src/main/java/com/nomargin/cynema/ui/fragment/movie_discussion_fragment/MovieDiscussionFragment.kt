@@ -28,10 +28,11 @@ class MovieDiscussionFragment : Fragment(), View.OnClickListener {
     private val movieDiscussionViewModel: MovieDiscussionViewModel by viewModels()
     private lateinit var movieDiscussionPostAdapter: MovieDiscussionPostAdapter
     private var itemPositionPost: Int? = null
+    private var currentUserId: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentMovieDiscussionBinding.inflate(inflater)
         _itemDiscussionPostBinding = ItemDiscussionPostBinding.inflate(inflater)
@@ -42,6 +43,7 @@ class MovieDiscussionFragment : Fragment(), View.OnClickListener {
 
     override fun onResume() {
         super.onResume()
+        getCurrentUserId()
         getMovieDiscussionPosts()
         initClicks()
     }
@@ -74,30 +76,32 @@ class MovieDiscussionFragment : Fragment(), View.OnClickListener {
 
     private fun initMovieDiscussionPostRecyclerView() {
         movieDiscussionPostAdapter =
-            MovieDiscussionPostAdapter(object : AdapterOnItemClickListenerWithView {
-                override fun <T> onItemClickListener(view: View, item: T, position: Int) {
-                    itemPositionPost = position
-                    when (view.id) {
-                        itemDiscussionPostBinding!!.post.id -> {
-                            postClicksListener(item as PostAppearanceModel)
-                        }
+            MovieDiscussionPostAdapter(
+                object : AdapterOnItemClickListenerWithView {
+                    override fun <T> onItemClickListener(view: View, item: T, position: Int) {
+                        itemPositionPost = position
+                        when (view.id) {
+                            itemDiscussionPostBinding!!.post.id -> {
+                                postClicksListener(item as PostAppearanceModel)
+                            }
 
-                        itemDiscussionPostBinding!!.buttonUpVote.id -> {
-                            updatePostVote(
-                                Constants.UPDATE_TYPE.Upvote,
-                                item as PostAppearanceModel
-                            )
-                        }
+                            itemDiscussionPostBinding!!.buttonUpVote.id -> {
+                                updatePostVote(
+                                    Constants.UPDATE_TYPE.Upvote,
+                                    item as PostAppearanceModel
+                                )
+                            }
 
-                        itemDiscussionPostBinding!!.buttonDownVote.id -> {
-                            updatePostVote(
-                                Constants.UPDATE_TYPE.Downvote,
-                                item as PostAppearanceModel
-                            )
+                            itemDiscussionPostBinding!!.buttonDownVote.id -> {
+                                updatePostVote(
+                                    Constants.UPDATE_TYPE.Downvote,
+                                    item as PostAppearanceModel
+                                )
+                            }
                         }
                     }
                 }
-            })
+            )
         val layoutManager = LinearLayoutManager(requireContext())
         layoutManager.scrollToPositionWithOffset(0, 0)
         binding.movieDiscussionPostRecyclerView.layoutManager =
@@ -134,6 +138,9 @@ class MovieDiscussionFragment : Fragment(), View.OnClickListener {
                 updateMovieDiscussionUpdatedPostRecyclerView(it)
             }
         }
+        movieDiscussionViewModel.currentUserId.observe(viewLifecycleOwner) {
+            currentUserId = it
+        }
     }
 
     private fun updateMovieDiscussionPostRecyclerView(postDatabaseModels: List<PostAppearanceModel>) {
@@ -141,7 +148,7 @@ class MovieDiscussionFragment : Fragment(), View.OnClickListener {
     }
 
     private fun updateMovieDiscussionUpdatedPostRecyclerView(
-        updatedPost: PostAppearanceModel
+        updatedPost: PostAppearanceModel,
     ) {
         itemPositionPost?.let {
             movieDiscussionPostAdapter.getUpdatedPost(updatedPost, it)
@@ -150,6 +157,10 @@ class MovieDiscussionFragment : Fragment(), View.OnClickListener {
 
     private fun getMovieDiscussionPosts() {
         movieDiscussionViewModel.getPosts()
+    }
+
+    private fun getCurrentUserId() {
+        movieDiscussionViewModel.getCurrentUserId()
     }
 
     private fun postClicksListener(item: PostAppearanceModel) {
@@ -162,7 +173,7 @@ class MovieDiscussionFragment : Fragment(), View.OnClickListener {
 
     private fun updatePostVote(
         updateType: Constants.UPDATE_TYPE,
-        postAppearanceModel: PostAppearanceModel
+        postAppearanceModel: PostAppearanceModel,
     ) {
         movieDiscussionViewModel.updatePostVote(updateType, postAppearanceModel.postId)
     }

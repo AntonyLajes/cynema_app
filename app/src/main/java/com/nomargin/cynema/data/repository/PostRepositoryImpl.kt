@@ -187,26 +187,43 @@ class PostRepositoryImpl @Inject constructor(
             }
         }
 
-        return when (updateType) {
-            Constants.UPDATE_TYPE.Upvote -> {
-                incrementAndDecrementHandler(
-                    updateType,
-                    votedType,
-                    1,
-                    hasVoted,
-                    postReference
-                )
-            }
+        val userReference = firebaseFirestore
+            .getFirebaseFirestore()
+            .collection(Constants.FIRESTORE.usersCollection)
+            .document(firebaseAuth.getFirebaseAuth().currentUser?.uid ?: "")
 
-            else -> {
-                incrementAndDecrementHandler(
-                    updateType,
-                    votedType,
-                    -1,
-                    hasVoted,
-                    postReference
-                )
+        return if (userReference.get().addOnCompleteListener { }.await().exists()) {
+            when (updateType) {
+                Constants.UPDATE_TYPE.Upvote -> {
+                    incrementAndDecrementHandler(
+                        updateType,
+                        votedType,
+                        1,
+                        hasVoted,
+                        postReference
+                    )
+                }
+
+                else -> {
+                    incrementAndDecrementHandler(
+                        updateType,
+                        votedType,
+                        -1,
+                        hasVoted,
+                        postReference
+                    )
+                }
             }
+        } else {
+            Resource.error(
+                "Error",
+                null,
+                StatusModel(
+                    false,
+                    Constants.ERROR_TYPES.userIsNotLoggedIn,
+                    R.string.user_is_not_logged_in
+                )
+            )
         }
     }
 
@@ -238,6 +255,8 @@ class PostRepositoryImpl @Inject constructor(
                                 firebaseAuth.getFirebaseAuth().currentUser?.uid ?: ""
                             )
                         )
+
+
                     } else {
                         postReference.update(
                             "votes",
