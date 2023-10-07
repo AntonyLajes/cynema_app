@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nomargin.cynema.data.local.entity.PostAppearanceModel
+import com.nomargin.cynema.data.repository.SharedPreferencesRepository
 import com.nomargin.cynema.data.usecase.PostUseCase
 import com.nomargin.cynema.util.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,7 +14,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MovieDiscussionPostViewModel @Inject constructor(
-    private val postUseCase: PostUseCase
+    private val postUseCase: PostUseCase,
+    private val sharedPreferencesRepository: SharedPreferencesRepository
 ) : ViewModel() {
 
     private val _post: MutableLiveData<PostAppearanceModel?> = MutableLiveData()
@@ -27,6 +29,10 @@ class MovieDiscussionPostViewModel @Inject constructor(
 
     fun updatePostVote(updateType: Constants.UPDATE_TYPE, postId: String) = viewModelScope.launch {
         _getUpdatedPost.value = postUseCase.updatePostVote(updateType, postId)
+    }
+
+    fun saveDataToSharedPreferences(key: String, postId: String){
+        sharedPreferencesRepository.putString(key, postId)
     }
 
 }

@@ -7,7 +7,7 @@
     android:paddingHorizontal="16dp"
     android:paddingBottom="32dp"
     android:paddingTop="16dp"
-    tools:context=".ui.fragment.create_post_sheet_fragment.CreatePostBottomSheetFragment">
+    tools:context=".ui.fragment.create_post_bottom_sheet_fragment.CreatePostBottomSheetFragment">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/post_title_input_layout"

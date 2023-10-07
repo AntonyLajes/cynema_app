@@ -37,24 +37,31 @@ class MovieDiscussionPostActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(view: View) {
         when (view.id) {
             binding.addComment.id -> {
+                val bundle = Bundle()
+                bundle.putString(
+                    Constants.BUNDLE_KEYS.MovieDiscussionPostOwnerName.name,
+                    buildString {
+                        append(postAppearanceModel.user?.firstName)
+                        append(" ")
+                        append(postAppearanceModel.user?.lastName)
+                    }
+                )
                 val createCommentPostBottomSheetFragment = CreateCommentPostBottomSheetFragment()
+                createCommentPostBottomSheetFragment.arguments = bundle
                 createCommentPostBottomSheetFragment.show(
-                    this.supportFragmentManager,
-                    "createCommentPostBottomSheetFragment"
+                    this.supportFragmentManager, "createCommentPostBottomSheetFragment"
                 )
             }
 
             binding.buttonUpVote.id -> {
                 movieDiscussionPostViewModel.updatePostVote(
-                    Constants.UPDATE_TYPE.Upvote,
-                    postAppearanceModel.postId
+                    Constants.UPDATE_TYPE.Upvote, postAppearanceModel.postId
                 )
             }
 
             binding.buttonDownVote.id -> {
                 movieDiscussionPostViewModel.updatePostVote(
-                    Constants.UPDATE_TYPE.Downvote,
-                    postAppearanceModel.postId
+                    Constants.UPDATE_TYPE.Downvote, postAppearanceModel.postId
                 )
             }
         }
@@ -81,6 +88,7 @@ class MovieDiscussionPostActivity : AppCompatActivity(), View.OnClickListener {
             post?.let {
                 fieldsHandler(it)
                 postAppearanceModel = it
+                saveMovieDiscussionPostId()
             }
         }
         movieDiscussionPostViewModel.getUpdatedPost.observe(this) { updatedPost ->
@@ -106,40 +114,37 @@ class MovieDiscussionPostActivity : AppCompatActivity(), View.OnClickListener {
             updateVoteColors(isUpVoted = false, isDownVoted = false)
         }
         binding.answersQuantity.text = postDatabaseModel.commentsQuantity
-        binding.textAnswersQuantity.visibility =
-            when (postDatabaseModel.commentsQuantity.toInt()) {
-                0 -> {
-                    View.GONE
-                }
-
-                1 -> {
-                    binding.textAnswersQuantity.text = buildString {
-                        append(postDatabaseModel.commentsQuantity)
-                        append(" ")
-                        append(getString(R.string.comment))
-                    }
-                    View.VISIBLE
-                }
-
-                else -> {
-                    binding.textAnswersQuantity.text = buildString {
-                        append(postDatabaseModel.commentsQuantity)
-                        append(" ")
-                        append(getString(R.string.comments))
-                    }
-                    View.VISIBLE
-                }
+        binding.textAnswersQuantity.visibility = when (postDatabaseModel.commentsQuantity.toInt()) {
+            0 -> {
+                View.GONE
             }
+
+            1 -> {
+                binding.textAnswersQuantity.text = buildString {
+                    append(postDatabaseModel.commentsQuantity)
+                    append(" ")
+                    append(getString(R.string.comment))
+                }
+                View.VISIBLE
+            }
+
+            else -> {
+                binding.textAnswersQuantity.text = buildString {
+                    append(postDatabaseModel.commentsQuantity)
+                    append(" ")
+                    append(getString(R.string.comments))
+                }
+                View.VISIBLE
+            }
+        }
         binding.postOwner.text = buildString {
             append(" ")
             append(postDatabaseModel.user?.firstName)
             append(" ")
             append(postDatabaseModel.user?.lastName)
         }
-        Glide.with(this)
-            .load(postDatabaseModel.user?.profilePicture)
-            .error(R.drawable.pic_profile_picture)
-            .into(binding.profilePicture)
+        Glide.with(this).load(postDatabaseModel.user?.profilePicture)
+            .error(R.drawable.pic_profile_picture).into(binding.profilePicture)
 
         binding.postDate.text = postDatabaseModel.timestamp
     }
@@ -148,25 +153,19 @@ class MovieDiscussionPostActivity : AppCompatActivity(), View.OnClickListener {
         when {
             isUpVoted -> {
                 setVoteItems(
-                    R.drawable.ic_up_voted,
-                    R.drawable.ic_down_vote,
-                    R.color.color_primary
+                    R.drawable.ic_up_voted, R.drawable.ic_down_vote, R.color.color_primary
                 )
             }
 
             isDownVoted -> {
                 setVoteItems(
-                    R.drawable.ic_up_vote,
-                    R.drawable.ic_down_voted,
-                    R.color.red
+                    R.drawable.ic_up_vote, R.drawable.ic_down_voted, R.color.red
                 )
             }
 
             else -> {
                 setVoteItems(
-                    R.drawable.ic_up_vote,
-                    R.drawable.ic_down_vote,
-                    R.color.custom_black
+                    R.drawable.ic_up_vote, R.drawable.ic_down_vote, R.color.custom_black
                 )
             }
         }
@@ -179,18 +178,22 @@ class MovieDiscussionPostActivity : AppCompatActivity(), View.OnClickListener {
     ) {
         binding.buttonUpVote.setImageDrawable(
             AppCompatResources.getDrawable(
-                this,
-                upVoteRes
+                this, upVoteRes
             )
         )
         binding.buttonDownVote.setImageDrawable(
             AppCompatResources.getDrawable(
-                this,
-                downVoteRes
+                this, downVoteRes
             )
         )
         binding.voteValue.setTextColor(
             ContextCompat.getColor(this, voteValueColor)
+        )
+    }
+
+    private fun saveMovieDiscussionPostId() {
+        movieDiscussionPostViewModel.saveDataToSharedPreferences(
+            Constants.LOCAL_STORAGE.sharedPreferencesPostIdKey, postAppearanceModel.postId
         )
     }
 }

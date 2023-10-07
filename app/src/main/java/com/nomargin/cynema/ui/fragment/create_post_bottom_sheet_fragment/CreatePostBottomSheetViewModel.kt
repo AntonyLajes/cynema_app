@@ -1,4 +1,4 @@
-package com.nomargin.cynema.ui.fragment.create_post_sheet_fragment
+package com.nomargin.cynema.ui.fragment.create_post_bottom_sheet_fragment
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

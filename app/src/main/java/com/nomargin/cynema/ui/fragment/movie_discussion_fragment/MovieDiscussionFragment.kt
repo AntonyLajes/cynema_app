@@ -13,7 +13,7 @@ import com.nomargin.cynema.databinding.FragmentMovieDiscussionBinding
 import com.nomargin.cynema.databinding.ItemDiscussionPostBinding
 import com.nomargin.cynema.ui.activity.movie_discussion_post_activity.MovieDiscussionPostActivity
 import com.nomargin.cynema.ui.adapter.recycler_view.MovieDiscussionPostAdapter
-import com.nomargin.cynema.ui.fragment.create_post_sheet_fragment.CreatePostBottomSheetFragment
+import com.nomargin.cynema.ui.fragment.create_post_bottom_sheet_fragment.CreatePostBottomSheetFragment
 import com.nomargin.cynema.util.Constants
 import com.nomargin.cynema.util.extension.AdapterOnItemClickListenerWithView
 import dagger.hilt.android.AndroidEntryPoint

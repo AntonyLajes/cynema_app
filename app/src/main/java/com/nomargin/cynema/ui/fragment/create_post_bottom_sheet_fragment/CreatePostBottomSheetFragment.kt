@@ -1,4 +1,4 @@
-package com.nomargin.cynema.ui.fragment.create_post_sheet_fragment
+package com.nomargin.cynema.ui.fragment.create_post_bottom_sheet_fragment
 
 import android.content.Intent
 import android.os.Bundle
@@ -15,7 +15,6 @@ import com.google.android.material.textfield.TextInputLayout
 import com.nomargin.cynema.R
 import com.nomargin.cynema.databinding.FragmentCreatePostBottomSheetBinding
 import com.nomargin.cynema.ui.activity.movie_discussion_post_activity.MovieDiscussionPostActivity
-import com.nomargin.cynema.ui.fragment.movie_discussion_fragment.MovieDiscussionViewModel
 import com.nomargin.cynema.util.Constants
 import com.nomargin.cynema.util.extension.TextInputLayoutExtensions.setFieldError
 import com.nomargin.cynema.util.model.StatusModel
@@ -27,7 +26,6 @@ class CreatePostBottomSheetFragment : BottomSheetDialogFragment(), View.OnClickL
     private var _binding: FragmentCreatePostBottomSheetBinding? = null
     private val binding: FragmentCreatePostBottomSheetBinding get() = _binding!!
     private val createPostBottomSheetViewModel: CreatePostBottomSheetViewModel by viewModels()
-    private val movieDiscussionViewModel: MovieDiscussionViewModel by viewModels()
     private val chipSpoiler: Chip by lazy { binding.chipSpoiler }
     private val postTitleInputLayout: TextInputLayout by lazy { binding.postTitleInputLayout }
     private val postBodyInputLayout: TextInputLayout by lazy { binding.postBodyInputLayout }
