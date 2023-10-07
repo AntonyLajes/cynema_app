@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nomargin.cynema.data.local.entity.PostAppearanceModel
 import com.nomargin.cynema.data.usecase.PostUseCase
+import com.nomargin.cynema.util.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -17,9 +18,15 @@ class MovieDiscussionPostViewModel @Inject constructor(
 
     private val _post: MutableLiveData<PostAppearanceModel?> = MutableLiveData()
     val post: LiveData<PostAppearanceModel?> = _post
+    private val _getUpdatedPost: MutableLiveData<PostAppearanceModel?> = MutableLiveData()
+    val getUpdatedPost: LiveData<PostAppearanceModel?> = _getUpdatedPost
 
     fun getDiscussionPostById(postId: String?) = viewModelScope.launch {
         _post.value = postUseCase.getPostById(postId ?: "")
+    }
+
+    fun updatePostVote(updateType: Constants.UPDATE_TYPE, postId: String) = viewModelScope.launch {
+        _getUpdatedPost.value = postUseCase.updatePostVote(updateType, postId)
     }
 
 }

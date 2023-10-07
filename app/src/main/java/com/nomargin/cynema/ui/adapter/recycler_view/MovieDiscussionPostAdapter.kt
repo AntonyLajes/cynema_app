@@ -2,7 +2,6 @@ package com.nomargin.cynema.ui.adapter.recycler_view
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.ColorRes

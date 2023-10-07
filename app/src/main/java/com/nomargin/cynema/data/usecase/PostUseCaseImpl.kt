@@ -44,6 +44,9 @@ class PostUseCaseImpl @Inject constructor(
                         votes = post.votes.toString(),
                         comments = post.comments,
                         commentsQuantity = commentsQuantity,
+                        usersWhoVoted = post.usersWhoVoted,
+                        usersWhoUpVoted = post.usersWhoUpVoted,
+                        usersWhoDownVoted = post.usersWhoDownVoted,
                         currentUser = currentUser
                     )
                 )

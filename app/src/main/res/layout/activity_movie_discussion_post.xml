@@ -107,9 +107,7 @@
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/button_up_vote"
             android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/ic_up_vote"
-            android:tint="@color/custom_bold_grey" />
+            android:layout_height="20dp"/>
 
         <TextView
             android:id="@+id/vote_value"
@@ -123,9 +121,7 @@
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/button_down_vote"
             android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/ic_down_vote"
-            android:tint="@color/custom_bold_grey" />
+            android:layout_height="20dp" />
 
     </LinearLayout>
 
