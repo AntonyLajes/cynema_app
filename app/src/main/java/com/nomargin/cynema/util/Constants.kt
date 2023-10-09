@@ -33,6 +33,7 @@ object Constants {
         const val commentBodyIsEmpty = 27
         const val commentBodyIsBiggerThanAllowed = 28
         const val commentBodyIsLowerThanAllowed = 29
+        const val couldNotReachTheDiscussionPostComment = 30
     }
 
     object AUTH_ERRORS {

@@ -7,57 +7,51 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.nomargin.cynema.R
-import com.nomargin.cynema.data.local.entity.PostAppearanceModel
-import com.nomargin.cynema.databinding.ItemDiscussionPostBinding
+import com.nomargin.cynema.data.local.entity.CommentAppearanceModel
+import com.nomargin.cynema.databinding.ItemMovieDiscussionPostCommentBinding
 import com.nomargin.cynema.util.FrequencyFunctions
 import com.nomargin.cynema.util.extension.AdapterOnItemClickListenerWithView
 
-class MovieDiscussionPostAdapter(
+class MovieDiscussionPostCommentAdapter(
     private val onItemClickListener: AdapterOnItemClickListenerWithView,
-) :
-    RecyclerView.Adapter<MovieDiscussionPostAdapter.MovieDiscussionPostViewHolder>() {
+) : RecyclerView.Adapter<MovieDiscussionPostCommentAdapter.MovieDiscussionPostCommentViewHolder>() {
 
-    private var postsList: MutableList<PostAppearanceModel> = mutableListOf()
+    private var commentsList: MutableList<CommentAppearanceModel> = mutableListOf()
     private lateinit var parentContext: Context
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
-    ): MovieDiscussionPostViewHolder {
+    ): MovieDiscussionPostCommentViewHolder {
         parentContext = parent.context
-        val view =
-            ItemDiscussionPostBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return MovieDiscussionPostViewHolder(view)
+        val item = ItemMovieDiscussionPostCommentBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
+        return MovieDiscussionPostCommentViewHolder(item)
     }
 
-    override fun onBindViewHolder(holder: MovieDiscussionPostViewHolder, position: Int) {
-        val currentItem = postsList[position]
-        holder.item.postTitle.text = currentItem.title
-        holder.item.postBody.text = currentItem.body
+    override fun onBindViewHolder(holder: MovieDiscussionPostCommentViewHolder, position: Int) {
+        val currentItem = commentsList[position]
         Glide.with(parentContext)
             .load(currentItem.user?.profilePicture)
             .error(R.drawable.pic_profile_picture)
             .into(holder.item.profilePicture)
-        holder.item.postOwner.text = buildString {
-            append(parentContext.getString(R.string.posted_by))
-            append(" ")
+        holder.item.commentOwner.text = buildString {
             append(currentItem.user?.firstName)
             append(" ")
             append(currentItem.user?.lastName)
         }
-        holder.item.postDate.text = currentItem.timestamp
+        holder.item.commentBody.text = currentItem.body
+        holder.item.commentDate.text = currentItem.timestamp
         holder.item.voteValue.text = currentItem.votes
-        holder.item.answerValue.text = currentItem.commentsQuantity
-        holder.item.post.setOnClickListener {
-            onItemClickListener.onItemClickListener(it, currentItem, position)
-        }
         holder.item.buttonUpVote.setOnClickListener {
             onItemClickListener.onItemClickListener(it, currentItem, position)
         }
         holder.item.buttonDownVote.setOnClickListener {
             onItemClickListener.onItemClickListener(it, currentItem, position)
         }
-
         if (currentItem.usersWhoVoted.contains(currentItem.currentUser?.uid ?: "")) {
             val isUpVoted = currentItem.usersWhoUpVoted.contains(currentItem.currentUser?.uid ?: "")
             val isDownVoted =
@@ -73,21 +67,21 @@ class MovieDiscussionPostAdapter(
         }
     }
 
-    override fun getItemCount(): Int = postsList.size
+    override fun getItemCount(): Int = commentsList.size
 
     @SuppressLint("NotifyDataSetChanged")
-    fun getDiscussionPosts(posts: List<PostAppearanceModel>) {
-        postsList = posts.toMutableList()
+    fun getDiscussionPostComments(comments: List<CommentAppearanceModel>) {
+        commentsList = comments.toMutableList()
         notifyDataSetChanged()
     }
 
-    fun getUpdatedPost(post: PostAppearanceModel, position: Int) {
-        postsList[position] = post
+    fun getUpdatedComment(comment: CommentAppearanceModel, position: Int) {
+        commentsList[position] = comment
         this.notifyItemChanged(position)
     }
 
-
-    inner class MovieDiscussionPostViewHolder(
-        val item: ItemDiscussionPostBinding,
+    inner class MovieDiscussionPostCommentViewHolder(
+        val item: ItemMovieDiscussionPostCommentBinding,
     ) : RecyclerView.ViewHolder(item.root)
+
 }

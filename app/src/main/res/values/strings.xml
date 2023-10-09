@@ -124,6 +124,8 @@
     <string name="could_not_reach_the_user_data">Couldn\'t reach the user data.</string>
     <string name="user_data_reached_with_success">User data reached with success!</string>
     <string name="discussion_posts_reached_with_success">Discussion posts reached with success!</string>
+    <string name="comments_reached_with_success">Posts reached with success!</string>
+    <string name="comment_reached_with_success">Comments reached with success!</string>
     <string name="discussion_posts_was_not_reached">Discussion posts wasn\'t reached.</string>
     <string name="welcome">Welcome</string>
     <string name="hi_emoji">👋</string>

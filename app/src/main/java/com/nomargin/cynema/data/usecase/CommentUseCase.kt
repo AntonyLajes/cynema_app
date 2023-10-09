@@ -5,7 +5,7 @@ import com.nomargin.cynema.util.Constants
 
 interface CommentUseCase {
 
-    suspend fun getComments(postId: String): List<CommentAppearanceModel>
+    suspend fun getAllComments(postId: String): List<CommentAppearanceModel>
     suspend fun getCommentById(commentId: String): CommentAppearanceModel?
     suspend fun updateCommentVote(
         updateType: Constants.UPDATE_TYPE,

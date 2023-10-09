@@ -1,7 +1,5 @@
 package com.nomargin.cynema.data.repository
 
-import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.FieldValue
 import com.nomargin.cynema.R
 import com.nomargin.cynema.data.local.entity.PostModel
 import com.nomargin.cynema.data.remote.firebase.authentication.FirebaseAuthUseCase
@@ -9,6 +7,7 @@ import com.nomargin.cynema.data.remote.firebase.entity.PostDatabaseModel
 import com.nomargin.cynema.data.remote.firebase.firestore.FirebaseFirestoreUseCase
 import com.nomargin.cynema.data.usecase.ValidateAttributesUseCase
 import com.nomargin.cynema.util.Constants
+import com.nomargin.cynema.util.FrequencyFunctions
 import com.nomargin.cynema.util.Resource
 import com.nomargin.cynema.util.Status
 import com.nomargin.cynema.util.model.StatusModel
@@ -195,22 +194,24 @@ class PostRepositoryImpl @Inject constructor(
         return if (userReference.get().addOnCompleteListener { }.await().exists()) {
             when (updateType) {
                 Constants.UPDATE_TYPE.Upvote -> {
-                    incrementAndDecrementHandler(
+                    FrequencyFunctions.incrementAndDecrementHandler(
                         updateType,
                         votedType,
                         1,
                         hasVoted,
-                        postReference
+                        postReference,
+                        firebaseAuth.getFirebaseAuth().currentUser?.uid
                     )
                 }
 
                 else -> {
-                    incrementAndDecrementHandler(
+                    FrequencyFunctions.incrementAndDecrementHandler(
                         updateType,
                         votedType,
                         -1,
                         hasVoted,
-                        postReference
+                        postReference,
+                        firebaseAuth.getFirebaseAuth().currentUser?.uid
                     )
                 }
             }
@@ -222,156 +223,6 @@ class PostRepositoryImpl @Inject constructor(
                     false,
                     Constants.ERROR_TYPES.userIsNotLoggedIn,
                     R.string.user_is_not_logged_in
-                )
-            )
-        }
-    }
-
-    private fun incrementAndDecrementHandler(
-        updateType: Constants.UPDATE_TYPE,
-        votedType: Constants.VOTE_TYPE?,
-        increment: Long,
-        hasVoted: Boolean,
-        postReference: DocumentReference,
-    ): Resource<StatusModel> {
-        return if (hasVoted) {
-            when (updateType) {
-                Constants.UPDATE_TYPE.Upvote -> {
-                    if (votedType == Constants.VOTE_TYPE.Upvote) {
-                        //Removes the vote
-                        postReference.update(
-                            "votes",
-                            FieldValue.increment(-1)
-                        )
-                        postReference.update(
-                            Constants.FIRESTORE.usersWhoUpVoted,
-                            FieldValue.arrayRemove(
-                                firebaseAuth.getFirebaseAuth().currentUser?.uid ?: ""
-                            )
-                        )
-                        postReference.update(
-                            Constants.FIRESTORE.usersWhoVoted,
-                            FieldValue.arrayRemove(
-                                firebaseAuth.getFirebaseAuth().currentUser?.uid ?: ""
-                            )
-                        )
-
-
-                    } else {
-                        postReference.update(
-                            "votes",
-                            FieldValue.increment(2)
-                        )
-                        postReference.update(
-                            Constants.FIRESTORE.usersWhoDownVoted,
-                            FieldValue.arrayRemove(
-                                firebaseAuth.getFirebaseAuth().currentUser?.uid ?: ""
-                            )
-                        )
-                        postReference.update(
-                            Constants.FIRESTORE.usersWhoUpVoted,
-                            FieldValue.arrayUnion(
-                                firebaseAuth.getFirebaseAuth().currentUser?.uid ?: ""
-                            )
-                        )
-                        postReference.update(
-                            Constants.FIRESTORE.usersWhoVoted,
-                            FieldValue.arrayUnion(
-                                firebaseAuth.getFirebaseAuth().currentUser?.uid ?: ""
-                            )
-                        )
-                    }
-                }
-
-                else -> {
-                    if (votedType == Constants.VOTE_TYPE.Downvote) {
-                        //Removes the vote
-                        postReference.update(
-                            "votes",
-                            FieldValue.increment(1)
-                        )
-                        postReference.update(
-                            Constants.FIRESTORE.usersWhoDownVoted,
-                            FieldValue.arrayRemove(
-                                firebaseAuth.getFirebaseAuth().currentUser?.uid ?: ""
-                            )
-                        )
-                        postReference.update(
-                            Constants.FIRESTORE.usersWhoVoted,
-                            FieldValue.arrayRemove(
-                                firebaseAuth.getFirebaseAuth().currentUser?.uid ?: ""
-                            )
-                        )
-                    } else {
-                        postReference.update(
-                            "votes",
-                            FieldValue.increment(-2)
-                        )
-                        postReference.update(
-                            Constants.FIRESTORE.usersWhoDownVoted,
-                            FieldValue.arrayUnion(
-                                firebaseAuth.getFirebaseAuth().currentUser?.uid ?: ""
-                            )
-                        )
-                        postReference.update(
-                            Constants.FIRESTORE.usersWhoUpVoted,
-                            FieldValue.arrayRemove(
-                                firebaseAuth.getFirebaseAuth().currentUser?.uid ?: ""
-                            )
-                        )
-                        postReference.update(
-                            Constants.FIRESTORE.usersWhoVoted,
-                            FieldValue.arrayUnion(
-                                firebaseAuth.getFirebaseAuth().currentUser?.uid ?: ""
-                            )
-                        )
-                    }
-                }
-            }
-            Resource.success(
-                null,
-                StatusModel(
-                    true,
-                    null,
-                    R.string.discussion_posts_reached_with_success
-                )
-            )
-        } else {
-            when (updateType) {
-                Constants.UPDATE_TYPE.Upvote -> {
-                    postReference.update(
-                        Constants.FIRESTORE.usersWhoUpVoted,
-                        FieldValue.arrayUnion(
-                            firebaseAuth.getFirebaseAuth().currentUser?.uid ?: ""
-                        )
-                    )
-                }
-
-                else -> {
-                    postReference.update(
-                        Constants.FIRESTORE.usersWhoDownVoted,
-                        FieldValue.arrayUnion(
-                            firebaseAuth.getFirebaseAuth().currentUser?.uid ?: ""
-                        )
-                    )
-                }
-            }
-            postReference.update(
-                Constants.FIRESTORE.usersWhoVoted,
-                FieldValue.arrayUnion(
-                    firebaseAuth.getFirebaseAuth().currentUser?.uid ?: ""
-                )
-            )
-            postReference.update(
-                "votes",
-                FieldValue.increment(increment)
-            )
-            Resource.success(
-                null,
-                StatusModel(
-                    true,
-                    null,
-                    R.string.discussion_posts_reached_with_success
                 )
             )
         }

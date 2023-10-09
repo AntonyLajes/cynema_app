@@ -15,12 +15,12 @@
         android:layout_height="32dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        app:layout_constraintBottom_toTopOf="@id/up_vote_value"
+        app:layout_constraintBottom_toTopOf="@id/vote_value"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/up_vote_value"
+        android:id="@+id/vote_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
@@ -36,9 +36,9 @@
         android:id="@+id/button_down_vote"
         android:layout_width="32dp"
         android:layout_height="32dp"
-        app:layout_constraintEnd_toEndOf="@id/up_vote_value"
-        app:layout_constraintStart_toStartOf="@id/up_vote_value"
-        app:layout_constraintTop_toBottomOf="@id/up_vote_value" />
+        app:layout_constraintEnd_toEndOf="@id/vote_value"
+        app:layout_constraintStart_toStartOf="@id/vote_value"
+        app:layout_constraintTop_toBottomOf="@id/vote_value" />
 
     <TextView
         android:id="@+id/post_title"

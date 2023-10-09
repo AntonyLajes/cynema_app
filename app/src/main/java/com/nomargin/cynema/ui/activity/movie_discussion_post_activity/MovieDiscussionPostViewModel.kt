@@ -4,8 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.nomargin.cynema.data.local.entity.CommentAppearanceModel
 import com.nomargin.cynema.data.local.entity.PostAppearanceModel
 import com.nomargin.cynema.data.repository.SharedPreferencesRepository
+import com.nomargin.cynema.data.usecase.CommentUseCase
 import com.nomargin.cynema.data.usecase.PostUseCase
 import com.nomargin.cynema.util.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,13 +17,18 @@ import javax.inject.Inject
 @HiltViewModel
 class MovieDiscussionPostViewModel @Inject constructor(
     private val postUseCase: PostUseCase,
-    private val sharedPreferencesRepository: SharedPreferencesRepository
+    private val sharedPreferencesRepository: SharedPreferencesRepository,
+    private val commentUseCase: CommentUseCase,
 ) : ViewModel() {
 
     private val _post: MutableLiveData<PostAppearanceModel?> = MutableLiveData()
     val post: LiveData<PostAppearanceModel?> = _post
     private val _getUpdatedPost: MutableLiveData<PostAppearanceModel?> = MutableLiveData()
     val getUpdatedPost: LiveData<PostAppearanceModel?> = _getUpdatedPost
+    private var _getComments: MutableLiveData<List<CommentAppearanceModel>?> = MutableLiveData()
+    val getComments: LiveData<List<CommentAppearanceModel>?> = _getComments
+    private val _getUpdatedComment: MutableLiveData<CommentAppearanceModel?> = MutableLiveData()
+    val getUpdatedComment: LiveData<CommentAppearanceModel?> = _getUpdatedComment
 
     fun getDiscussionPostById(postId: String?) = viewModelScope.launch {
         _post.value = postUseCase.getPostById(postId ?: "")
@@ -31,8 +38,20 @@ class MovieDiscussionPostViewModel @Inject constructor(
         _getUpdatedPost.value = postUseCase.updatePostVote(updateType, postId)
     }
 
-    fun saveDataToSharedPreferences(key: String, postId: String){
+    fun updateCommentVote(
+        updateType: Constants.UPDATE_TYPE,
+        commentId: String,
+    ) = viewModelScope.launch {
+        _getUpdatedComment.value = commentUseCase.updateCommentVote(updateType, commentId)
+    }
+
+    fun saveDataToSharedPreferences(key: String, postId: String) {
         sharedPreferencesRepository.putString(key, postId)
     }
+
+    fun getAllComments(postId: String?) = viewModelScope.launch {
+        _getComments.value = commentUseCase.getAllComments(postId ?: "")
+    }
+
 
 }

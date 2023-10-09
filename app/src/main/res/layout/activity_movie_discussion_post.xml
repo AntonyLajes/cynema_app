@@ -107,7 +107,7 @@
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/button_up_vote"
             android:layout_width="20dp"
-            android:layout_height="20dp"/>
+            android:layout_height="20dp" />
 
         <TextView
             android:id="@+id/vote_value"
@@ -196,4 +196,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/first_divider" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/comment_recycler_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/add_comment" />
 </androidx.constraintlayout.widget.ConstraintLayout>

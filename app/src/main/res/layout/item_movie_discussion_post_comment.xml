@@ -32,7 +32,7 @@
         android:ellipsize="end"
         android:maxWidth="180dp"
         android:maxLines="1"
-        android:textColor="@color/custom_bold_grey"
+        android:textColor="@color/color_primary"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="@id/profile_picture"
         app:layout_constraintEnd_toStartOf="@id/comment_title_divider"
@@ -89,35 +89,30 @@
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/button_up_vote"
             android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/ic_up_vote"
-            android:tint="@color/custom_bold_grey" />
+            android:layout_height="20dp" />
 
         <TextView
             android:id="@+id/vote_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingHorizontal="4dp"
-            android:textColor="@color/custom_bold_grey"
             android:textStyle="bold"
             tools:text="21" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/button_down_vote"
             android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/ic_down_vote"
-            android:tint="@color/custom_bold_grey" />
+            android:layout_height="20dp"/>
 
     </LinearLayout>
 
     <LinearLayout
-        android:background="@drawable/bg_button"
-        android:backgroundTint="@color/custom_low_grey"
         android:id="@+id/view_answer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:background="@drawable/bg_button"
+        android:backgroundTint="@color/custom_low_grey"
         android:paddingHorizontal="16dp"
         android:paddingVertical="4dp"
         app:layout_constraintBottom_toBottomOf="@id/view_vote"
@@ -137,9 +132,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingHorizontal="4dp"
+            android:text="@string/answer"
             android:textColor="@color/custom_bold_grey"
-            android:textStyle="bold"
-            android:text="@string/answer" />
+            android:textStyle="bold" />
 
     </LinearLayout>
 

@@ -16,7 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CreateCommentPostBottomSheetViewModel @Inject constructor(
     sharedPreferencesRepository: SharedPreferencesRepository,
-    private val postRepository: CommentRepository,
+    private val commentRepository: CommentRepository,
 ) : ViewModel() {
 
     private val postId = sharedPreferencesRepository.getString(
@@ -34,7 +34,7 @@ class CreateCommentPostBottomSheetViewModel @Inject constructor(
             isSpoiler,
             postId ?: ""
         )
-        _createCommentStatus.value = postRepository.publishComment(commentModel)
+        _createCommentStatus.value = commentRepository.publishComment(commentModel)
 
     }
 }

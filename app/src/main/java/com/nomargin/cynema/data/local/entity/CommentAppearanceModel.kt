@@ -1,13 +1,13 @@
 package com.nomargin.cynema.data.local.entity
 
 import com.google.firebase.auth.FirebaseUser
+import com.nomargin.cynema.data.remote.firebase.entity.PostDatabaseModel
 import com.nomargin.cynema.data.remote.firebase.entity.UserProfileDataModel
-import com.nomargin.cynema.data.remote.retrofit.entity.MovieDetailsModel
 
 data class CommentAppearanceModel(
     val commentId: String = "",
     val user: UserProfileDataModel?,
-    val movie: MovieDetailsModel?,
+    val post: PostDatabaseModel?,
     val body: String = "",
     val isSpoiler: Boolean? = null,
     var timestamp: String = "",

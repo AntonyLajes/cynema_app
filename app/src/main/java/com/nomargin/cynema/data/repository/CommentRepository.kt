@@ -12,7 +12,7 @@ interface CommentRepository {
         commentModel: CommentModel
     ): Resource<String>
 
-    suspend fun getAllComments(commentId: String): Resource<List<CommentDatabaseModel>>
+    suspend fun getAllComments(postId: String): Resource<List<CommentDatabaseModel>>
 
     suspend fun getCommentById(commentId: String): Resource<CommentDatabaseModel>
 
