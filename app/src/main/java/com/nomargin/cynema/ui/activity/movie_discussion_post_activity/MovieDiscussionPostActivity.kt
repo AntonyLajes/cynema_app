@@ -32,6 +32,10 @@ class MovieDiscussionPostActivity : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+    }
+
+    override fun onResume() {
+        super.onResume()
         observers()
         initMovieDiscussionPostCommentRecyclerView()
         getMovieDiscussionPostId()
@@ -49,6 +53,10 @@ class MovieDiscussionPostActivity : AppCompatActivity(), View.OnClickListener {
                         append(" ")
                         append(postAppearanceModel.user?.lastName)
                     }
+                )
+                bundle.putString(
+                    Constants.BUNDLE_KEYS.MovieDiscussionPostId.name,
+                    postAppearanceModel.postId
                 )
                 val createCommentPostBottomSheetFragment = CreateCommentPostBottomSheetFragment()
                 createCommentPostBottomSheetFragment.arguments = bundle
@@ -75,6 +83,9 @@ class MovieDiscussionPostActivity : AppCompatActivity(), View.OnClickListener {
         binding.addComment.setOnClickListener(this)
         binding.buttonUpVote.setOnClickListener(this)
         binding.buttonDownVote.setOnClickListener(this)
+        binding.swipeToRefresh.setOnRefreshListener {
+            getPostDetails()
+        }
     }
 
     private fun getMovieDiscussionPostId() {
@@ -83,13 +94,18 @@ class MovieDiscussionPostActivity : AppCompatActivity(), View.OnClickListener {
             movieDiscussionPostId = bundle.getString(
                 Constants.BUNDLE_KEYS.MovieDiscussionPostId.toString()
             )
-            movieDiscussionPostViewModel.getDiscussionPostById(movieDiscussionPostId)
-            movieDiscussionPostViewModel.getAllComments(movieDiscussionPostId)
+            getPostDetails()
         }
+    }
+
+    private fun getPostDetails() {
+        movieDiscussionPostViewModel.getDiscussionPostById(movieDiscussionPostId)
+        movieDiscussionPostViewModel.getAllComments(movieDiscussionPostId)
     }
 
     private fun observers() {
         movieDiscussionPostViewModel.post.observe(this) { post ->
+            binding.swipeToRefresh.isRefreshing = false
             post?.let {
                 fieldsHandler(it)
                 postAppearanceModel = it
@@ -103,10 +119,10 @@ class MovieDiscussionPostActivity : AppCompatActivity(), View.OnClickListener {
         }
         movieDiscussionPostViewModel.getComments.observe(this) { comments ->
             comments?.let {
-                updateMovieDiscussionPostCommentRecyclerView(comments)
+                updateMovieDiscussionPostCommentRecyclerView(it)
             }
         }
-        movieDiscussionPostViewModel.getUpdatedComment.observe(this){updatedComment ->
+        movieDiscussionPostViewModel.getUpdatedComment.observe(this) { updatedComment ->
             updatedComment?.let {
                 updateMovieDiscussionUpdatedPostCommentRecyclerView(it)
             }
