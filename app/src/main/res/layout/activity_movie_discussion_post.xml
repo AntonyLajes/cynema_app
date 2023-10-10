@@ -1,199 +1,231 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swipe_to_refresh"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingHorizontal="24dp"
-    android:paddingVertical="12dp"
-    tools:context=".ui.activity.movie_discussion_post_activity.MovieDiscussionPostActivity">
+    android:layout_height="match_parent">
 
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/profile_picture"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="16dp"
-        android:scaleType="centerCrop"
-        app:chainUseRtl="true"
-        app:layout_constraintEnd_toStartOf="@id/text_posted_by"
-        app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:shapeAppearanceOverlay="@style/RoundedPostProfilePicture"
-        tools:src="@drawable/rocket_1" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:paddingHorizontal="24dp"
+        tools:context=".ui.activity.movie_discussion_post_activity.MovieDiscussionPostActivity">
 
-    <TextView
-        android:id="@+id/text_posted_by"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:text="@string/posted_by"
-        android:textColor="@color/custom_normal_grey"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="@id/profile_picture"
-        app:layout_constraintEnd_toStartOf="@id/post_owner"
-        app:layout_constraintStart_toEndOf="@id/profile_picture"
-        app:layout_constraintTop_toTopOf="@id/profile_picture" />
 
-    <TextView
-        android:id="@+id/post_owner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:maxWidth="128dp"
-        android:maxLines="1"
-        android:textColor="@color/color_primary"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="@id/text_posted_by"
-        app:layout_constraintEnd_toStartOf="@id/post_date"
-        app:layout_constraintStart_toEndOf="@id/text_posted_by"
-        app:layout_constraintTop_toTopOf="@id/text_posted_by"
-        tools:text="Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum " />
-
-    <TextView
-        android:id="@+id/post_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:textColor="@color/custom_normal_grey"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="@id/post_owner"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/post_owner"
-        app:layout_constraintTop_toTopOf="@id/post_owner"
-        tools:text="12hr ago" />
-
-    <TextView
-        android:id="@+id/post_discussion_title"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:maxLength="80"
-        android:textColor="@color/custom_black"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@id/post_discussion_body"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/profile_picture"
-        tools:text="@string/lorem_ipsum" />
-
-    <TextView
-        android:id="@+id/post_discussion_body"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:maxLength="720"
-        android:textColor="@color/custom_bold_grey"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/post_discussion_title"
-        tools:text="@string/lorem_ipsum" />
-
-    <LinearLayout
-        android:id="@+id/view_vote"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/bg_button"
-        android:backgroundTint="@color/custom_low_grey"
-        android:paddingHorizontal="8dp"
-        android:paddingVertical="4dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/post_discussion_body">
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/button_up_vote"
-            android:layout_width="20dp"
-            android:layout_height="20dp"/>
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/profile_picture"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:scaleType="centerCrop"
+            app:chainUseRtl="true"
+            app:layout_constraintBottom_toTopOf="@id/post_discussion_title"
+            app:layout_constraintEnd_toStartOf="@id/text_posted_by"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:shapeAppearanceOverlay="@style/RoundedPostProfilePicture"
+            tools:src="@drawable/rocket_1" />
 
         <TextView
-            android:id="@+id/vote_value"
+            android:id="@+id/text_posted_by"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="4dp"
-            android:textColor="@color/custom_bold_grey"
-            android:textStyle="bold"
-            tools:text="21" />
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/button_down_vote"
-            android:layout_width="20dp"
-            android:layout_height="20dp" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/view_comments"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/bg_button"
-        android:backgroundTint="@color/custom_low_grey"
-        android:paddingHorizontal="8dp"
-        android:paddingVertical="4dp"
-        app:layout_constraintStart_toEndOf="@id/view_vote"
-        app:layout_constraintTop_toBottomOf="@id/post_discussion_body">
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/answers"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/ic_reply"
-            android:tint="@color/custom_bold_grey" />
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@string/posted_by"
+            android:textColor="@color/custom_normal_grey"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@id/profile_picture"
+            app:layout_constraintEnd_toStartOf="@id/post_owner"
+            app:layout_constraintStart_toEndOf="@id/profile_picture"
+            app:layout_constraintTop_toTopOf="@id/profile_picture" />
 
         <TextView
-            android:id="@+id/answers_quantity"
+            android:id="@+id/post_owner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="4dp"
+            android:ellipsize="end"
+            android:maxWidth="128dp"
+            android:maxLines="1"
+            android:textColor="@color/color_primary"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@id/text_posted_by"
+            app:layout_constraintEnd_toStartOf="@id/post_date"
+            app:layout_constraintStart_toEndOf="@id/text_posted_by"
+            app:layout_constraintTop_toTopOf="@id/text_posted_by"
+            tools:text="Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum " />
+
+        <TextView
+            android:id="@+id/post_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textColor="@color/custom_normal_grey"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@id/post_owner"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/post_owner"
+            app:layout_constraintTop_toTopOf="@id/post_owner"
+            tools:text="12hr ago" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/menu_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_kebab"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/post_date" />
+
+        <TextView
+            android:id="@+id/post_discussion_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:maxLength="80"
+            android:textColor="@color/custom_black"
+            android:textSize="20sp"
+            app:chainUseRtl="true"
+            app:layout_constraintBottom_toTopOf="@id/post_discussion_body"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/profile_picture"
+            tools:text="@string/lorem_ipsum" />
+
+        <TextView
+            android:id="@+id/post_discussion_body"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:maxLength="720"
             android:textColor="@color/custom_bold_grey"
-            android:textStyle="bold"
-            tools:text="21" />
+            app:layout_constraintBottom_toTopOf="@id/view_vote"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/post_discussion_title"
+            tools:text="@string/lorem_ipsum" />
 
-    </LinearLayout>
+        <LinearLayout
+            android:id="@+id/view_vote"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_button"
+            android:backgroundTint="@color/custom_low_grey"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="4dp"
+            app:layout_constraintBottom_toTopOf="@id/first_divider"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/post_discussion_body">
 
-    <com.google.android.material.divider.MaterialDivider
-        android:id="@+id/first_divider"
-        android:layout_width="0dp"
-        android:layout_height="2dp"
-        android:layout_marginVertical="16dp"
-        android:layout_marginEnd="8dp"
-        android:background="@color/custom_bold_grey"
-        app:layout_constraintBottom_toTopOf="@id/add_comment"
-        app:layout_constraintEnd_toStartOf="@id/text_answers_quantity"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/view_vote" />
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/button_up_vote"
+                android:layout_width="20dp"
+                android:layout_height="20dp" />
 
-    <TextView
-        android:id="@+id/text_answers_quantity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/custom_bold_grey"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="@id/first_divider"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/first_divider"
-        app:layout_constraintTop_toTopOf="@id/first_divider"
-        tools:text="21 comments" />
+            <TextView
+                android:id="@+id/vote_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="4dp"
+                android:textColor="@color/custom_bold_grey"
+                android:textStyle="bold"
+                tools:text="21" />
 
-    <Button
-        android:id="@+id/add_comment"
-        style="@style/Widget.Material3.Button.OutlinedButton.Icon"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="24dp"
-        android:paddingVertical="12dp"
-        android:text="@string/publish_you_comment"
-        android:textColor="@color/custom_bold_grey"
-        app:icon="@drawable/ic_add"
-        app:iconGravity="textStart"
-        app:iconTint="@color/custom_bold_grey"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/first_divider" />
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/button_down_vote"
+                android:layout_width="20dp"
+                android:layout_height="20dp" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/view_comments"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:background="@drawable/bg_button"
+            android:backgroundTint="@color/custom_low_grey"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="4dp"
+            app:layout_constraintBottom_toBottomOf="@id/view_vote"
+            app:layout_constraintStart_toEndOf="@id/view_vote"
+            app:layout_constraintTop_toTopOf="@id/view_vote">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/answers"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_reply"
+                android:tint="@color/custom_bold_grey" />
+
+            <TextView
+                android:id="@+id/answers_quantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="4dp"
+                android:textColor="@color/custom_bold_grey"
+                android:textStyle="bold"
+                tools:text="21" />
+
+        </LinearLayout>
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/first_divider"
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:layout_marginEnd="8dp"
+            android:background="@color/custom_bold_grey"
+            app:layout_constraintBottom_toTopOf="@id/add_comment"
+            app:layout_constraintEnd_toStartOf="@id/text_answers_quantity"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view_vote" />
+
+        <TextView
+            android:id="@+id/text_answers_quantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/custom_bold_grey"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@id/first_divider"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/first_divider"
+            app:layout_constraintTop_toTopOf="@id/first_divider"
+            tools:text="21 comments" />
+
+        <Button
+            android:id="@+id/add_comment"
+            style="@style/Widget.Material3.Button.OutlinedButton.Icon"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="16dp"
+            android:paddingVertical="12dp"
+            android:text="@string/publish_you_comment"
+            android:textColor="@color/custom_bold_grey"
+            app:icon="@drawable/ic_add"
+            app:iconGravity="textStart"
+            app:iconTint="@color/custom_bold_grey"
+            app:layout_constraintBottom_toTopOf="@id/comment_recycler_view"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/first_divider" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/comment_recycler_view"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/add_comment" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

@@ -1,6 +1,7 @@
 package com.nomargin.cynema.data.usecase
 
 import com.nomargin.cynema.R
+import com.nomargin.cynema.data.local.entity.CommentModel
 import com.nomargin.cynema.data.local.entity.PostModel
 import com.nomargin.cynema.util.Constants
 import com.nomargin.cynema.util.model.SignInModel
@@ -222,6 +223,42 @@ class ValidateAttributesUseCaseImpl @Inject constructor() : ValidateAttributesUs
                     false,
                     Constants.ERROR_TYPES.postBodyIsLowerThanAllowed,
                     R.string.valid_post_body
+                )
+            }
+
+            else -> {
+                StatusModel(
+                    true,
+                    null,
+                    R.string.all_fields_are_checked
+                )
+            }
+        }
+    }
+
+    override fun validateComment(commentModel: CommentModel): StatusModel {
+        return when {
+            commentModel.body.isEmpty() -> {
+                StatusModel(
+                    false,
+                    Constants.ERROR_TYPES.commentBodyIsEmpty,
+                    R.string.comment_body_is_empty
+                )
+            }
+
+            commentModel.body.length > Constants.MAX_LENGTH.commentBodyMaxLength -> {
+                StatusModel(
+                    false,
+                    Constants.ERROR_TYPES.commentBodyIsBiggerThanAllowed,
+                    R.string.valid_comment_body
+                )
+            }
+
+            commentModel.body.length < Constants.MIN_LENGTH.commentBodyMinLength -> {
+                StatusModel(
+                    false,
+                    Constants.ERROR_TYPES.commentBodyIsLowerThanAllowed,
+                    R.string.valid_comment_body
                 )
             }
 

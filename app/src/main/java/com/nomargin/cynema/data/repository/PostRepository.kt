@@ -13,8 +13,7 @@ interface PostRepository {
     ): Resource<String>
 
     suspend fun getAllPosts(movieId: String): Resource<List<PostDatabaseModel>>
-
     suspend fun getPostById(postId: String): Resource<PostDatabaseModel>
-
     suspend fun updatePostVote(updateType: Constants.UPDATE_TYPE, postId: String): Resource<StatusModel>
+    suspend fun updatePost(postModel: PostModel): Resource<String>
 }

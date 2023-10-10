@@ -1,4 +1,4 @@
-package com.nomargin.cynema.ui.fragment.create_post_sheet_fragment
+package com.nomargin.cynema.ui.fragment.handle_post_bottom_sheet_fragment
 
 import android.content.Intent
 import android.os.Bundle
@@ -13,32 +13,42 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.nomargin.cynema.R
-import com.nomargin.cynema.databinding.FragmentCreatePostBottomSheetBinding
+import com.nomargin.cynema.data.local.entity.PostAppearanceModel
+import com.nomargin.cynema.databinding.FragmentHandlePostBottomSheetBinding
 import com.nomargin.cynema.ui.activity.movie_discussion_post_activity.MovieDiscussionPostActivity
-import com.nomargin.cynema.ui.fragment.movie_discussion_fragment.MovieDiscussionViewModel
 import com.nomargin.cynema.util.Constants
+import com.nomargin.cynema.util.extension.OnSaveClickListener
 import com.nomargin.cynema.util.extension.TextInputLayoutExtensions.setFieldError
 import com.nomargin.cynema.util.model.StatusModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class CreatePostBottomSheetFragment : BottomSheetDialogFragment(), View.OnClickListener {
+class HandlePostBottomSheetFragment : BottomSheetDialogFragment(), View.OnClickListener {
 
-    private var _binding: FragmentCreatePostBottomSheetBinding? = null
-    private val binding: FragmentCreatePostBottomSheetBinding get() = _binding!!
-    private val createPostBottomSheetViewModel: CreatePostBottomSheetViewModel by viewModels()
-    private val movieDiscussionViewModel: MovieDiscussionViewModel by viewModels()
+    private var _binding: FragmentHandlePostBottomSheetBinding? = null
+    private val binding: FragmentHandlePostBottomSheetBinding get() = _binding!!
+    private val handlePostBottomSheetViewModel: HandlePostBottomSheetViewModel by viewModels()
+    private var onSaveClickListener: OnSaveClickListener? = null
     private val chipSpoiler: Chip by lazy { binding.chipSpoiler }
     private val postTitleInputLayout: TextInputLayout by lazy { binding.postTitleInputLayout }
     private val postBodyInputLayout: TextInputLayout by lazy { binding.postBodyInputLayout }
     private val postTitle: TextInputEditText by lazy { binding.postTitleInput }
     private val postBody: TextInputEditText by lazy { binding.postBodyInput }
+    private var handlerType: String? = null
+    private var postId: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
-        _binding = FragmentCreatePostBottomSheetBinding.inflate(inflater, container, false)
+        _binding = FragmentHandlePostBottomSheetBinding.inflate(inflater, container, false)
+        handlerType = arguments?.getString(
+            Constants.BUNDLE_KEYS.MovieDiscussionHandlerType.name,
+            Constants.BOTTOM_SHEET_TYPE.MovieDiscussionHandlerCreate.name
+        )
+        postId = arguments?.getString(
+            Constants.BUNDLE_KEYS.MovieDiscussionPostId.name
+        )
         return binding.root
     }
 
@@ -49,6 +59,7 @@ class CreatePostBottomSheetFragment : BottomSheetDialogFragment(), View.OnClickL
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        handlerType()
         focusWatcher()
         inputWatcher()
         observers()
@@ -62,11 +73,42 @@ class CreatePostBottomSheetFragment : BottomSheetDialogFragment(), View.OnClickL
             }
 
             binding.buttonPublish.id -> {
-                createPostBottomSheetViewModel.publishPost(
-                    binding.postTitleInput.text.toString(),
-                    binding.postBodyInput.text.toString(),
-                    binding.chipSpoiler.isChecked
-                )
+                when (handlerType) {
+                    Constants.BOTTOM_SHEET_TYPE.MovieDiscussionHandlerEdit.name -> {
+                        handlePostBottomSheetViewModel.updatePost(
+                            postId ?: "",
+                            binding.postTitleInput.text.toString(),
+                            binding.postBodyInput.text.toString(),
+                            binding.chipSpoiler.isChecked
+                        )
+                        onSaveClickListener?.onSaveClicked()
+                    }
+
+                    else -> {
+                        handlePostBottomSheetViewModel.publishPost(
+                            binding.postTitleInput.text.toString(),
+                            binding.postBodyInput.text.toString(),
+                            binding.chipSpoiler.isChecked
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    fun setOnSaveClickListener(listener: OnSaveClickListener) {
+        onSaveClickListener = listener
+    }
+
+    private fun handlerType() {
+        when (handlerType) {
+            Constants.BOTTOM_SHEET_TYPE.MovieDiscussionHandlerCreate.name -> {
+                binding.buttonPublish.text = getString(R.string.publish)
+            }
+
+            else -> {
+                binding.buttonPublish.text = getString(R.string.save)
+                handlePostBottomSheetViewModel.getDiscussionPostById(postId)
             }
         }
     }
@@ -90,7 +132,7 @@ class CreatePostBottomSheetFragment : BottomSheetDialogFragment(), View.OnClickL
     }
 
     private fun observers() {
-        createPostBottomSheetViewModel.createPostStatus.observe(viewLifecycleOwner) { postStatus ->
+        handlePostBottomSheetViewModel.createPostStatus.observe(viewLifecycleOwner) { postStatus ->
             postStatus?.let {
                 if (it.statusModel!!.isValid) {
                     this.dismiss()
@@ -99,6 +141,29 @@ class CreatePostBottomSheetFragment : BottomSheetDialogFragment(), View.OnClickL
                     errorHandler(it.statusModel)
                 }
             }
+        }
+
+        handlePostBottomSheetViewModel.updatePost.observe(viewLifecycleOwner) { postStatus ->
+            postStatus?.let {
+                if (it.statusModel!!.isValid) {
+                    this.dismiss()
+                    goToPost(it.data ?: "")
+                } else {
+                    errorHandler(it.statusModel)
+                }
+            }
+        }
+
+        handlePostBottomSheetViewModel.post.observe(viewLifecycleOwner) { postData ->
+            handlerFields(postData)
+        }
+    }
+
+    private fun handlerFields(postData: PostAppearanceModel?) {
+        postData?.let {
+            binding.postTitleInput.setText(it.title)
+            binding.postBodyInput.setText(it.body)
+            binding.chipSpoiler.isChecked = it.isSpoiler ?: false
         }
     }
 
@@ -152,10 +217,19 @@ class CreatePostBottomSheetFragment : BottomSheetDialogFragment(), View.OnClickL
     }
 
     private fun goToPost(postId: String) {
-        val intent = Intent(requireContext(), MovieDiscussionPostActivity::class.java)
-        val bundle = Bundle()
-        bundle.putString(Constants.BUNDLE_KEYS.MovieDiscussionPostId.toString(), postId)
-        intent.putExtras(bundle)
-        startActivity(intent)
+        when (handlerType) {
+            Constants.BOTTOM_SHEET_TYPE.MovieDiscussionHandlerEdit.name -> {
+                this.dismiss()
+            }
+
+            else -> {
+                val intent = Intent(requireContext(), MovieDiscussionPostActivity::class.java)
+                val bundle = Bundle()
+                bundle.putString(Constants.BUNDLE_KEYS.MovieDiscussionPostId.toString(), postId)
+                intent.putExtras(bundle)
+                startActivity(intent)
+
+            }
+        }
     }
 }

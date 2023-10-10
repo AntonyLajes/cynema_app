@@ -1,9 +1,10 @@
 package com.nomargin.cynema.data.repository
 
+import com.google.firebase.firestore.FieldValue
 import com.nomargin.cynema.R
-import com.nomargin.cynema.data.local.entity.PostModel
+import com.nomargin.cynema.data.local.entity.CommentModel
 import com.nomargin.cynema.data.remote.firebase.authentication.FirebaseAuthUseCase
-import com.nomargin.cynema.data.remote.firebase.entity.PostDatabaseModel
+import com.nomargin.cynema.data.remote.firebase.entity.CommentDatabaseModel
 import com.nomargin.cynema.data.remote.firebase.firestore.FirebaseFirestoreUseCase
 import com.nomargin.cynema.data.usecase.ValidateAttributesUseCase
 import com.nomargin.cynema.util.Constants
@@ -15,53 +16,61 @@ import kotlinx.coroutines.tasks.await
 import java.util.UUID
 import javax.inject.Inject
 
-class PostRepositoryImpl @Inject constructor(
+class CommentRepositoryImpl @Inject constructor(
     private val firebaseFirestore: FirebaseFirestoreUseCase,
     private val firebaseAuth: FirebaseAuthUseCase,
     private val validateAttributes: ValidateAttributesUseCase,
     private val profileRepository: ProfileRepository,
-) : PostRepository {
+) : CommentRepository {
 
-    private lateinit var createPostResult: Resource<String>
-    private lateinit var updateResult: Resource<String>
+    private lateinit var createCommentResult: Resource<String>
     private val randomUUID = UUID.randomUUID().toString()
 
-    override suspend fun publishPost(postModel: PostModel): Resource<String> {
-        val database = firebaseFirestore.getFirebaseFirestore()
+    override suspend fun publishComment(commentModel: CommentModel): Resource<String> {
+        val validateCommentAttributes = validateAttributes.validateComment(commentModel)
+        val postsDatabase = firebaseFirestore.getFirebaseFirestore()
             .collection(Constants.FIRESTORE.postsCollection)
+            .document(commentModel.postId)
+        val commentsDatabase = firebaseFirestore.getFirebaseFirestore()
+            .collection(Constants.FIRESTORE.commentsCollection)
             .document(randomUUID)
 
-        val validatePostAttributes = validateAttributes.validatePost(postModel)
+        if (validateCommentAttributes.isValid) {
 
-        if (validatePostAttributes.isValid) {
-
-            val post = PostDatabaseModel(
+            val comment = CommentDatabaseModel(
                 id = randomUUID,
                 userId = firebaseAuth.getFirebaseAuth().currentUser?.uid.toString(),
-                movieId = postModel.movieId,
-                title = postModel.title,
-                body = postModel.body,
-                isSpoiler = postModel.isSpoiler,
+                postId = commentModel.postId,
+                body = commentModel.body,
+                isSpoiler = commentModel.isSpoiler,
                 votes = 0,
                 usersWhoVoted = listOf(),
-                comments = listOf(),
+                answers = listOf(),
                 usersWhoUpVoted = listOf(),
                 usersWhoDownVoted = listOf(),
-                commentsQuantity = 0
+                answersQuantity = 0
             )
 
-            database.set(post)
+            commentsDatabase.set(comment)
                 .addOnSuccessListener {
-                    createPostResult = Resource.success(
+                    postsDatabase.update(
+                        "comments",
+                        FieldValue.arrayUnion(comment.id)
+                    )
+                    postsDatabase.update(
+                        "commentsQuantity",
+                        FieldValue.increment(1)
+                    )
+                    createCommentResult = Resource.success(
                         randomUUID,
                         StatusModel(
                             true,
                             null,
-                            R.string.profile_updated_with_success
+                            R.string.comment_created_with_success
                         )
                     )
                 }.addOnFailureListener {
-                    createPostResult = Resource.error(
+                    createCommentResult = Resource.error(
                         "Error",
                         null,
                         StatusModel(
@@ -72,23 +81,24 @@ class PostRepositoryImpl @Inject constructor(
                     )
                 }.await()
 
+
         } else {
-            createPostResult = Resource.error(
+            createCommentResult = Resource.error(
                 "Error",
                 null,
-                validatePostAttributes
+                validateCommentAttributes
             )
         }
-        return createPostResult
+        return createCommentResult
     }
 
-    override suspend fun getAllPosts(movieId: String): Resource<List<PostDatabaseModel>> {
-        val posts = firebaseFirestore.getFirebaseFirestore()
-            .collection(Constants.FIRESTORE.postsCollection)
-            .whereEqualTo("movieId", movieId)
+    override suspend fun getAllComments(postId: String): Resource<List<CommentDatabaseModel>> {
+        val comments = firebaseFirestore.getFirebaseFirestore()
+            .collection(Constants.FIRESTORE.commentsCollection)
+            .whereEqualTo("postId", postId)
             .get()
             .addOnCompleteListener { }.await()
-        return if (posts.isEmpty) {
+        return if (comments.isEmpty) {
             Resource.error(
                 "Error",
                 null,
@@ -100,23 +110,23 @@ class PostRepositoryImpl @Inject constructor(
             )
         } else {
             Resource.success(
-                posts.toObjects(PostDatabaseModel::class.java),
+                comments.toObjects(CommentDatabaseModel::class.java),
                 StatusModel(
                     true,
                     null,
-                    R.string.discussion_posts_reached_with_success
+                    R.string.comments_reached_with_success
                 )
             )
         }
     }
 
-    override suspend fun getPostById(postId: String): Resource<PostDatabaseModel> {
-        val post = firebaseFirestore.getFirebaseFirestore()
-            .collection(Constants.FIRESTORE.postsCollection)
-            .whereEqualTo("id", postId)
+    override suspend fun getCommentById(commentId: String): Resource<CommentDatabaseModel> {
+        val comment = firebaseFirestore.getFirebaseFirestore()
+            .collection(Constants.FIRESTORE.commentsCollection)
+            .whereEqualTo("id", commentId)
             .get()
             .addOnCompleteListener { }.await()
-        return if (post.isEmpty) {
+        return if (comment.isEmpty) {
             Resource.error(
                 "Error",
                 null,
@@ -128,33 +138,33 @@ class PostRepositoryImpl @Inject constructor(
             )
         } else {
             Resource.success(
-                post.documents[0].toObject(PostDatabaseModel::class.java),
+                comment.documents[0].toObject(CommentDatabaseModel::class.java),
                 StatusModel(
                     true,
                     null,
-                    R.string.discussion_posts_reached_with_success
+                    R.string.comment_reached_with_success
                 )
             )
         }
     }
 
-    override suspend fun updatePostVote(
+    override suspend fun updateCommentVote(
         updateType: Constants.UPDATE_TYPE,
-        postId: String,
+        commentId: String,
     ): Resource<StatusModel> {
         val userData = profileRepository.getUserData(
             firebaseAuth.getFirebaseAuth().currentUser?.uid ?: ""
         )
-        val postData = getPostById(postId)
-        val postReference =
+        val commentData = getCommentById(commentId)
+        val commentReference =
             firebaseFirestore
                 .getFirebaseFirestore()
-                .collection(Constants.FIRESTORE.postsCollection)
-                .document(postId)
+                .collection(Constants.FIRESTORE.commentsCollection)
+                .document(commentId)
         var hasVoted = false
         var votedType: Constants.VOTE_TYPE? = null
-        if (postData.status == Status.SUCCESS) {
-            for (postVote in postData.data!!.usersWhoVoted) {
+        if (commentData.status == Status.SUCCESS) {
+            for (postVote in commentData.data!!.usersWhoVoted) {
                 if (postVote == userData.data!!.id) {
                     hasVoted = true
                 }
@@ -165,24 +175,26 @@ class PostRepositoryImpl @Inject constructor(
                 null,
                 StatusModel(
                     false,
-                    Constants.ERROR_TYPES.couldNotReachTheDiscussionPost,
+                    Constants.ERROR_TYPES.couldNotReachTheDiscussionPostComment,
                     R.string.discussion_posts_was_not_reached
                 )
             )
         }
 
-        if (hasVoted) {
-            when {
-                postData.data.usersWhoUpVoted.contains(
-                    firebaseAuth.getFirebaseAuth().currentUser?.uid ?: ""
-                ) -> {
-                    votedType = Constants.VOTE_TYPE.Upvote
-                }
+        commentData.data.let {
+            if (hasVoted) {
+                when {
+                    it.usersWhoUpVoted.contains(
+                        firebaseAuth.getFirebaseAuth().currentUser?.uid ?: ""
+                    ) -> {
+                        votedType = Constants.VOTE_TYPE.Upvote
+                    }
 
-                postData.data.usersWhoDownVoted.contains(
-                    firebaseAuth.getFirebaseAuth().currentUser?.uid ?: ""
-                ) -> {
-                    votedType = Constants.VOTE_TYPE.Downvote
+                    it.usersWhoDownVoted.contains(
+                        firebaseAuth.getFirebaseAuth().currentUser?.uid ?: ""
+                    ) -> {
+                        votedType = Constants.VOTE_TYPE.Downvote
+                    }
                 }
             }
         }
@@ -200,7 +212,7 @@ class PostRepositoryImpl @Inject constructor(
                         votedType,
                         1,
                         hasVoted,
-                        postReference,
+                        commentReference,
                         firebaseAuth.getFirebaseAuth().currentUser?.uid
                     )
                 }
@@ -211,7 +223,7 @@ class PostRepositoryImpl @Inject constructor(
                         votedType,
                         -1,
                         hasVoted,
-                        postReference,
+                        commentReference,
                         firebaseAuth.getFirebaseAuth().currentUser?.uid
                     )
                 }
@@ -227,56 +239,6 @@ class PostRepositoryImpl @Inject constructor(
                 )
             )
         }
+
     }
-
-    override suspend fun updatePost(postModel: PostModel): Resource<String> {
-        try {
-            val postReference = firebaseFirestore
-                .getFirebaseFirestore()
-                .collection(Constants.FIRESTORE.postsCollection)
-                .document(postModel.id ?: "")
-
-            postReference
-                .update(
-                    mapOf(
-                        "title" to postModel.title,
-                        "body" to postModel.body,
-                        "spoiler" to postModel.isSpoiler
-                    )
-                ).addOnCompleteListener {
-                    updateResult = if (it.isSuccessful) {
-                        Resource.success(
-                            postModel.id,
-                            StatusModel(
-                                true,
-                                null,
-                                R.string.post_updated_with_successfully
-                            )
-                        )
-                    } else {
-                        Resource.error(
-                            "Error",
-                            null,
-                            StatusModel(
-                                false,
-                                Constants.ERROR_TYPES.couldNotReachTheDiscussionPost,
-                                R.string.error
-                            )
-                        )
-                    }
-                }.await()
-        } catch (e: Exception) {
-            updateResult = Resource.error(
-                "Error",
-                null,
-                StatusModel(
-                    false,
-                    Constants.ERROR_TYPES.couldNotReachTheDiscussionPost,
-                    R.string.error
-                )
-            )
-        }
-        return updateResult
-    }
-
 }

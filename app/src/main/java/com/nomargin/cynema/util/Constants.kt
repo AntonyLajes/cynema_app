@@ -21,7 +21,6 @@ object Constants {
         const val userBiographyIsBiggerThanAllowed = 14
         const val passwordIsNotValid = 15
         const val userUsernameAlreadyInUse = 16
-        const val firestoreError = 17
         const val couldNotReachTheUserData = 18
         const val postTitleIsEmpty = 19
         const val postTitleIsBiggerThanAllowed = 20
@@ -31,6 +30,10 @@ object Constants {
         const val postBodyIsLowerThanAllowed = 24
         const val couldNotReachTheDiscussionPost = 25
         const val userIsNotLoggedIn = 26
+        const val commentBodyIsEmpty = 27
+        const val commentBodyIsBiggerThanAllowed = 28
+        const val commentBodyIsLowerThanAllowed = 29
+        const val couldNotReachTheDiscussionPostComment = 30
     }
 
     object AUTH_ERRORS {
@@ -59,6 +62,7 @@ object Constants {
         const val usernameMinLength = 4
         const val postTitleMinLength = 4
         const val postBodyMinLength = 8
+        const val commentBodyMinLength = 1
     }
 
     object MAX_LENGTH {
@@ -66,6 +70,7 @@ object Constants {
         const val userBiographyMaxLength = 240
         const val postTitleMaxLength = 80
         const val postBodyMaxLength = 720
+        const val commentBodyMaxLength = 254
     }
 
     object REGEX {
@@ -80,6 +85,7 @@ object Constants {
     object FIRESTORE {
         const val usersCollection = "users"
         const val postsCollection = "posts"
+        const val commentsCollection = "comments"
         const val usersWhoVoted = "usersWhoVoted"
         const val usersWhoUpVoted = "usersWhoUpVoted"
         const val usersWhoDownVoted = "usersWhoDownVoted"
@@ -97,10 +103,18 @@ object Constants {
         const val genreDescColumnName = "desc"
         const val sharedPreferencesGeneralKey = "movieIdGeneralKey"
         const val sharedPreferencesMovieIdKey = "movieId"
+        const val sharedPreferencesPostIdKey = "postId"
     }
 
     enum class BUNDLE_KEYS {
-        MovieDiscussionPostId
+        MovieDiscussionPostId,
+        MovieDiscussionPostOwnerName,
+        MovieDiscussionHandlerType
+    }
+
+    enum class BOTTOM_SHEET_TYPE{
+        MovieDiscussionHandlerCreate,
+        MovieDiscussionHandlerEdit
     }
 
     enum class UPDATE_TYPE {
