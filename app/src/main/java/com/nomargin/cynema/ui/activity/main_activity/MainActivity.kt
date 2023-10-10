@@ -1,8 +1,8 @@
 package com.nomargin.cynema.ui.activity.main_activity
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.nomargin.cynema.R
@@ -30,12 +30,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun navigationFragmentHandler(item: MenuItem): Boolean{
+    private fun navigationFragmentHandler(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.home_fragment -> {
                 findNavController(binding.fragmentContainerView.id).navigate(R.id.home_fragment)
                 true
             }
+            /*
             R.id.search_fragment -> {
                 findNavController(binding.fragmentContainerView.id).navigate(R.id.search_fragment)
                 true
@@ -48,6 +49,7 @@ class MainActivity : AppCompatActivity() {
                 findNavController(binding.fragmentContainerView.id).navigate(R.id.profile_fragment)
                 true
             }
+             */
             else -> false
         }
     }
