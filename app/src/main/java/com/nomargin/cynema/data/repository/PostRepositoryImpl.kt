@@ -70,8 +70,7 @@ class PostRepositoryImpl @Inject constructor(
                             R.string.unknown_error
                         )
                     )
-                }.await()
-
+                }.addOnCompleteListener {  }.await()
         } else {
             createPostResult = Resource.error(
                 "Error",

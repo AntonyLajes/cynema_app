@@ -25,7 +25,8 @@ import com.nomargin.cynema.util.extension.OnSaveClickListener
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MovieDiscussionPostActivity : AppCompatActivity(), View.OnClickListener, OnSaveClickListener, OnCommentClickListener {
+class MovieDiscussionPostActivity : AppCompatActivity(), View.OnClickListener, OnSaveClickListener,
+    OnCommentClickListener {
 
     private var movieDiscussionPostId: String? = null
     private val binding: ActivityMovieDiscussionPostBinding by lazy {
@@ -38,6 +39,7 @@ class MovieDiscussionPostActivity : AppCompatActivity(), View.OnClickListener, O
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding.includeShimmerActivityMovieDiscussionScreen.shimmerLayout.startShimmer()
         setContentView(binding.root)
     }
 
@@ -100,6 +102,12 @@ class MovieDiscussionPostActivity : AppCompatActivity(), View.OnClickListener, O
         getComments()
     }
 
+    private fun finishShimmerLayout() {
+        binding.includeShimmerActivityMovieDiscussionScreen.shimmerLayout.stopShimmer()
+        binding.includeShimmerActivityMovieDiscussionScreen.shimmerLayout.visibility = View.GONE
+        binding.mainView.visibility = View.VISIBLE
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     private fun showMenu(view: View, @MenuRes menuRes: Int) {
         val popUp = PopupMenu(applicationContext, view)
@@ -149,7 +157,7 @@ class MovieDiscussionPostActivity : AppCompatActivity(), View.OnClickListener, O
         movieDiscussionPostViewModel.getAllComments(movieDiscussionPostId)
     }
 
-    private fun getComments(){
+    private fun getComments() {
         movieDiscussionPostViewModel.getAllComments(movieDiscussionPostId)
     }
 
@@ -157,6 +165,7 @@ class MovieDiscussionPostActivity : AppCompatActivity(), View.OnClickListener, O
         movieDiscussionPostViewModel.post.observe(this) { post ->
             binding.swipeToRefresh.isRefreshing = false
             post?.let {
+                finishShimmerLayout()
                 fieldsHandler(it)
                 postAppearanceModel = it
                 saveMovieDiscussionPostId()
@@ -169,6 +178,7 @@ class MovieDiscussionPostActivity : AppCompatActivity(), View.OnClickListener, O
         }
         movieDiscussionPostViewModel.getComments.observe(this) { comments ->
             comments?.let {
+                binding.progressBar.visibility = View.INVISIBLE
                 updateMovieDiscussionPostCommentRecyclerView(it)
             }
         }
