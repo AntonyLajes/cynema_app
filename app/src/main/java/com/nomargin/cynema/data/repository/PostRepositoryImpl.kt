@@ -23,6 +23,7 @@ class PostRepositoryImpl @Inject constructor(
 ) : PostRepository {
 
     private lateinit var createPostResult: Resource<String>
+    private lateinit var updateResult: Resource<String>
     private val randomUUID = UUID.randomUUID().toString()
 
     override suspend fun publishPost(postModel: PostModel): Resource<String> {
@@ -227,4 +228,55 @@ class PostRepositoryImpl @Inject constructor(
             )
         }
     }
+
+    override suspend fun updatePost(postModel: PostModel): Resource<String> {
+        try {
+            val postReference = firebaseFirestore
+                .getFirebaseFirestore()
+                .collection(Constants.FIRESTORE.postsCollection)
+                .document(postModel.id ?: "")
+
+            postReference
+                .update(
+                    mapOf(
+                        "title" to postModel.title,
+                        "body" to postModel.body,
+                        "spoiler" to postModel.isSpoiler
+                    )
+                ).addOnCompleteListener {
+                    updateResult = if (it.isSuccessful) {
+                        Resource.success(
+                            postModel.id,
+                            StatusModel(
+                                true,
+                                null,
+                                R.string.post_updated_with_successfully
+                            )
+                        )
+                    } else {
+                        Resource.error(
+                            "Error",
+                            null,
+                            StatusModel(
+                                false,
+                                Constants.ERROR_TYPES.couldNotReachTheDiscussionPost,
+                                R.string.error
+                            )
+                        )
+                    }
+                }.await()
+        } catch (e: Exception) {
+            updateResult = Resource.error(
+                "Error",
+                null,
+                StatusModel(
+                    false,
+                    Constants.ERROR_TYPES.couldNotReachTheDiscussionPost,
+                    R.string.error
+                )
+            )
+        }
+        return updateResult
+    }
+
 }

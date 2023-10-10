@@ -154,4 +154,8 @@
     <string name="the_user_is_not_logged_in">Please, signIn before vote.</string>
     <string name="commenting_on">Commenting on</string>
     <string name="post">post</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="save">Save</string>
+    <string name="post_updated_with_successfully">Post updated with successfully</string>
 </resources>

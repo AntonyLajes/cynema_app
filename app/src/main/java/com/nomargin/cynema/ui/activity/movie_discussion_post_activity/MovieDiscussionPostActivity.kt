@@ -1,8 +1,12 @@
 package com.nomargin.cynema.ui.activity.movie_discussion_post_activity
 
+import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.widget.PopupMenu
 import androidx.activity.viewModels
+import androidx.annotation.MenuRes
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -12,13 +16,15 @@ import com.nomargin.cynema.data.local.entity.PostAppearanceModel
 import com.nomargin.cynema.databinding.ActivityMovieDiscussionPostBinding
 import com.nomargin.cynema.ui.adapter.recycler_view.MovieDiscussionPostCommentAdapter
 import com.nomargin.cynema.ui.fragment.create_comment_post_sheet_fragment.CreateCommentPostBottomSheetFragment
+import com.nomargin.cynema.ui.fragment.handle_post_bottom_sheet_fragment.HandlePostBottomSheetFragment
 import com.nomargin.cynema.util.Constants
 import com.nomargin.cynema.util.FrequencyFunctions
 import com.nomargin.cynema.util.extension.AdapterOnItemClickListenerWithView
+import com.nomargin.cynema.util.extension.OnSaveClickListener
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MovieDiscussionPostActivity : AppCompatActivity(), View.OnClickListener {
+class MovieDiscussionPostActivity : AppCompatActivity(), View.OnClickListener, OnSaveClickListener {
 
     private var movieDiscussionPostId: String? = null
     private val binding: ActivityMovieDiscussionPostBinding by lazy {
@@ -42,6 +48,7 @@ class MovieDiscussionPostActivity : AppCompatActivity(), View.OnClickListener {
         initClicks()
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onClick(view: View) {
         when (view.id) {
             binding.addComment.id -> {
@@ -76,13 +83,46 @@ class MovieDiscussionPostActivity : AppCompatActivity(), View.OnClickListener {
                     Constants.UPDATE_TYPE.Downvote, postAppearanceModel.postId
                 )
             }
+
+            binding.menuMore.id -> {
+                showMenu(view, R.menu.menu_post)
+            }
         }
+    }
+
+    override fun onSaveClicked() {
+        getPostDetails()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun showMenu(view: View, @MenuRes menuRes: Int) {
+        val popUp = PopupMenu(applicationContext, view)
+        popUp.menuInflater.inflate(menuRes, popUp.menu)
+        popUp.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.menu_edit_post -> {
+                    showEditPostBottomSheet()
+                    true
+                }
+
+                R.id.menu_delete_post -> {
+
+                    true
+                }
+
+                else -> {
+                    false
+                }
+            }
+        }
+        popUp.show()
     }
 
     private fun initClicks() {
         binding.addComment.setOnClickListener(this)
         binding.buttonUpVote.setOnClickListener(this)
         binding.buttonDownVote.setOnClickListener(this)
+        binding.menuMore.setOnClickListener(this)
         binding.swipeToRefresh.setOnRefreshListener {
             getPostDetails()
         }
@@ -240,5 +280,23 @@ class MovieDiscussionPostActivity : AppCompatActivity(), View.OnClickListener {
         commentAppearanceModel: CommentAppearanceModel,
     ) {
         movieDiscussionPostViewModel.updateCommentVote(updateType, commentAppearanceModel.commentId)
+    }
+
+    private fun showEditPostBottomSheet() {
+        val bundle = Bundle()
+        bundle.putString(
+            Constants.BUNDLE_KEYS.MovieDiscussionPostId.name,
+            postAppearanceModel.postId
+        )
+        bundle.putString(
+            Constants.BUNDLE_KEYS.MovieDiscussionHandlerType.name,
+            Constants.BOTTOM_SHEET_TYPE.MovieDiscussionHandlerEdit.name
+        )
+        val editPostBottomSheetFragment = HandlePostBottomSheetFragment()
+        editPostBottomSheetFragment.setOnSaveClickListener(this)
+        editPostBottomSheetFragment.arguments = bundle
+        editPostBottomSheetFragment.show(
+            this.supportFragmentManager, "editPostBottomSheetFragment"
+        )
     }
 }
