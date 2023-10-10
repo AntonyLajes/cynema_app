@@ -9,9 +9,9 @@ import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.nomargin.cynema.R
 import com.nomargin.cynema.databinding.FragmentCreateCommentPostBottomSheetBinding
-import com.nomargin.cynema.ui.activity.movie_discussion_post_activity.MovieDiscussionPostViewModel
 import com.nomargin.cynema.util.Constants
 import com.nomargin.cynema.util.Status
+import com.nomargin.cynema.util.extension.OnCommentClickListener
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -20,7 +20,7 @@ class CreateCommentPostBottomSheetFragment : BottomSheetDialogFragment(), View.O
     private var _binding: FragmentCreateCommentPostBottomSheetBinding? = null
     private val binding: FragmentCreateCommentPostBottomSheetBinding get() = _binding!!
     private val createCommentPostBottomSheetViewModel: CreateCommentPostBottomSheetViewModel by viewModels()
-    private val movieDiscussionPostViewModel: MovieDiscussionPostViewModel by viewModels()
+    private var onCommentClickListener: OnCommentClickListener? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,6 +53,10 @@ class CreateCommentPostBottomSheetFragment : BottomSheetDialogFragment(), View.O
         }
     }
 
+    fun setOnCommentClickListener(listener: OnCommentClickListener) {
+        onCommentClickListener = listener
+    }
+
     private fun initClicks() {
         binding.buttonComment.setOnClickListener(this)
     }
@@ -60,6 +64,7 @@ class CreateCommentPostBottomSheetFragment : BottomSheetDialogFragment(), View.O
     private fun observers() {
         createCommentPostBottomSheetViewModel.createCommentStatus.observe(this) { createCommentStatus ->
             if (createCommentStatus.status == Status.SUCCESS) {
+                onCommentClickListener?.onAddCommentClicked()
                 closeBottomSheet()
             } else {
                 Log.d("createCommentStatus", "observers: ${createCommentStatus.statusModel}")

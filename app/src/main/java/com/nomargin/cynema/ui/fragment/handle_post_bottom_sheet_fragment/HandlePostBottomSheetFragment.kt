@@ -73,13 +73,25 @@ class HandlePostBottomSheetFragment : BottomSheetDialogFragment(), View.OnClickL
             }
 
             binding.buttonPublish.id -> {
-                handlePostBottomSheetViewModel.updatePost(
-                    postId ?: "",
-                    binding.postTitleInput.text.toString(),
-                    binding.postBodyInput.text.toString(),
-                    binding.chipSpoiler.isChecked
-                )
-                onSaveClickListener?.onSaveClicked()
+                when (handlerType) {
+                    Constants.BOTTOM_SHEET_TYPE.MovieDiscussionHandlerEdit.name -> {
+                        handlePostBottomSheetViewModel.updatePost(
+                            postId ?: "",
+                            binding.postTitleInput.text.toString(),
+                            binding.postBodyInput.text.toString(),
+                            binding.chipSpoiler.isChecked
+                        )
+                        onSaveClickListener?.onSaveClicked()
+                    }
+
+                    else -> {
+                        handlePostBottomSheetViewModel.publishPost(
+                            binding.postTitleInput.text.toString(),
+                            binding.postBodyInput.text.toString(),
+                            binding.chipSpoiler.isChecked
+                        )
+                    }
+                }
             }
         }
     }

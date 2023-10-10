@@ -20,11 +20,12 @@ import com.nomargin.cynema.ui.fragment.handle_post_bottom_sheet_fragment.HandleP
 import com.nomargin.cynema.util.Constants
 import com.nomargin.cynema.util.FrequencyFunctions
 import com.nomargin.cynema.util.extension.AdapterOnItemClickListenerWithView
+import com.nomargin.cynema.util.extension.OnCommentClickListener
 import com.nomargin.cynema.util.extension.OnSaveClickListener
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MovieDiscussionPostActivity : AppCompatActivity(), View.OnClickListener, OnSaveClickListener {
+class MovieDiscussionPostActivity : AppCompatActivity(), View.OnClickListener, OnSaveClickListener, OnCommentClickListener {
 
     private var movieDiscussionPostId: String? = null
     private val binding: ActivityMovieDiscussionPostBinding by lazy {
@@ -67,6 +68,7 @@ class MovieDiscussionPostActivity : AppCompatActivity(), View.OnClickListener, O
                 )
                 val createCommentPostBottomSheetFragment = CreateCommentPostBottomSheetFragment()
                 createCommentPostBottomSheetFragment.arguments = bundle
+                createCommentPostBottomSheetFragment.setOnCommentClickListener(this)
                 createCommentPostBottomSheetFragment.show(
                     this.supportFragmentManager, "createCommentPostBottomSheetFragment"
                 )
@@ -92,6 +94,10 @@ class MovieDiscussionPostActivity : AppCompatActivity(), View.OnClickListener, O
 
     override fun onSaveClicked() {
         getPostDetails()
+    }
+
+    override fun onAddCommentClicked() {
+        getComments()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -140,6 +146,10 @@ class MovieDiscussionPostActivity : AppCompatActivity(), View.OnClickListener, O
 
     private fun getPostDetails() {
         movieDiscussionPostViewModel.getDiscussionPostById(movieDiscussionPostId)
+        movieDiscussionPostViewModel.getAllComments(movieDiscussionPostId)
+    }
+
+    private fun getComments(){
         movieDiscussionPostViewModel.getAllComments(movieDiscussionPostId)
     }
 

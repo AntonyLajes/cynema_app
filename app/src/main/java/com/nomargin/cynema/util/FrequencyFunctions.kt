@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.util.Log
 import android.widget.Toast
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
@@ -39,6 +40,7 @@ object FrequencyFunctions {
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun getPostDifferenceTime(timestamp: Timestamp?): String {
+        Log.d("getPostDifferenceTime", "getPostDifferenceTime: ${timestamp?.seconds}")
         val postDateTime = LocalDateTime.ofInstant(
             Instant.ofEpochSecond(timestamp!!.seconds, 0),
             ZoneId.systemDefault()
