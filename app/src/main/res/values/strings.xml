@@ -158,4 +158,8 @@
     <string name="delete">Delete</string>
     <string name="save">Save</string>
     <string name="post_updated_with_successfully">Post updated with successfully</string>
+    <string name="this_action_cannot_be_undone_do_you_really_want_to_delete_the_post">This action cannot be undone. \nDo you really want to delete the post?</string>
+    <string name="decline">Decline</string>
+    <string name="accept">Accept</string>
+    <string name="post_deleted_with_success">Post deleted with success!</string>
 </resources>

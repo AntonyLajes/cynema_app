@@ -10,6 +10,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.nomargin.cynema.R
 import com.nomargin.cynema.data.local.entity.CommentAppearanceModel
 import com.nomargin.cynema.data.local.entity.PostAppearanceModel
@@ -120,7 +121,7 @@ class MovieDiscussionPostActivity : AppCompatActivity(), View.OnClickListener, O
                 }
 
                 R.id.menu_delete_post -> {
-
+                    startDeleteDialog()
                     true
                 }
 
@@ -130,6 +131,29 @@ class MovieDiscussionPostActivity : AppCompatActivity(), View.OnClickListener, O
             }
         }
         popUp.show()
+    }
+
+    private fun startDeleteDialog() {
+        MaterialAlertDialogBuilder(this)
+            .setTitle(buildString {
+                append(getString(R.string.attention))
+                append("!")
+            })
+            .setMessage(getString(R.string.this_action_cannot_be_undone_do_you_really_want_to_delete_the_post))
+            .setNeutralButton(getString(R.string.cancel)) { dialog, which ->
+                dialog.cancel()
+            }
+            .setNegativeButton(getString(R.string.decline)) { dialog, which ->
+                dialog.cancel()
+            }
+            .setPositiveButton(getString(R.string.accept)) { dialog, which ->
+                deletePost()
+            }
+            .show()
+    }
+
+    private fun deletePost() {
+        movieDiscussionPostViewModel.deletePost(movieDiscussionPostId)
     }
 
     private fun initClicks() {
@@ -185,6 +209,16 @@ class MovieDiscussionPostActivity : AppCompatActivity(), View.OnClickListener, O
         movieDiscussionPostViewModel.getUpdatedComment.observe(this) { updatedComment ->
             updatedComment?.let {
                 updateMovieDiscussionUpdatedPostCommentRecyclerView(it)
+            }
+        }
+        movieDiscussionPostViewModel.deletePost.observe(this) { deletePost ->
+            deletePost?.let {
+                if (it.isValid) {
+                    FrequencyFunctions.makeToast(this, it.message)
+                    this.finish()
+                } else {
+                    FrequencyFunctions.makeToast(this, it.message)
+                }
             }
         }
     }

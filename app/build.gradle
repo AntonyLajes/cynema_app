@@ -10,13 +10,13 @@ plugins {
 }
 
 android {
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.nomargin.cynema"
         minSdk 24
-        targetSdk 32
-        versionCode 1
+        targetSdk 33
+        versionCode 3
         versionName "1.0"
 
         testInstrumentationRunner "com.nomargin.cynema_app.CustomTestRunner"

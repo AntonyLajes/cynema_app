@@ -11,8 +11,8 @@ data class GenreModel (
     @PrimaryKey(autoGenerate = false)
     @ColumnInfo(name = Constants.LOCAL_STORAGE.genreIdColumnName)
     @SerializedName("id")
-    val genreId: Int,
+    val genreId: Int? = null,
     @ColumnInfo(name = Constants.LOCAL_STORAGE.genreDescColumnName)
     @SerializedName("name")
-    val genreDesc: String
+    val genreDesc: String? = null
 )
