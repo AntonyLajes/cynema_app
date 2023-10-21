@@ -17,5 +17,6 @@ data class CommentAppearanceModel(
     val usersWhoVoted: List<String> = arrayListOf(),
     val usersWhoUpVoted: List<String> = arrayListOf(),
     val usersWhoDownVoted: List<String> = arrayListOf(),
-    val currentUser: FirebaseUser? = null
+    val currentUser: FirebaseUser? = null,
+    val active: Boolean = true
 )

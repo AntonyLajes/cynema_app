@@ -94,10 +94,12 @@ class ProfileRepositoryImpl @Inject constructor(
     }
 
     override suspend fun verifyProfile(): Boolean {
-        return database.get()
-            .addOnSuccessListener {}
-            .addOnFailureListener {}.await().exists()
+        return firebaseFirestore.getFirebaseFirestore()
+            .collection(Constants.FIRESTORE.usersCollection)
+            .document(firebaseAuth.getFirebaseAuth().currentUser?.uid.toString()).get().await()
+            .exists()
     }
+
 
     override suspend fun checkUserUsername(username: String): StatusModel? {
         if (username.length >= Constants.MIN_LENGTH.usernameMinLength && username.length <= Constants.MAX_LENGTH.userUsernameMaxLength) {

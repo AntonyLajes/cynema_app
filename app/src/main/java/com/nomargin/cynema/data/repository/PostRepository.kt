@@ -9,11 +9,16 @@ import com.nomargin.cynema.util.model.StatusModel
 interface PostRepository {
 
     suspend fun publishPost(
-        postModel: PostModel
+        postModel: PostModel,
     ): Resource<String>
 
     suspend fun getAllPosts(movieId: String): Resource<List<PostDatabaseModel>>
     suspend fun getPostById(postId: String): Resource<PostDatabaseModel>
-    suspend fun updatePostVote(updateType: Constants.UPDATE_TYPE, postId: String): Resource<StatusModel>
+    suspend fun updatePostVote(
+        updateType: Constants.UPDATE_TYPE,
+        postId: String,
+    ): Resource<StatusModel>
+
     suspend fun updatePost(postModel: PostModel): Resource<String>
+    suspend fun deletePost(postId: String): StatusModel
 }

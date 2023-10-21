@@ -47,7 +47,8 @@ class CommentUseCaseImpl @Inject constructor(
                         usersWhoVoted = comment.usersWhoVoted,
                         usersWhoUpVoted = comment.usersWhoUpVoted,
                         usersWhoDownVoted = comment.usersWhoDownVoted,
-                        currentUser = currentUser
+                        currentUser = currentUser,
+                        active = comment.isActive
                     )
                 )
             }

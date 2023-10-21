@@ -6,10 +6,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nomargin.cynema.data.local.entity.CommentAppearanceModel
 import com.nomargin.cynema.data.local.entity.PostAppearanceModel
+import com.nomargin.cynema.data.remote.firebase.authentication.FirebaseAuthUseCase
+import com.nomargin.cynema.data.repository.CommentRepository
+import com.nomargin.cynema.data.repository.PostRepository
 import com.nomargin.cynema.data.repository.SharedPreferencesRepository
 import com.nomargin.cynema.data.usecase.CommentUseCase
 import com.nomargin.cynema.data.usecase.PostUseCase
 import com.nomargin.cynema.util.Constants
+import com.nomargin.cynema.util.model.StatusModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -19,6 +23,9 @@ class MovieDiscussionPostViewModel @Inject constructor(
     private val postUseCase: PostUseCase,
     private val sharedPreferencesRepository: SharedPreferencesRepository,
     private val commentUseCase: CommentUseCase,
+    private val postRepository: PostRepository,
+    private val firebaseAuth: FirebaseAuthUseCase,
+    private val commentRepository: CommentRepository,
 ) : ViewModel() {
 
     private val _post: MutableLiveData<PostAppearanceModel?> = MutableLiveData()
@@ -29,6 +36,12 @@ class MovieDiscussionPostViewModel @Inject constructor(
     val getComments: LiveData<List<CommentAppearanceModel>?> = _getComments
     private val _getUpdatedComment: MutableLiveData<CommentAppearanceModel?> = MutableLiveData()
     val getUpdatedComment: LiveData<CommentAppearanceModel?> = _getUpdatedComment
+    private val _deletePost: MutableLiveData<StatusModel> = MutableLiveData()
+    val deletePost: LiveData<StatusModel?> = _deletePost
+    private val _currentUserIsPostOwner: MutableLiveData<Boolean> = MutableLiveData()
+    val currentUserIsPostOwner: LiveData<Boolean> = _currentUserIsPostOwner
+    private val _deleteComment: MutableLiveData<StatusModel> = MutableLiveData()
+    val deleteComment: LiveData<StatusModel?> = _deleteComment
 
     fun getDiscussionPostById(postId: String?) = viewModelScope.launch {
         _post.value = postUseCase.getPostById(postId ?: "")
@@ -51,6 +64,19 @@ class MovieDiscussionPostViewModel @Inject constructor(
 
     fun getAllComments(postId: String?) = viewModelScope.launch {
         _getComments.value = commentUseCase.getAllComments(postId ?: "")
+    }
+
+    fun deletePost(postId: String?) = viewModelScope.launch {
+        _deletePost.value = postRepository.deletePost(postId ?: "")
+    }
+
+    fun checkIfCurrentUserIsPostOwner(postOwnerId: String) {
+        _currentUserIsPostOwner.value =
+            firebaseAuth.getFirebaseAuth().currentUser?.uid.toString() == postOwnerId
+    }
+
+    fun deleteComment(id: String) = viewModelScope.launch {
+        _deleteComment.value = commentRepository.deleteComment(id)
     }
 
 

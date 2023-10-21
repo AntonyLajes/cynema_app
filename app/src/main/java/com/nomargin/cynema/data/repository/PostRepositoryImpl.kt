@@ -24,6 +24,7 @@ class PostRepositoryImpl @Inject constructor(
 
     private lateinit var createPostResult: Resource<String>
     private lateinit var updateResult: Resource<String>
+    private lateinit var deleteResult: StatusModel
     private val randomUUID = UUID.randomUUID().toString()
 
     override suspend fun publishPost(postModel: PostModel): Resource<String> {
@@ -47,7 +48,8 @@ class PostRepositoryImpl @Inject constructor(
                 comments = listOf(),
                 usersWhoUpVoted = listOf(),
                 usersWhoDownVoted = listOf(),
-                commentsQuantity = 0
+                commentsQuantity = 0,
+                isActive = true
             )
 
             database.set(post)
@@ -70,7 +72,7 @@ class PostRepositoryImpl @Inject constructor(
                             R.string.unknown_error
                         )
                     )
-                }.addOnCompleteListener {  }.await()
+                }.addOnCompleteListener { }.await()
         } else {
             createPostResult = Resource.error(
                 "Error",
@@ -85,6 +87,7 @@ class PostRepositoryImpl @Inject constructor(
         val posts = firebaseFirestore.getFirebaseFirestore()
             .collection(Constants.FIRESTORE.postsCollection)
             .whereEqualTo("movieId", movieId)
+            .whereEqualTo("active", true)
             .get()
             .addOnCompleteListener { }.await()
         return if (posts.isEmpty) {
@@ -113,6 +116,7 @@ class PostRepositoryImpl @Inject constructor(
         val post = firebaseFirestore.getFirebaseFirestore()
             .collection(Constants.FIRESTORE.postsCollection)
             .whereEqualTo("id", postId)
+            .whereEqualTo("active", true)
             .get()
             .addOnCompleteListener { }.await()
         return if (post.isEmpty) {
@@ -278,4 +282,40 @@ class PostRepositoryImpl @Inject constructor(
         return updateResult
     }
 
+    override suspend fun deletePost(postId: String): StatusModel {
+        try {
+            val postReference = firebaseFirestore
+                .getFirebaseFirestore()
+                .collection(Constants.FIRESTORE.postsCollection)
+                .document(postId)
+
+            postReference
+                .update(
+                    mapOf(
+                        "active" to false
+                    )
+                ).addOnCompleteListener {
+                    deleteResult = if (it.isSuccessful) {
+                        StatusModel(
+                            true,
+                            null,
+                            R.string.post_deleted_with_success
+                        )
+                    } else {
+                        StatusModel(
+                            false,
+                            null,
+                            R.string.discussion_posts_was_not_reached
+                        )
+                    }
+                }.await()
+        } catch (e: Exception) {
+            deleteResult = StatusModel(
+                false,
+                null,
+                R.string.unknown_error
+            )
+        }
+        return deleteResult
+    }
 }

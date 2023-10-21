@@ -12,13 +12,14 @@ import com.nomargin.cynema.util.model.CarouselModel
 
 class MainCarouselAdapter(
     private val movieList: List<CarouselModel>,
-    private val adapterOnItemClickListener: AdapterOnItemClickListener
-): RecyclerView.Adapter<MainCarouselAdapter.MainCarouselViewHolder>() {
+    private val adapterOnItemClickListener: AdapterOnItemClickListener,
+) : RecyclerView.Adapter<MainCarouselAdapter.MainCarouselViewHolder>() {
 
     private lateinit var parentContext: Context
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainCarouselViewHolder {
         parentContext = parent.context
-        val view = ItemMainCarouselBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val view =
+            ItemMainCarouselBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MainCarouselViewHolder(view)
     }
 
@@ -31,18 +32,24 @@ class MainCarouselAdapter(
             .load(Constants.TMDB_PATH_URLs.posterPathUrl + currentItem.backgroundPath)
             .centerCrop()
             .into(holder.itemMainCarouselBinding.carouselItemImage)
-        holder.itemMainCarouselBinding.moreInfoItem.setOnClickListener{
+        holder.itemMainCarouselBinding.moreInfoItem.setOnClickListener {
             adapterOnItemClickListener.onItemClickListener(
                 currentItem,
                 position
             )
         }
         val genreDesc: MutableList<String> = mutableListOf()
-        for(genre in currentItem.genres){
-            genreDesc.add(genre.genreDesc)
+        for (genre in currentItem.genres) {
+            genre.genreDesc?.let {
+                genreDesc.add(it)
+            }
         }
-        holder.itemMainCarouselBinding.carouselItemGenre.text = genreDesc.take(2).joinToString(" • ")
+        if (genreDesc.isNotEmpty()) {
+            holder.itemMainCarouselBinding.carouselItemGenre.text =
+                genreDesc.take(2).joinToString(" • ")
+        }
     }
 
-    class MainCarouselViewHolder(val itemMainCarouselBinding: ItemMainCarouselBinding): RecyclerView.ViewHolder(itemMainCarouselBinding.root)
+    class MainCarouselViewHolder(val itemMainCarouselBinding: ItemMainCarouselBinding) :
+        RecyclerView.ViewHolder(itemMainCarouselBinding.root)
 }

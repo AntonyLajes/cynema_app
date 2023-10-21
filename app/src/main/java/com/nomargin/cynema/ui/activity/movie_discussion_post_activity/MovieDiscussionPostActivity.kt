@@ -10,6 +10,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.nomargin.cynema.R
 import com.nomargin.cynema.data.local.entity.CommentAppearanceModel
 import com.nomargin.cynema.data.local.entity.PostAppearanceModel
@@ -36,6 +37,7 @@ class MovieDiscussionPostActivity : AppCompatActivity(), View.OnClickListener, O
     private lateinit var postAppearanceModel: PostAppearanceModel
     private lateinit var movieDiscussionPostCommentAdapter: MovieDiscussionPostCommentAdapter
     private var itemPositionPost: Int? = null
+    private var currentCommentData: CommentAppearanceModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,7 +91,12 @@ class MovieDiscussionPostActivity : AppCompatActivity(), View.OnClickListener, O
             }
 
             binding.menuMore.id -> {
-                showMenu(view, R.menu.menu_post)
+                showMenu(
+                    Constants.MENU_TYPE.PostType,
+                    view,
+                    R.menu.menu_post,
+                    null
+                )
             }
         }
     }
@@ -109,18 +116,23 @@ class MovieDiscussionPostActivity : AppCompatActivity(), View.OnClickListener, O
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun showMenu(view: View, @MenuRes menuRes: Int) {
+    private fun showMenu(
+        menuType: Constants.MENU_TYPE,
+        view: View,
+        @MenuRes menuRes: Int,
+        commentAppearanceModel: CommentAppearanceModel?,
+    ) {
         val popUp = PopupMenu(applicationContext, view)
         popUp.menuInflater.inflate(menuRes, popUp.menu)
         popUp.setOnMenuItemClickListener {
             when (it.itemId) {
-                R.id.menu_edit_post -> {
-                    showEditPostBottomSheet()
+                R.id.menu_edit -> {
+                    showBottomDialogType(menuType, commentAppearanceModel)
                     true
                 }
 
-                R.id.menu_delete_post -> {
-
+                R.id.menu_delete -> {
+                    startDeleteDialog(menuType)
                     true
                 }
 
@@ -130,6 +142,61 @@ class MovieDiscussionPostActivity : AppCompatActivity(), View.OnClickListener, O
             }
         }
         popUp.show()
+    }
+
+    private fun showBottomDialogType(
+        menuType: Constants.MENU_TYPE,
+        commentAppearanceModel: CommentAppearanceModel?,
+    ) {
+        when (menuType) {
+            Constants.MENU_TYPE.PostType -> {
+                showEditPostBottomSheet()
+            }
+
+            else -> {
+                showEditCommentBottomSheet(commentAppearanceModel)
+            }
+        }
+    }
+
+    private fun startDeleteDialog(menuType: Constants.MENU_TYPE) {
+        val message = if (menuType == Constants.MENU_TYPE.PostType) {
+            R.string.this_action_cannot_be_undone_do_you_really_want_to_delete_the_post
+        } else {
+            R.string.this_action_cannot_be_undone_do_you_really_want_to_delete_the_comment
+        }
+        MaterialAlertDialogBuilder(this)
+            .setTitle(buildString {
+                append(getString(R.string.attention))
+                append("!")
+            })
+            .setMessage(getString(message))
+            .setNeutralButton(getString(R.string.cancel)) { dialog, _ ->
+                dialog.cancel()
+            }
+            .setNegativeButton(getString(R.string.decline)) { dialog, _ ->
+                dialog.cancel()
+            }
+            .setPositiveButton(getString(R.string.accept)) { _, _ ->
+                when (menuType) {
+                    Constants.MENU_TYPE.PostType -> {
+                        deletePost()
+                    }
+
+                    else -> {
+                        deleteComment()
+                    }
+                }
+            }
+            .show()
+    }
+
+    private fun deletePost() {
+        movieDiscussionPostViewModel.deletePost(movieDiscussionPostId)
+    }
+
+    private fun deleteComment() {
+        movieDiscussionPostViewModel.deleteComment(currentCommentData?.commentId ?: "")
     }
 
     private fun initClicks() {
@@ -169,6 +236,7 @@ class MovieDiscussionPostActivity : AppCompatActivity(), View.OnClickListener, O
                 fieldsHandler(it)
                 postAppearanceModel = it
                 saveMovieDiscussionPostId()
+                movieDiscussionPostViewModel.checkIfCurrentUserIsPostOwner(it.user?.id ?: "")
             }
         }
         movieDiscussionPostViewModel.getUpdatedPost.observe(this) { updatedPost ->
@@ -185,6 +253,33 @@ class MovieDiscussionPostActivity : AppCompatActivity(), View.OnClickListener, O
         movieDiscussionPostViewModel.getUpdatedComment.observe(this) { updatedComment ->
             updatedComment?.let {
                 updateMovieDiscussionUpdatedPostCommentRecyclerView(it)
+            }
+        }
+        movieDiscussionPostViewModel.deletePost.observe(this) { deletePost ->
+            deletePost?.let {
+                if (it.isValid) {
+                    FrequencyFunctions.makeToast(this, it.message)
+                    this.finish()
+                } else {
+                    FrequencyFunctions.makeToast(this, it.message)
+                }
+            }
+        }
+        movieDiscussionPostViewModel.deleteComment.observe(this) { deleteComment ->
+            deleteComment?.let {
+                if (it.isValid) {
+                    FrequencyFunctions.makeToast(this, it.message)
+                    getPostDetails()
+                } else {
+                    FrequencyFunctions.makeToast(this, it.message)
+                }
+            }
+        }
+        movieDiscussionPostViewModel.currentUserIsPostOwner.observe(this) { currentUserIsPostOwner ->
+            binding.menuMore.visibility = if (currentUserIsPostOwner) {
+                View.VISIBLE
+            } else {
+                View.GONE
             }
         }
     }
@@ -253,6 +348,7 @@ class MovieDiscussionPostActivity : AppCompatActivity(), View.OnClickListener, O
     private fun initMovieDiscussionPostCommentRecyclerView() {
         movieDiscussionPostCommentAdapter = MovieDiscussionPostCommentAdapter(
             object : AdapterOnItemClickListenerWithView {
+                @RequiresApi(Build.VERSION_CODES.O)
                 override fun <T> onItemClickListener(view: View, item: T, position: Int) {
                     itemPositionPost = position
                     when (view.id) {
@@ -266,6 +362,16 @@ class MovieDiscussionPostActivity : AppCompatActivity(), View.OnClickListener, O
                         binding.buttonDownVote.id -> {
                             updateCommentVote(
                                 Constants.UPDATE_TYPE.Downvote,
+                                item as CommentAppearanceModel
+                            )
+                        }
+
+                        binding.menuMore.id -> {
+                            currentCommentData = item as CommentAppearanceModel
+                            showMenu(
+                                Constants.MENU_TYPE.CommentType,
+                                view,
+                                R.menu.menu_post,
                                 item as CommentAppearanceModel
                             )
                         }
@@ -317,6 +423,32 @@ class MovieDiscussionPostActivity : AppCompatActivity(), View.OnClickListener, O
         editPostBottomSheetFragment.arguments = bundle
         editPostBottomSheetFragment.show(
             this.supportFragmentManager, "editPostBottomSheetFragment"
+        )
+    }
+
+    private fun showEditCommentBottomSheet(commentAppearanceModel: CommentAppearanceModel?) {
+        val bundle = Bundle()
+        bundle.putString(
+            Constants.BUNDLE_KEYS.MovieDiscussionPostOwnerName.name,
+            buildString {
+                append(postAppearanceModel.user?.firstName)
+                append(" ")
+                append(postAppearanceModel.user?.lastName)
+            }
+        )
+        bundle.putString(
+            Constants.BUNDLE_KEYS.MovieDiscussionPostCommentId.name,
+            commentAppearanceModel?.commentId ?: ""
+        )
+        bundle.putString(
+            Constants.BUNDLE_KEYS.MovieDiscussionHandlerType.name,
+            Constants.BOTTOM_SHEET_TYPE.MovieDiscussionHandlerEdit.name
+        )
+        val createCommentPostBottomSheetFragment = CreateCommentPostBottomSheetFragment()
+        createCommentPostBottomSheetFragment.arguments = bundle
+        createCommentPostBottomSheetFragment.setOnCommentClickListener(this)
+        createCommentPostBottomSheetFragment.show(
+            this.supportFragmentManager, "createCommentPostBottomSheetFragment"
         )
     }
 }

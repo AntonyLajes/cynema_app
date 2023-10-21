@@ -17,5 +17,6 @@ data class PostDatabaseModel(
     val usersWhoDownVoted: List<String> = arrayListOf(),
     val votes: Int = 0,
     val comments: List<String> = arrayListOf(),
-    val commentsQuantity: Int = 0
+    val commentsQuantity: Int = 0,
+    val isActive: Boolean = true
 )

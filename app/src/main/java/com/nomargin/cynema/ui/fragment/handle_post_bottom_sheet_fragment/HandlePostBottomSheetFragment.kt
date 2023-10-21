@@ -228,7 +228,6 @@ class HandlePostBottomSheetFragment : BottomSheetDialogFragment(), View.OnClickL
                 bundle.putString(Constants.BUNDLE_KEYS.MovieDiscussionPostId.toString(), postId)
                 intent.putExtras(bundle)
                 startActivity(intent)
-
             }
         }
     }

@@ -36,7 +36,6 @@ class MainActivity : AppCompatActivity() {
                 findNavController(binding.fragmentContainerView.id).navigate(R.id.home_fragment)
                 true
             }
-            /*
             R.id.search_fragment -> {
                 findNavController(binding.fragmentContainerView.id).navigate(R.id.search_fragment)
                 true
@@ -49,7 +48,6 @@ class MainActivity : AppCompatActivity() {
                 findNavController(binding.fragmentContainerView.id).navigate(R.id.profile_fragment)
                 true
             }
-             */
             else -> false
         }
     }
