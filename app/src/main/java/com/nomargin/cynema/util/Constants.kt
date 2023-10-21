@@ -83,6 +83,7 @@ object Constants {
     }
 
     object FIRESTORE {
+        const val rootCollection = "data"
         const val usersCollection = "users"
         const val postsCollection = "posts"
         const val commentsCollection = "comments"

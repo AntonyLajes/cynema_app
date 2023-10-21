@@ -40,8 +40,22 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-    viewBinding{
+    viewBinding {
         enabled = true
+    }
+    productFlavors {
+        flavorDimensions 'side'
+        production {
+            dimension 'side'
+            buildConfigField "String", "FIREBASE_FLAVOR_COLLECTION", "\"production\""
+            manifestPlaceholders.appNameSuffix = ""
+        }
+        development {
+            dimension 'side'
+            applicationIdSuffix '.development'
+            manifestPlaceholders.appNameSuffix = " - Development"
+            buildConfigField "String", "FIREBASE_FLAVOR_COLLECTION", "\"development\""
+        }
     }
 }
 

@@ -2,6 +2,7 @@ package com.nomargin.cynema.data.repository
 
 import android.net.Uri
 import com.google.firebase.firestore.ktx.toObject
+import com.nomargin.cynema.BuildConfig
 import com.nomargin.cynema.R
 import com.nomargin.cynema.data.remote.firebase.authentication.FirebaseAuthUseCase
 import com.nomargin.cynema.data.remote.firebase.entity.UserProfileDataModel
@@ -24,7 +25,7 @@ class ProfileRepositoryImpl @Inject constructor(
 
     private lateinit var createProfileResult: Resource<StatusModel>
     private val database = firebaseFirestore.getFirebaseFirestore()
-        .collection(Constants.FIRESTORE.usersCollection)
+        .collection("${Constants.FIRESTORE.rootCollection}/${BuildConfig.FIREBASE_FLAVOR_COLLECTION}/${Constants.FIRESTORE.usersCollection}")
         .document(firebaseAuth.getFirebaseAuth().currentUser?.uid.toString())
 
     override suspend fun createProfile(userProfileModel: UserProfileModel): Resource<StatusModel> {
@@ -94,17 +95,16 @@ class ProfileRepositoryImpl @Inject constructor(
     }
 
     override suspend fun verifyProfile(): Boolean {
-        return firebaseFirestore.getFirebaseFirestore()
-            .collection(Constants.FIRESTORE.usersCollection)
-            .document(firebaseAuth.getFirebaseAuth().currentUser?.uid.toString()).get().await()
+        return database.get().await()
             .exists()
     }
 
 
     override suspend fun checkUserUsername(username: String): StatusModel? {
+
         if (username.length >= Constants.MIN_LENGTH.usernameMinLength && username.length <= Constants.MAX_LENGTH.userUsernameMaxLength) {
             val usernameDoNotExists = firebaseFirestore.getFirebaseFirestore()
-                .collection(Constants.FIRESTORE.usersCollection)
+                .collection("${Constants.FIRESTORE.rootCollection}/${BuildConfig.FIREBASE_FLAVOR_COLLECTION}/${Constants.FIRESTORE.usersCollection}")
                 .whereEqualTo("user_username", username)
                 .get()
                 .addOnCompleteListener { }
@@ -132,7 +132,7 @@ class ProfileRepositoryImpl @Inject constructor(
         val user = firebaseFirestore
             .getFirebaseFirestore()
             .collection(
-                Constants.FIRESTORE.usersCollection
+                "${Constants.FIRESTORE.rootCollection}/${BuildConfig.FIREBASE_FLAVOR_COLLECTION}/${Constants.FIRESTORE.usersCollection}"
             ).document(
                 userId
             ).get()
