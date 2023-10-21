@@ -8,7 +8,7 @@ data class CommentDatabaseModel(
     val userId: String = "",
     val postId: String = "",
     val body: String = "",
-    val isSpoiler: Boolean? = null,
+    val isSpoiler: Boolean? = false,
     @ServerTimestamp
     var timestamp: Timestamp? = null,
     val usersWhoVoted: List<String> = arrayListOf(),
@@ -17,4 +17,5 @@ data class CommentDatabaseModel(
     val votes: Int = 0,
     val answers: List<String> = arrayListOf(),
     val answersQuantity: Int = 0,
+    val isActive: Boolean = true
 )

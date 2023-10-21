@@ -3,6 +3,7 @@ package com.nomargin.cynema.ui.adapter.recycler_view
 import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -52,6 +53,9 @@ class MovieDiscussionPostCommentAdapter(
         holder.item.buttonDownVote.setOnClickListener {
             onItemClickListener.onItemClickListener(it, currentItem, position)
         }
+        holder.item.menuMore.setOnClickListener {
+            onItemClickListener.onItemClickListener(it, currentItem, position)
+        }
         if (currentItem.usersWhoVoted.contains(currentItem.currentUser?.uid ?: "")) {
             val isUpVoted = currentItem.usersWhoUpVoted.contains(currentItem.currentUser?.uid ?: "")
             val isDownVoted =
@@ -64,6 +68,11 @@ class MovieDiscussionPostCommentAdapter(
                 isUpVoted = false,
                 isDownVoted = false
             )
+        }
+        holder.item.menuMore.visibility =  if ((currentItem.user?.id ?: "") != (currentItem.currentUser?.uid ?: "")) {
+             View.GONE
+        }else{
+            View.VISIBLE
         }
     }
 

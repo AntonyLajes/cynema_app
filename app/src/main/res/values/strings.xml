@@ -127,6 +127,7 @@
     <string name="comments_reached_with_success">Posts reached with success!</string>
     <string name="comment_reached_with_success">Comments reached with success!</string>
     <string name="discussion_posts_was_not_reached">Discussion posts wasn\'t reached.</string>
+    <string name="discussion_posts_comment_was_not_reached">Comment wasn\'t reached.</string>
     <string name="welcome">Welcome</string>
     <string name="hi_emoji">👋</string>
     <string name="details">Details</string>
@@ -158,8 +159,13 @@
     <string name="delete">Delete</string>
     <string name="save">Save</string>
     <string name="post_updated_with_successfully">Post updated with successfully</string>
+    <string name="comment_updated_with_successfully">Comment updated with successfully</string>
     <string name="this_action_cannot_be_undone_do_you_really_want_to_delete_the_post">This action cannot be undone. \nDo you really want to delete the post?</string>
+    <string name="this_action_cannot_be_undone_do_you_really_want_to_delete_the_comment">This action cannot be undone. \nDo you really want to delete the comment?</string>
     <string name="decline">Decline</string>
     <string name="accept">Accept</string>
     <string name="post_deleted_with_success">Post deleted with success!</string>
+    <string name="comment_deleted_with_success">Comment deleted with success!</string>
+    <string name="editing_your_comment_on">Editing your comment on</string>
+    <string name="coming_soon">Coming soon…</string>
 </resources>

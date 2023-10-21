@@ -108,6 +108,7 @@ object Constants {
 
     enum class BUNDLE_KEYS {
         MovieDiscussionPostId,
+        MovieDiscussionPostCommentId,
         MovieDiscussionPostOwnerName,
         MovieDiscussionHandlerType
     }
@@ -115,6 +116,11 @@ object Constants {
     enum class BOTTOM_SHEET_TYPE{
         MovieDiscussionHandlerCreate,
         MovieDiscussionHandlerEdit
+    }
+
+    enum class MENU_TYPE{
+        PostType,
+        CommentType
     }
 
     enum class UPDATE_TYPE {

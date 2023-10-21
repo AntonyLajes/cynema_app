@@ -25,6 +25,7 @@ class CommentRepositoryImpl @Inject constructor(
 
     private lateinit var createCommentResult: Resource<String>
     private val randomUUID = UUID.randomUUID().toString()
+    private lateinit var updateResult: Resource<String>
 
     override suspend fun publishComment(commentModel: CommentModel): Resource<String> {
         val validateCommentAttributes = validateAttributes.validateComment(commentModel)
@@ -48,7 +49,8 @@ class CommentRepositoryImpl @Inject constructor(
                 answers = listOf(),
                 usersWhoUpVoted = listOf(),
                 usersWhoDownVoted = listOf(),
-                answersQuantity = 0
+                answersQuantity = 0,
+                isActive = true
             )
 
             commentsDatabase.set(comment)
@@ -96,6 +98,7 @@ class CommentRepositoryImpl @Inject constructor(
         val comments = firebaseFirestore.getFirebaseFirestore()
             .collection(Constants.FIRESTORE.commentsCollection)
             .whereEqualTo("postId", postId)
+            .whereEqualTo("active", true)
             .get()
             .addOnCompleteListener { }.await()
         return if (comments.isEmpty) {
@@ -240,5 +243,86 @@ class CommentRepositoryImpl @Inject constructor(
             )
         }
 
+    }
+
+    override suspend fun updateComment(commentModel: CommentModel): Resource<String> {
+        try {
+            val commentReference = firebaseFirestore
+                .getFirebaseFirestore()
+                .collection(Constants.FIRESTORE.commentsCollection)
+                .document(commentModel.id ?: "")
+
+            commentReference
+                .update(
+                    mapOf(
+                        "body" to commentModel.body,
+                        "spoiler" to commentModel.isSpoiler
+                    )
+                ).addOnCompleteListener {
+                    updateResult = if (it.isSuccessful) {
+                        Resource.success(
+                            commentModel.id,
+                            StatusModel(
+                                true,
+                                null,
+                                R.string.comment_updated_with_successfully
+                            )
+                        )
+                    } else {
+                        Resource.error(
+                            "Error",
+                            null,
+                            StatusModel(
+                                false,
+                                Constants.ERROR_TYPES.couldNotReachTheDiscussionPostComment,
+                                R.string.error
+                            )
+                        )
+                    }
+                }.await()
+
+        } catch (e: Exception) {
+            updateResult = Resource.error(
+                "Error",
+                null,
+                StatusModel(
+                    false,
+                    Constants.ERROR_TYPES.couldNotReachTheDiscussionPostComment,
+                    R.string.error
+                )
+            )
+        }
+        return updateResult
+    }
+
+    override suspend fun deleteComment(commentId: String): StatusModel {
+        val comment = getCommentById(commentId)
+        val postRef =
+            firebaseFirestore.getFirebaseFirestore().collection(Constants.FIRESTORE.postsCollection)
+                .document(comment.data?.postId ?: "")
+        postRef.update(
+            "comments",
+            FieldValue.arrayRemove(comment.data?.id ?: "")
+        ).addOnCompleteListener { }.await()
+        postRef.update(
+            "commentsQuantity",
+            FieldValue.increment(-1)
+        ).addOnCompleteListener { }.await()
+        val result = firebaseFirestore.getFirebaseFirestore()
+            .collection(Constants.FIRESTORE.commentsCollection)
+            .document(commentId)
+            .update(
+                "active",
+                false
+            ).isSuccessful
+        return if (result) {
+            StatusModel(true, null, R.string.comment_deleted_with_success)
+        } else {
+            StatusModel(
+                false,
+                Constants.ERROR_TYPES.couldNotReachTheDiscussionPostComment,
+                R.string.error
+            )
+        }
     }
 }

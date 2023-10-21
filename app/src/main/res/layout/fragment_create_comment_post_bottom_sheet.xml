@@ -87,7 +87,6 @@
         android:id="@+id/button_comment"
         style="@style/CustomProviderButton"
         android:backgroundTint="@color/color_primary"
-        android:text="@string/add_comment"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
