@@ -1,6 +1,7 @@
 package com.nomargin.cynema.data.repository
 
 import com.google.firebase.firestore.FieldValue
+import com.nomargin.cynema.BuildConfig
 import com.nomargin.cynema.R
 import com.nomargin.cynema.data.local.entity.CommentModel
 import com.nomargin.cynema.data.remote.firebase.authentication.FirebaseAuthUseCase
@@ -26,14 +27,16 @@ class CommentRepositoryImpl @Inject constructor(
     private lateinit var createCommentResult: Resource<String>
     private val randomUUID = UUID.randomUUID().toString()
     private lateinit var updateResult: Resource<String>
+    private val commentDatabase = firebaseFirestore.getFirebaseFirestore()
+        .collection("${Constants.FIRESTORE.rootCollection}/${BuildConfig.FIREBASE_FLAVOR_COLLECTION}/${Constants.FIRESTORE.commentsCollection}")
+    private val postDatabase = firebaseFirestore.getFirebaseFirestore()
+        .collection("${Constants.FIRESTORE.rootCollection}/${BuildConfig.FIREBASE_FLAVOR_COLLECTION}/${Constants.FIRESTORE.postsCollection}")
 
     override suspend fun publishComment(commentModel: CommentModel): Resource<String> {
         val validateCommentAttributes = validateAttributes.validateComment(commentModel)
-        val postsDatabase = firebaseFirestore.getFirebaseFirestore()
-            .collection(Constants.FIRESTORE.postsCollection)
-            .document(commentModel.postId)
-        val commentsDatabase = firebaseFirestore.getFirebaseFirestore()
-            .collection(Constants.FIRESTORE.commentsCollection)
+        val postsDatabase = postDatabase
+        .document(commentModel.postId)
+        val commentsDatabase = commentDatabase
             .document(randomUUID)
 
         if (validateCommentAttributes.isValid) {
@@ -95,8 +98,7 @@ class CommentRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getAllComments(postId: String): Resource<List<CommentDatabaseModel>> {
-        val comments = firebaseFirestore.getFirebaseFirestore()
-            .collection(Constants.FIRESTORE.commentsCollection)
+        val comments = commentDatabase
             .whereEqualTo("postId", postId)
             .whereEqualTo("active", true)
             .get()
@@ -124,8 +126,7 @@ class CommentRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getCommentById(commentId: String): Resource<CommentDatabaseModel> {
-        val comment = firebaseFirestore.getFirebaseFirestore()
-            .collection(Constants.FIRESTORE.commentsCollection)
+        val comment = commentDatabase
             .whereEqualTo("id", commentId)
             .get()
             .addOnCompleteListener { }.await()
@@ -160,9 +161,7 @@ class CommentRepositoryImpl @Inject constructor(
         )
         val commentData = getCommentById(commentId)
         val commentReference =
-            firebaseFirestore
-                .getFirebaseFirestore()
-                .collection(Constants.FIRESTORE.commentsCollection)
+            commentDatabase
                 .document(commentId)
         var hasVoted = false
         var votedType: Constants.VOTE_TYPE? = null
@@ -204,7 +203,7 @@ class CommentRepositoryImpl @Inject constructor(
 
         val userReference = firebaseFirestore
             .getFirebaseFirestore()
-            .collection(Constants.FIRESTORE.usersCollection)
+            .collection("${Constants.FIRESTORE.rootCollection}/${BuildConfig.FIREBASE_FLAVOR_COLLECTION}/${Constants.FIRESTORE.usersCollection}")
             .document(firebaseAuth.getFirebaseAuth().currentUser?.uid ?: "")
 
         return if (userReference.get().addOnCompleteListener { }.await().exists()) {
@@ -247,9 +246,7 @@ class CommentRepositoryImpl @Inject constructor(
 
     override suspend fun updateComment(commentModel: CommentModel): Resource<String> {
         try {
-            val commentReference = firebaseFirestore
-                .getFirebaseFirestore()
-                .collection(Constants.FIRESTORE.commentsCollection)
+            val commentReference = commentDatabase
                 .document(commentModel.id ?: "")
 
             commentReference
@@ -298,7 +295,7 @@ class CommentRepositoryImpl @Inject constructor(
     override suspend fun deleteComment(commentId: String): StatusModel {
         val comment = getCommentById(commentId)
         val postRef =
-            firebaseFirestore.getFirebaseFirestore().collection(Constants.FIRESTORE.postsCollection)
+            firebaseFirestore.getFirebaseFirestore().collection("${Constants.FIRESTORE.rootCollection}/${BuildConfig.FIREBASE_FLAVOR_COLLECTION}/${Constants.FIRESTORE.postsCollection}")
                 .document(comment.data?.postId ?: "")
         postRef.update(
             "comments",
@@ -308,8 +305,7 @@ class CommentRepositoryImpl @Inject constructor(
             "commentsQuantity",
             FieldValue.increment(-1)
         ).addOnCompleteListener { }.await()
-        val result = firebaseFirestore.getFirebaseFirestore()
-            .collection(Constants.FIRESTORE.commentsCollection)
+        val result = commentDatabase
             .document(commentId)
             .update(
                 "active",

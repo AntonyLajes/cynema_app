@@ -1,5 +1,6 @@
 package com.nomargin.cynema.data.repository
 
+import com.nomargin.cynema.BuildConfig
 import com.nomargin.cynema.R
 import com.nomargin.cynema.data.local.entity.PostModel
 import com.nomargin.cynema.data.remote.firebase.authentication.FirebaseAuthUseCase
@@ -26,11 +27,10 @@ class PostRepositoryImpl @Inject constructor(
     private lateinit var updateResult: Resource<String>
     private lateinit var deleteResult: StatusModel
     private val randomUUID = UUID.randomUUID().toString()
+    private val database = firebaseFirestore.getFirebaseFirestore()
+        .collection("${Constants.FIRESTORE.rootCollection}/${BuildConfig.FIREBASE_FLAVOR_COLLECTION}/${Constants.FIRESTORE.postsCollection}")
 
     override suspend fun publishPost(postModel: PostModel): Resource<String> {
-        val database = firebaseFirestore.getFirebaseFirestore()
-            .collection(Constants.FIRESTORE.postsCollection)
-            .document(randomUUID)
 
         val validatePostAttributes = validateAttributes.validatePost(postModel)
 
@@ -52,7 +52,7 @@ class PostRepositoryImpl @Inject constructor(
                 isActive = true
             )
 
-            database.set(post)
+            database.document(randomUUID).set(post)
                 .addOnSuccessListener {
                     createPostResult = Resource.success(
                         randomUUID,
@@ -84,8 +84,7 @@ class PostRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getAllPosts(movieId: String): Resource<List<PostDatabaseModel>> {
-        val posts = firebaseFirestore.getFirebaseFirestore()
-            .collection(Constants.FIRESTORE.postsCollection)
+        val posts = database
             .whereEqualTo("movieId", movieId)
             .whereEqualTo("active", true)
             .get()
@@ -113,8 +112,7 @@ class PostRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getPostById(postId: String): Resource<PostDatabaseModel> {
-        val post = firebaseFirestore.getFirebaseFirestore()
-            .collection(Constants.FIRESTORE.postsCollection)
+        val post = database
             .whereEqualTo("id", postId)
             .whereEqualTo("active", true)
             .get()
@@ -150,9 +148,7 @@ class PostRepositoryImpl @Inject constructor(
         )
         val postData = getPostById(postId)
         val postReference =
-            firebaseFirestore
-                .getFirebaseFirestore()
-                .collection(Constants.FIRESTORE.postsCollection)
+            database
                 .document(postId)
         var hasVoted = false
         var votedType: Constants.VOTE_TYPE? = null
@@ -190,9 +186,7 @@ class PostRepositoryImpl @Inject constructor(
             }
         }
 
-        val userReference = firebaseFirestore
-            .getFirebaseFirestore()
-            .collection(Constants.FIRESTORE.usersCollection)
+        val userReference = database
             .document(firebaseAuth.getFirebaseAuth().currentUser?.uid ?: "")
 
         return if (userReference.get().addOnCompleteListener { }.await().exists()) {
@@ -234,9 +228,7 @@ class PostRepositoryImpl @Inject constructor(
 
     override suspend fun updatePost(postModel: PostModel): Resource<String> {
         try {
-            val postReference = firebaseFirestore
-                .getFirebaseFirestore()
-                .collection(Constants.FIRESTORE.postsCollection)
+            val postReference = database
                 .document(postModel.id ?: "")
 
             postReference
@@ -284,9 +276,7 @@ class PostRepositoryImpl @Inject constructor(
 
     override suspend fun deletePost(postId: String): StatusModel {
         try {
-            val postReference = firebaseFirestore
-                .getFirebaseFirestore()
-                .collection(Constants.FIRESTORE.postsCollection)
+            val postReference = database
                 .document(postId)
 
             postReference
