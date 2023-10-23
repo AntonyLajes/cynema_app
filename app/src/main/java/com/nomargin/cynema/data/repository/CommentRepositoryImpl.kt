@@ -274,7 +274,19 @@ class CommentRepositoryImpl @Inject constructor(
                     }
 
             } catch (e: Exception) {
-                continuation.resumeWith(Result.failure(e))
+                continuation.resumeWith(
+                    Result.success(
+                        Resource.error(
+                            "Error",
+                            null,
+                            StatusModel(
+                                false,
+                                Constants.ERROR_TYPES.couldNotReachTheDiscussionPostComment,
+                                R.string.error
+                            )
+                        )
+                    )
+                )
             }
         }
     }
@@ -288,25 +300,31 @@ class CommentRepositoryImpl @Inject constructor(
         postRef.update(
             "comments",
             FieldValue.arrayRemove(comment.data?.id ?: "")
-        ).addOnCompleteListener { }.await()
-        postRef.update(
-            "commentsQuantity",
-            FieldValue.increment(-1)
-        ).addOnCompleteListener { }.await()
-        val result = commentDatabase
-            .document(commentId)
-            .update(
-                "active",
-                false
-            ).isSuccessful
-        return if (result) {
-            StatusModel(true, null, R.string.comment_deleted_with_success)
-        } else {
-            StatusModel(
-                false,
-                Constants.ERROR_TYPES.couldNotReachTheDiscussionPostComment,
-                R.string.error
+        ).continueWithTask {
+            postRef.update(
+                "commentsQuantity",
+                FieldValue.increment(-1)
             )
+        }
+        return suspendCoroutine { continuation ->
+            commentDatabase
+                .document(commentId)
+                .update(
+                    "active",
+                    false
+                ).addOnSuccessListener {
+                    continuation.resumeWith(
+                        Result.success(
+                            StatusModel(
+                                true,
+                                null,
+                                R.string.comment_deleted_with_success
+                            )
+                        )
+                    )
+                }.addOnFailureListener {
+                    continuation.resumeWith(Result.failure(it))
+                }
         }
     }
 }

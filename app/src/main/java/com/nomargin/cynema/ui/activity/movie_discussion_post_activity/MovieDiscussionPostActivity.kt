@@ -106,7 +106,7 @@ class MovieDiscussionPostActivity : AppCompatActivity(), View.OnClickListener, O
     }
 
     override fun onAddCommentClicked() {
-        getComments()
+        getPostDetails()
     }
 
     private fun finishShimmerLayout() {
