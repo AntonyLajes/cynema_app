@@ -17,4 +17,6 @@ interface ProfileRepository {
     suspend fun checkUserUsername(username: String): StatusModel?
 
     suspend fun getUserData(userId: String): Resource<UserProfileDataModel>
+
+    suspend fun handlerFavoriteMovies(movieId: String): Resource<StatusModel>
 }

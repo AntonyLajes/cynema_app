@@ -170,4 +170,6 @@
     <string name="editing_your_comment_on">Editing your comment on</string>
     <string name="coming_soon">Coming soon…</string>
     <string name="search_by_query_movie_item">Search by query movie item</string>
+    <string name="movie_added_to_your_favorites">Movie added to your favorites</string>
+    <string name="movie_removed_from_your_favorites">Movie removed from your favorites</string>
 </resources>

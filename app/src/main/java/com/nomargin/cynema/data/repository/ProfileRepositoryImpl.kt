@@ -1,6 +1,7 @@
 package com.nomargin.cynema.data.repository
 
 import android.net.Uri
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.toObject
 import com.nomargin.cynema.BuildConfig
 import com.nomargin.cynema.R
@@ -158,6 +159,69 @@ class ProfileRepositoryImpl @Inject constructor(
                     R.string.could_not_reach_the_user_data
                 )
             )
+        }
+    }
+
+    override suspend fun handlerFavoriteMovies(
+        movieId: String,
+    ): Resource<StatusModel> {
+        val userData = getUserData(firebaseAuth.getFirebaseAuth().currentUser?.uid.toString())
+        return suspendCoroutine { continuation ->
+            if (userData.statusModel?.isValid == true) {
+                if (userData.data?.favoriteMovies?.contains(movieId) == true) {
+                    database.update(
+                        "favoriteMovies", FieldValue.arrayRemove(movieId)
+                    ).addOnSuccessListener {
+                        continuation.resumeWith(
+                            Result.success(
+                                Resource.success(
+                                    null,
+                                    StatusModel(
+                                        true,
+                                        null,
+                                        R.string.movie_removed_from_your_favorites
+                                    )
+                                )
+                            )
+                        )
+                    }.addOnFailureListener {
+                        continuation.resumeWith(Result.failure(it))
+                    }
+                } else {
+                    database.update(
+                        "favoriteMovies", FieldValue.arrayUnion(movieId)
+                    ).addOnSuccessListener {
+                        continuation.resumeWith(
+                            Result.success(
+                                Resource.success(
+                                    null,
+                                    StatusModel(
+                                        true,
+                                        null,
+                                        R.string.movie_added_to_your_favorites
+                                    )
+                                )
+                            )
+                        )
+                    }.addOnFailureListener {
+                        continuation.resumeWith(Result.failure(it))
+                    }
+                }
+            } else {
+                continuation.resumeWith(
+                    Result.success(
+                        Resource.error(
+                            "Error",
+                            null,
+                            StatusModel(
+                                false,
+                                null,
+                                R.string.error
+                            )
+                        )
+                    )
+                )
+            }
         }
     }
 }
