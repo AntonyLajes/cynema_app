@@ -91,6 +91,8 @@
         android:backgroundTint="@color/custom_low_grey"
         android:paddingHorizontal="8dp"
         android:paddingVertical="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/view_answer"
         app:layout_constraintStart_toStartOf="@id/comment_body"
         app:layout_constraintTop_toBottomOf="@id/comment_body">
 
@@ -114,26 +116,35 @@
 
     </LinearLayout>
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/button_answer"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:layout_marginStart="16dp"
-        android:src="@drawable/ic_answer"
-        android:tint="@color/custom_bold_grey"
-        app:layout_constraintBottom_toBottomOf="@id/view_vote"
-        app:layout_constraintStart_toEndOf="@id/view_vote"
-        app:layout_constraintTop_toTopOf="@id/view_vote" />
-
-    <TextView
-        android:id="@+id/text_answer"
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/view_answer"
+        android:gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="6dp"
-        android:text="@string/answer"
-        android:textColor="@color/custom_bold_grey"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@id/button_answer"
-        app:layout_constraintStart_toEndOf="@id/button_answer" />
+        app:layout_constraintBottom_toBottomOf="@id/view_vote"
+        app:layout_constraintStart_toEndOf="@id/view_vote"
+        app:layout_constraintTop_toTopOf="@id/view_vote">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/button_answer"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/ic_answer"
+            android:tint="@color/custom_bold_grey" />
+
+        <TextView
+            android:id="@+id/text_answer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="6dp"
+            android:text="@string/answer"
+            android:textColor="@color/custom_bold_grey"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/button_answer"
+            app:layout_constraintStart_toEndOf="@id/button_answer" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
