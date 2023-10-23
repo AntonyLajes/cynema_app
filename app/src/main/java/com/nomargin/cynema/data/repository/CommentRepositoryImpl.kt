@@ -16,6 +16,7 @@ import com.nomargin.cynema.util.model.StatusModel
 import kotlinx.coroutines.tasks.await
 import java.util.UUID
 import javax.inject.Inject
+import kotlin.coroutines.suspendCoroutine
 
 class CommentRepositoryImpl @Inject constructor(
     private val firebaseFirestore: FirebaseFirestoreUseCase,
@@ -24,77 +25,76 @@ class CommentRepositoryImpl @Inject constructor(
     private val profileRepository: ProfileRepository,
 ) : CommentRepository {
 
-    private lateinit var createCommentResult: Resource<String>
     private val randomUUID = UUID.randomUUID().toString()
-    private lateinit var updateResult: Resource<String>
     private val commentDatabase = firebaseFirestore.getFirebaseFirestore()
         .collection("${Constants.FIRESTORE.rootCollection}/${BuildConfig.FIREBASE_FLAVOR_COLLECTION}/${Constants.FIRESTORE.commentsCollection}")
     private val postDatabase = firebaseFirestore.getFirebaseFirestore()
         .collection("${Constants.FIRESTORE.rootCollection}/${BuildConfig.FIREBASE_FLAVOR_COLLECTION}/${Constants.FIRESTORE.postsCollection}")
 
     override suspend fun publishComment(commentModel: CommentModel): Resource<String> {
-        val validateCommentAttributes = validateAttributes.validateComment(commentModel)
-        val postsDatabase = postDatabase
-        .document(commentModel.postId)
-        val commentsDatabase = commentDatabase
-            .document(randomUUID)
+        return suspendCoroutine { continuation ->
+            val validateCommentAttributes = validateAttributes.validateComment(commentModel)
+            val postsDatabase = postDatabase
+                .document(commentModel.postId)
+            val commentsDatabase = commentDatabase
+                .document(randomUUID)
 
-        if (validateCommentAttributes.isValid) {
+            if (validateCommentAttributes.isValid) {
 
-            val comment = CommentDatabaseModel(
-                id = randomUUID,
-                userId = firebaseAuth.getFirebaseAuth().currentUser?.uid.toString(),
-                postId = commentModel.postId,
-                body = commentModel.body,
-                isSpoiler = commentModel.isSpoiler,
-                votes = 0,
-                usersWhoVoted = listOf(),
-                answers = listOf(),
-                usersWhoUpVoted = listOf(),
-                usersWhoDownVoted = listOf(),
-                answersQuantity = 0,
-                isActive = true
-            )
+                val comment = CommentDatabaseModel(
+                    id = randomUUID,
+                    userId = firebaseAuth.getFirebaseAuth().currentUser?.uid.toString(),
+                    postId = commentModel.postId,
+                    body = commentModel.body,
+                    isSpoiler = commentModel.isSpoiler,
+                    votes = 0,
+                    usersWhoVoted = listOf(),
+                    answers = listOf(),
+                    usersWhoUpVoted = listOf(),
+                    usersWhoDownVoted = listOf(),
+                    answersQuantity = 0,
+                    isActive = true
+                )
 
-            commentsDatabase.set(comment)
-                .addOnSuccessListener {
-                    postsDatabase.update(
-                        "comments",
-                        FieldValue.arrayUnion(comment.id)
-                    )
-                    postsDatabase.update(
-                        "commentsQuantity",
-                        FieldValue.increment(1)
-                    )
-                    createCommentResult = Resource.success(
-                        randomUUID,
-                        StatusModel(
-                            true,
+                commentsDatabase.set(comment)
+                    .addOnSuccessListener {
+                        postsDatabase.update(
+                            "comments",
+                            FieldValue.arrayUnion(comment.id)
+                        )
+                        postsDatabase.update(
+                            "commentsQuantity",
+                            FieldValue.increment(1)
+                        )
+                        continuation.resumeWith(
+                            Result.success(
+                                Resource.success(
+                                    randomUUID,
+                                    StatusModel(
+                                        true,
+                                        null,
+                                        R.string.comment_created_with_success
+                                    )
+                                )
+                            )
+                        )
+                    }.addOnFailureListener {
+                        continuation.resumeWith(Result.failure(it))
+                    }
+
+
+            } else {
+                continuation.resumeWith(
+                    Result.success(
+                        Resource.error(
+                            "Error",
                             null,
-                            R.string.comment_created_with_success
+                            validateCommentAttributes
                         )
                     )
-                }.addOnFailureListener {
-                    createCommentResult = Resource.error(
-                        "Error",
-                        null,
-                        StatusModel(
-                            false,
-                            null,
-                            R.string.unknown_error
-                        )
-                    )
-                }.await()
-
-
-        } else {
-            createCommentResult = Resource.error(
-                "Error",
-                null,
-                validateCommentAttributes
-            )
+                )
+            }
         }
-        return createCommentResult
     }
 
     override suspend fun getAllComments(postId: String): Resource<List<CommentDatabaseModel>> {
@@ -245,57 +245,45 @@ class CommentRepositoryImpl @Inject constructor(
     }
 
     override suspend fun updateComment(commentModel: CommentModel): Resource<String> {
-        try {
-            val commentReference = commentDatabase
-                .document(commentModel.id ?: "")
+        return suspendCoroutine { continuation ->
+            try {
+                val commentReference = commentDatabase
+                    .document(commentModel.id ?: "")
 
-            commentReference
-                .update(
-                    mapOf(
-                        "body" to commentModel.body,
-                        "spoiler" to commentModel.isSpoiler
-                    )
-                ).addOnCompleteListener {
-                    updateResult = if (it.isSuccessful) {
-                        Resource.success(
-                            commentModel.id,
-                            StatusModel(
-                                true,
-                                null,
-                                R.string.comment_updated_with_successfully
+                commentReference
+                    .update(
+                        mapOf(
+                            "body" to commentModel.body,
+                            "spoiler" to commentModel.isSpoiler
+                        )
+                    ).addOnSuccessListener {
+                        continuation.resumeWith(
+                            Result.success(
+                                Resource.success(
+                                    commentModel.id,
+                                    StatusModel(
+                                        true,
+                                        null,
+                                        R.string.comment_updated_with_successfully
+                                    )
+                                )
                             )
                         )
-                    } else {
-                        Resource.error(
-                            "Error",
-                            null,
-                            StatusModel(
-                                false,
-                                Constants.ERROR_TYPES.couldNotReachTheDiscussionPostComment,
-                                R.string.error
-                            )
-                        )
+                    }.addOnFailureListener {
+                        continuation.resumeWith(Result.failure(it))
                     }
-                }.await()
 
-        } catch (e: Exception) {
-            updateResult = Resource.error(
-                "Error",
-                null,
-                StatusModel(
-                    false,
-                    Constants.ERROR_TYPES.couldNotReachTheDiscussionPostComment,
-                    R.string.error
-                )
-            )
+            } catch (e: Exception) {
+                continuation.resumeWith(Result.failure(e))
+            }
         }
-        return updateResult
     }
 
     override suspend fun deleteComment(commentId: String): StatusModel {
         val comment = getCommentById(commentId)
         val postRef =
-            firebaseFirestore.getFirebaseFirestore().collection("${Constants.FIRESTORE.rootCollection}/${BuildConfig.FIREBASE_FLAVOR_COLLECTION}/${Constants.FIRESTORE.postsCollection}")
+            firebaseFirestore.getFirebaseFirestore()
+                .collection("${Constants.FIRESTORE.rootCollection}/${BuildConfig.FIREBASE_FLAVOR_COLLECTION}/${Constants.FIRESTORE.postsCollection}")
                 .document(comment.data?.postId ?: "")
         postRef.update(
             "comments",
