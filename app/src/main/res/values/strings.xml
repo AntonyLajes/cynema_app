@@ -152,6 +152,7 @@
     <string name="answer">Answer</string>
     <string name="publish_you_comment">Publish you comment</string>
     <string name="nothing_to_show_consider_creating_a_post"><b>Nothing to show.</b>\nConsider <font color="#FF9B3F">creating a post!</font></string>
+    <string name="nothing_found_consider_rewriting_or_spell_checking"><b>Nothing found. </b>\nConsider <font color="#FF9B3F">rewriting or spell checking.</font></string>
     <string name="the_user_is_not_logged_in">Please, signIn before vote.</string>
     <string name="commenting_on">Commenting on</string>
     <string name="post">post</string>
@@ -168,4 +169,5 @@
     <string name="comment_deleted_with_success">Comment deleted with success!</string>
     <string name="editing_your_comment_on">Editing your comment on</string>
     <string name="coming_soon">Coming soon…</string>
+    <string name="search_by_query_movie_item">Search by query movie item</string>
 </resources>

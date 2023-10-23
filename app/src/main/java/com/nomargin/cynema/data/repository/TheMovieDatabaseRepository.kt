@@ -13,5 +13,5 @@ interface TheMovieDatabaseRepository {
     suspend fun getTopRatedMovies(): MovieResponse
     suspend fun getUpcomingMovies(): MovieResponse
     suspend fun getMovieDetails(movieId: String): MovieDetailsModel
-
+    suspend fun getMovieDetailsByQuery(query: String): MovieResponse
 }

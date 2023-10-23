@@ -137,5 +137,6 @@ object Constants {
     object CLASS_TYPE {
         const val carouselModel = 1
         const val movieModel = 2
+        const val movieSearchedDetailsModel = 3
     }
 }

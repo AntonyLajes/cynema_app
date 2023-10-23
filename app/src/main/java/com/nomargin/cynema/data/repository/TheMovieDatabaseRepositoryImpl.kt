@@ -7,7 +7,7 @@ import com.nomargin.cynema.data.remote.retrofit.entity.MovieResponse
 import javax.inject.Inject
 
 class TheMovieDatabaseRepositoryImpl @Inject constructor(
-    private val theMovieDatabaseEndpoints: TheMovieDatabaseEndpoints
+    private val theMovieDatabaseEndpoints: TheMovieDatabaseEndpoints,
 ) : TheMovieDatabaseRepository {
     override suspend fun getMovieGenres(): GenreResponse {
         return theMovieDatabaseEndpoints.getMovieGenres()
@@ -34,6 +34,10 @@ class TheMovieDatabaseRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getMovieDetails(movieId: String): MovieDetailsModel {
-        return theMovieDatabaseEndpoints.getMovieDetails(movieId)
+        return theMovieDatabaseEndpoints.getMovieDetailsById(movieId)
+    }
+
+    override suspend fun getMovieDetailsByQuery(query: String): MovieResponse {
+        return theMovieDatabaseEndpoints.getMovieDetailsByQuery(query)
     }
 }

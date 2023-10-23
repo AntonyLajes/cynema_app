@@ -5,6 +5,7 @@ import com.nomargin.cynema.data.remote.retrofit.entity.MovieDetailsModel
 import com.nomargin.cynema.data.remote.retrofit.entity.MovieResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface TheMovieDatabaseEndpoints {
 
@@ -27,6 +28,10 @@ interface TheMovieDatabaseEndpoints {
     suspend fun getUpcomingMovies(): MovieResponse
 
     @GET("movie/{movie_id}?language=en-US")
-    suspend fun getMovieDetails(@Path("movie_id") movieId: String): MovieDetailsModel
+    suspend fun getMovieDetailsById(@Path("movie_id") movieId: String): MovieDetailsModel
+
+    @GET("search/movie")
+    suspend fun getMovieDetailsByQuery(@Query("query") query: String): MovieResponse
+
 
 }
