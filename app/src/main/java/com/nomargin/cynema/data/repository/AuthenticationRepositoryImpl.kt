@@ -1,32 +1,27 @@
 package com.nomargin.cynema.data.repository
 
-import android.util.Log
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.SignInCredential
 import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.nomargin.cynema.R
-import com.nomargin.cynema.util.model.SignInModel
-import com.nomargin.cynema.util.model.SignUpModel
 import com.nomargin.cynema.data.remote.firebase.authentication.FirebaseAuthUseCase
 import com.nomargin.cynema.data.remote.google.AuthenticationRequestUseCase
 import com.nomargin.cynema.data.usecase.ValidateAttributesUseCase
 import com.nomargin.cynema.util.Constants
 import com.nomargin.cynema.util.Resource
+import com.nomargin.cynema.util.model.SignInModel
+import com.nomargin.cynema.util.model.SignUpModel
 import com.nomargin.cynema.util.model.StatusModel
-import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
+import kotlin.coroutines.suspendCoroutine
 
 class AuthenticationRepositoryImpl @Inject constructor(
     private val firebaseAuth: FirebaseAuthUseCase,
     private val validateAttributes: ValidateAttributesUseCase,
-    private val authenticationRequestUseCaseImpl: AuthenticationRequestUseCase
+    private val authenticationRequestUseCaseImpl: AuthenticationRequestUseCase,
 ) : AuthenticationRepository {
-
-    private lateinit var resultSignUpTask: Resource<StatusModel>
-    private lateinit var resultSignInTask: Resource<StatusModel>
-    private lateinit var resultSendPasswordResetEmailTask: Resource<StatusModel>
 
     override suspend fun verifyLogin(): Resource<FirebaseUser?> {
         val currentUser = firebaseAuth.getFirebaseAuth().currentUser
@@ -53,110 +48,128 @@ class AuthenticationRepositoryImpl @Inject constructor(
     }
 
     override suspend fun signUp(signUpModel: SignUpModel): Resource<StatusModel> {
-        val validatedSignUpAttributes = validateAttributes.validateSignUpAttributes(signUpModel)
-        if (validatedSignUpAttributes.isValid) {
-            try {
-                firebaseAuth.getFirebaseAuth().createUserWithEmailAndPassword(
-                    signUpModel.email,
-                    signUpModel.password
-                ).addOnSuccessListener {
-                    resultSignUpTask = Resource.success(
-                        null,
-                        StatusModel(
-                            true,
-                            null,
-                            R.string.sign_up_with_successfully
+        return suspendCoroutine { continuation ->
+            val validatedSignUpAttributes = validateAttributes.validateSignUpAttributes(signUpModel)
+            if (validatedSignUpAttributes.isValid) {
+                try {
+                    firebaseAuth.getFirebaseAuth().createUserWithEmailAndPassword(
+                        signUpModel.email,
+                        signUpModel.password
+                    ).addOnSuccessListener {
+                        continuation.resumeWith(
+                            Result.success(
+                                Resource.success(
+                                    null,
+                                    StatusModel(
+                                        true,
+                                        null,
+                                        R.string.sign_up_with_successfully
+                                    )
+                                )
+                            )
+                        )
+                    }.addOnFailureListener {
+                        continuation.resumeWith(Result.failure(it))
+                    }
+                } catch (e: Exception) {
+                    continuation.resumeWith(Result.failure(e))
+                }
+            } else {
+                continuation.resumeWith(
+                    Result.success(
+                        Resource.error(
+                            msg = "Error",
+                            data = null,
+                            statusModel = validatedSignUpAttributes
                         )
                     )
-                }.addOnFailureListener {
-                    resultSignUpTask = firebaseOnFailure(it)
-                }.await()
-            } catch (e: Exception) {
-                resultSignUpTask = catchError(e)
-            }
-        } else {
-            resultSignUpTask =
-                Resource.error(
-                    msg = "Error",
-                    data = null,
-                    statusModel = validatedSignUpAttributes
                 )
+            }
         }
-        return resultSignUpTask
     }
 
     override suspend fun signIn(signInModel: SignInModel): Resource<StatusModel> {
-        val validatedSignInAttributes = validateAttributes.validateSignInAttributes(signInModel)
-        if (validatedSignInAttributes.isValid) {
-            try {
-                firebaseAuth.getFirebaseAuth().signInWithEmailAndPassword(
-                    signInModel.email,
-                    signInModel.password
-                ).addOnSuccessListener {
-                    resultSignInTask = Resource.success(
-                        null,
-                        StatusModel(
-                            true,
-                            null,
-                            R.string.auth_with_successfully
+        return suspendCoroutine { continuation ->
+            val validatedSignInAttributes = validateAttributes.validateSignInAttributes(signInModel)
+            if (validatedSignInAttributes.isValid) {
+                try {
+                    firebaseAuth.getFirebaseAuth().signInWithEmailAndPassword(
+                        signInModel.email,
+                        signInModel.password
+                    ).addOnSuccessListener {
+                        continuation.resumeWith(
+                            Result.success(
+                                Resource.success(
+                                    null,
+                                    StatusModel(
+                                        true,
+                                        null,
+                                        R.string.auth_with_successfully
+                                    )
+                                )
+                            )
+                        )
+                    }.addOnFailureListener {
+                        continuation.resumeWith(Result.failure(it))
+                    }
+                } catch (e: Exception) {
+                    continuation.resumeWith(Result.failure(e))
+                }
+            } else {
+                continuation.resumeWith(
+                    Result.success(
+                        Resource.error(
+                            msg = "Error",
+                            data = null,
+                            statusModel = validatedSignInAttributes
                         )
                     )
-                }.addOnFailureListener {
-                    resultSignInTask = firebaseOnFailure(it)
-                }.await()
-            } catch (e: Exception) {
-                resultSignInTask = catchError(e)
+                )
             }
-        } else {
-            resultSignInTask =
-                Resource.error(msg = "Error", data = null, statusModel = validatedSignInAttributes)
         }
-        return resultSignInTask
     }
 
     override suspend fun authWithCredential(credential: SignInCredential): Resource<StatusModel> {
-        val idToken = credential.googleIdToken
-        return when {
-            idToken != null -> {
-                val firebaseCredential = GoogleAuthProvider.getCredential(idToken, null)
-                firebaseAuth.getFirebaseAuth().signInWithCredential(firebaseCredential)
-                    .addOnCompleteListener { task ->
-                        resultSignUpTask = if (task.isSuccessful) {
-                            Resource.success(
-                                null,
-                                StatusModel(
-                                    true,
-                                    null,
-                                    R.string.auth_with_successfully
+        return suspendCoroutine { continuation ->
+            val idToken = credential.googleIdToken
+            when {
+                idToken != null -> {
+                    val firebaseCredential = GoogleAuthProvider.getCredential(idToken, null)
+                    firebaseAuth.getFirebaseAuth().signInWithCredential(firebaseCredential)
+                        .addOnSuccessListener {
+                            continuation.resumeWith(
+                                Result.success(
+                                    Resource.success(
+                                        null,
+                                        StatusModel(
+                                            true,
+                                            null,
+                                            R.string.auth_with_successfully
+                                        )
+                                    )
                                 )
                             )
-                        } else {
-                            Log.w("firebaseAuth", "signInWithCredential:failure", task.exception)
+                        }
+                        .addOnFailureListener {
+                            continuation.resumeWith(Result.failure(it))
+                        }
+                }
+
+                else -> {
+                    continuation.resumeWith(
+                        Result.success(
                             Resource.error(
-                                task.exception?.message.toString(),
+                                "No ID token!",
                                 null,
                                 StatusModel(
                                     false,
                                     Constants.ERROR_TYPES.firebaseCredentialAuthError,
-                                    R.string.auth_failed
+                                    R.string.no_id_token
                                 )
                             )
-                        }
-                    }.await()
-                resultSignUpTask
-            }
-
-            else -> {
-                // Shouldn't happen.
-                Resource.error(
-                    "No ID token!",
-                    null,
-                    StatusModel(
-                        false,
-                        Constants.ERROR_TYPES.firebaseCredentialAuthError,
-                        R.string.no_id_token
+                        )
                     )
-                )
+                }
             }
         }
     }
@@ -192,31 +205,44 @@ class AuthenticationRepositoryImpl @Inject constructor(
     }
 
     override suspend fun sendPasswordResetEmail(email: String): Resource<StatusModel> {
-        val validateSendPasswordResetEmailCredential =
-            validateAttributes.validateSendPasswordResetEmailAttributes(email)
-        if (validateSendPasswordResetEmailCredential.isValid) {
-            try {
-                firebaseAuth.getFirebaseAuth().sendPasswordResetEmail(
-                    email
-                ).addOnSuccessListener {
-                    resultSendPasswordResetEmailTask = Resource.success(
-                        null,
-                        StatusModel(
-                            true,
-                            null,
-                            R.string.sent_password_reset_email_with_success
+        return suspendCoroutine { continuation ->
+            val validateSendPasswordResetEmailCredential =
+                validateAttributes.validateSendPasswordResetEmailAttributes(email)
+            if (validateSendPasswordResetEmailCredential.isValid) {
+                try {
+                    firebaseAuth.getFirebaseAuth().sendPasswordResetEmail(
+                        email
+                    ).addOnSuccessListener {
+                        continuation.resumeWith(
+                            Result.success(
+                                Resource.success(
+                                    null,
+                                    StatusModel(
+                                        true,
+                                        null,
+                                        R.string.sent_password_reset_email_with_success
+                                    )
+                                )
+                            )
+                        )
+                    }.addOnFailureListener {
+                        continuation.resumeWith(Result.failure(it))
+                    }
+                } catch (e: Exception) {
+                    continuation.resumeWith(Result.failure(e))
+                }
+            } else {
+                continuation.resumeWith(
+                    Result.success(
+                        Resource.error(
+                            msg = "Error",
+                            data = null,
+                            statusModel = validateSendPasswordResetEmailCredential
                         )
                     )
-                }.addOnFailureListener {
-                    resultSendPasswordResetEmailTask = firebaseOnFailure(it)
-                }.await()
-            } catch (e: Exception) {
-                resultSendPasswordResetEmailTask = catchError(e)
+                )
             }
-        } else {
-            resultSendPasswordResetEmailTask = Resource.error(msg = "Error", data = null, statusModel = validateSendPasswordResetEmailCredential)
         }
-        return resultSendPasswordResetEmailTask
     }
 
     private fun catchError(exception: Exception): Resource<StatusModel> {
