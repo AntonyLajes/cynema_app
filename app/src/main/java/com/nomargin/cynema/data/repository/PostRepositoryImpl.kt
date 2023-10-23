@@ -15,72 +15,76 @@ import com.nomargin.cynema.util.model.StatusModel
 import kotlinx.coroutines.tasks.await
 import java.util.UUID
 import javax.inject.Inject
+import kotlin.coroutines.suspendCoroutine
 
 class PostRepositoryImpl @Inject constructor(
-    private val firebaseFirestore: FirebaseFirestoreUseCase,
+    firebaseFirestore: FirebaseFirestoreUseCase,
     private val firebaseAuth: FirebaseAuthUseCase,
     private val validateAttributes: ValidateAttributesUseCase,
     private val profileRepository: ProfileRepository,
 ) : PostRepository {
 
-    private lateinit var createPostResult: Resource<String>
-    private lateinit var updateResult: Resource<String>
-    private lateinit var deleteResult: StatusModel
     private val randomUUID = UUID.randomUUID().toString()
     private val database = firebaseFirestore.getFirebaseFirestore()
         .collection("${Constants.FIRESTORE.rootCollection}/${BuildConfig.FIREBASE_FLAVOR_COLLECTION}/${Constants.FIRESTORE.postsCollection}")
 
     override suspend fun publishPost(postModel: PostModel): Resource<String> {
 
-        val validatePostAttributes = validateAttributes.validatePost(postModel)
+        return suspendCoroutine { continuation ->
 
-        if (validatePostAttributes.isValid) {
+            val validatePostAttributes = validateAttributes.validatePost(postModel)
 
-            val post = PostDatabaseModel(
-                id = randomUUID,
-                userId = firebaseAuth.getFirebaseAuth().currentUser?.uid.toString(),
-                movieId = postModel.movieId,
-                title = postModel.title,
-                body = postModel.body,
-                isSpoiler = postModel.isSpoiler,
-                votes = 0,
-                usersWhoVoted = listOf(),
-                comments = listOf(),
-                usersWhoUpVoted = listOf(),
-                usersWhoDownVoted = listOf(),
-                commentsQuantity = 0,
-                isActive = true
-            )
+            if (validatePostAttributes.isValid) {
 
-            database.document(randomUUID).set(post)
-                .addOnSuccessListener {
-                    createPostResult = Resource.success(
-                        randomUUID,
-                        StatusModel(
-                            true,
+                val post = PostDatabaseModel(
+                    id = randomUUID,
+                    userId = firebaseAuth.getFirebaseAuth().currentUser?.uid.toString(),
+                    movieId = postModel.movieId,
+                    title = postModel.title,
+                    body = postModel.body,
+                    isSpoiler = postModel.isSpoiler,
+                    votes = 0,
+                    usersWhoVoted = listOf(),
+                    comments = listOf(),
+                    usersWhoUpVoted = listOf(),
+                    usersWhoDownVoted = listOf(),
+                    commentsQuantity = 0,
+                    isActive = true
+                )
+
+                database.document(randomUUID).set(post)
+                    .addOnSuccessListener {
+                        continuation.resumeWith(
+                            Result.success(
+                                Resource.success(
+                                    randomUUID,
+                                    StatusModel(
+                                        true,
+                                        null,
+                                        R.string.profile_updated_with_success
+                                    )
+                                )
+                            )
+                        )
+
+                    }.addOnFailureListener {
+                        continuation.resumeWith(
+                            Result.failure(it)
+                        )
+                    }
+            } else {
+                continuation.resumeWith(
+                    Result.success(
+                        Resource.error(
+                            "Error",
                             null,
-                            R.string.profile_updated_with_success
+                            validatePostAttributes
                         )
                     )
-                }.addOnFailureListener {
-                    createPostResult = Resource.error(
-                        "Error",
-                        null,
-                        StatusModel(
-                            false,
-                            null,
-                            R.string.unknown_error
-                        )
-                    )
-                }.addOnCompleteListener { }.await()
-        } else {
-            createPostResult = Resource.error(
-                "Error",
-                null,
-                validatePostAttributes
-            )
+                )
+            }
+
         }
-        return createPostResult
     }
 
     override suspend fun getAllPosts(movieId: String): Resource<List<PostDatabaseModel>> {
@@ -227,85 +231,70 @@ class PostRepositoryImpl @Inject constructor(
     }
 
     override suspend fun updatePost(postModel: PostModel): Resource<String> {
-        try {
-            val postReference = database
-                .document(postModel.id ?: "")
+        return suspendCoroutine { continuation ->
+            try {
+                val postReference = database
+                    .document(postModel.id ?: "")
 
-            postReference
-                .update(
-                    mapOf(
-                        "title" to postModel.title,
-                        "body" to postModel.body,
-                        "spoiler" to postModel.isSpoiler
-                    )
-                ).addOnCompleteListener {
-                    updateResult = if (it.isSuccessful) {
-                        Resource.success(
-                            postModel.id,
-                            StatusModel(
-                                true,
-                                null,
-                                R.string.post_updated_with_successfully
-                            )
+                postReference
+                    .update(
+                        mapOf(
+                            "title" to postModel.title,
+                            "body" to postModel.body,
+                            "spoiler" to postModel.isSpoiler
                         )
-                    } else {
-                        Resource.error(
-                            "Error",
-                            null,
-                            StatusModel(
-                                false,
-                                Constants.ERROR_TYPES.couldNotReachTheDiscussionPost,
-                                R.string.error
+                    )
+                    .addOnSuccessListener {
+                        continuation.resumeWith(
+                            Result.success(
+                                Resource.success(
+                                    postModel.id,
+                                    StatusModel(
+                                        true,
+                                        null,
+                                        R.string.post_updated_with_successfully
+                                    )
+                                )
                             )
                         )
                     }
-                }.await()
-        } catch (e: Exception) {
-            updateResult = Resource.error(
-                "Error",
-                null,
-                StatusModel(
-                    false,
-                    Constants.ERROR_TYPES.couldNotReachTheDiscussionPost,
-                    R.string.error
-                )
-            )
+                    .addOnFailureListener {
+                        continuation.resumeWith(Result.failure(it))
+                    }
+            } catch (e: Exception) {
+                continuation.resumeWith(Result.failure(e))
+            }
         }
-        return updateResult
     }
 
     override suspend fun deletePost(postId: String): StatusModel {
-        try {
-            val postReference = database
-                .document(postId)
+        return suspendCoroutine { continuation ->
+            try {
+                val postReference = database
+                    .document(postId)
 
-            postReference
-                .update(
-                    mapOf(
-                        "active" to false
-                    )
-                ).addOnCompleteListener {
-                    deleteResult = if (it.isSuccessful) {
-                        StatusModel(
-                            true,
-                            null,
-                            R.string.post_deleted_with_success
+                postReference
+                    .update(
+                        mapOf(
+                            "active" to false
                         )
-                    } else {
-                        StatusModel(
-                            false,
-                            null,
-                            R.string.discussion_posts_was_not_reached
+                    ).addOnSuccessListener {
+                        continuation.resumeWith(
+                            Result.success(
+                                StatusModel(
+                                    true,
+                                    null,
+                                    R.string.post_deleted_with_success
+                                )
+                            )
                         )
                     }
-                }.await()
-        } catch (e: Exception) {
-            deleteResult = StatusModel(
-                false,
-                null,
-                R.string.unknown_error
-            )
+                    .addOnFailureListener {
+                        continuation.resumeWith(Result.failure(it))
+                    }
+            } catch (e: Exception) {
+                continuation.resumeWith(Result.failure(e))
+            }
         }
-        return deleteResult
     }
 }

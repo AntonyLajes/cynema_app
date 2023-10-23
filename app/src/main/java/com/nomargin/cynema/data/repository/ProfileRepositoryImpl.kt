@@ -15,6 +15,7 @@ import com.nomargin.cynema.util.model.StatusModel
 import com.nomargin.cynema.util.model.UserProfileModel
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
+import kotlin.coroutines.suspendCoroutine
 
 class ProfileRepositoryImpl @Inject constructor(
     private val firebaseStorage: FirebaseStorageUseCase,
