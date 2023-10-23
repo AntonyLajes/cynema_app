@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
@@ -22,6 +21,7 @@ import com.nomargin.cynema.ui.adapter.recycler_view.FragmentHomeGenresAdapter
 import com.nomargin.cynema.ui.adapter.recycler_view.MoviePosterAdapter
 import com.nomargin.cynema.ui.adapter.view_pager.MainCarouselAdapter
 import com.nomargin.cynema.util.Constants
+import com.nomargin.cynema.util.FrequencyFunctions
 import com.nomargin.cynema.util.extension.AdapterOnItemClickListener
 import com.nomargin.cynema.util.model.CarouselModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,7 +35,7 @@ class HomeFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         binding.includeShimmerLayout.shimmerLayout.startShimmer()
@@ -95,7 +95,12 @@ class HomeFragment : Fragment() {
         binding.viewPager.adapter =
             MainCarouselAdapter(movies.take(7), object : AdapterOnItemClickListener {
                 override fun <T> onItemClickListener(item: T, position: Int) {
-                    navigateToMovieDetails(Constants.CLASS_TYPE.carouselModel, item, position)
+                    FrequencyFunctions.navigateToMovieDetails(
+                        Constants.CLASS_TYPE.carouselModel,
+                        item,
+                        requireActivity(),
+                        homeViewModel
+                    )
                 }
             })
     }
@@ -115,7 +120,12 @@ class HomeFragment : Fragment() {
         binding.includesHomeFragmentNowPlayingMovies.recyclerView.adapter =
             MoviePosterAdapter(movies.take(7), object : AdapterOnItemClickListener {
                 override fun <T> onItemClickListener(item: T, position: Int) {
-                    navigateToMovieDetails(Constants.CLASS_TYPE.movieModel, item, position)
+                    FrequencyFunctions.navigateToMovieDetails(
+                        Constants.CLASS_TYPE.movieModel,
+                        item,
+                        requireActivity(),
+                        homeViewModel
+                    )
                 }
             })
     }
@@ -128,7 +138,12 @@ class HomeFragment : Fragment() {
         binding.includesHomeFragmentTopRatedMovies.recyclerView.adapter =
             MoviePosterAdapter(movies.take(7), object : AdapterOnItemClickListener {
                 override fun <T> onItemClickListener(item: T, position: Int) {
-                    navigateToMovieDetails(Constants.CLASS_TYPE.movieModel, item, position)
+                    FrequencyFunctions.navigateToMovieDetails(
+                        Constants.CLASS_TYPE.movieModel,
+                        item,
+                        requireActivity(),
+                        homeViewModel
+                    )
                 }
             })
     }
@@ -141,7 +156,12 @@ class HomeFragment : Fragment() {
         binding.includesHomeFragmentUpcomingMovies.recyclerView.adapter =
             MoviePosterAdapter(movies.take(7), object : AdapterOnItemClickListener {
                 override fun <T> onItemClickListener(item: T, position: Int) {
-                    navigateToMovieDetails(Constants.CLASS_TYPE.movieModel, item, position)
+                    FrequencyFunctions.navigateToMovieDetails(
+                        Constants.CLASS_TYPE.movieModel,
+                        item,
+                        requireActivity(),
+                        homeViewModel
+                    )
                 }
             })
     }
@@ -166,7 +186,7 @@ class HomeFragment : Fragment() {
 
                     Glide.with(this)
                         .load(it.profilePicture)
-                        .error(R.drawable.pic_profile_picture)
+                        .error(R.drawable.bg_button)
                         .into(binding.profilePicture)
                 }
 
@@ -187,31 +207,5 @@ class HomeFragment : Fragment() {
                 }
             }
         }
-    }
-
-    private fun <T> navigateToMovieDetails(transactionType: Int, item: T, position: Int){
-        when(transactionType){
-            Constants.CLASS_TYPE.carouselModel -> {
-                val itemToCarousel = item as CarouselModel
-                homeViewModel.saveDataToSharedPreferences(
-                    Constants.LOCAL_STORAGE.sharedPreferencesMovieIdKey,
-                    itemToCarousel.id.toString()
-                )
-            }
-            Constants.CLASS_TYPE.movieModel -> {
-                val itemToMovieModel = item as MovieModel
-                homeViewModel.saveDataToSharedPreferences(
-                    Constants.LOCAL_STORAGE.sharedPreferencesMovieIdKey,
-                    itemToMovieModel.movieId.toString()
-                )
-            }
-        }
-        requireActivity()
-            .findNavController(
-                R.id.fragmentContainerView
-            )
-            .navigate(
-                HomeFragmentDirections.actionHomeFragmentToMovieFragment()
-            )
     }
 }

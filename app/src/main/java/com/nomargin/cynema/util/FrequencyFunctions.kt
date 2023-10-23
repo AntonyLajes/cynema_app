@@ -12,14 +12,23 @@ import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModel
+import androidx.navigation.findNavController
 import androidx.viewbinding.ViewBinding
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FieldValue
 import com.nomargin.cynema.R
+import com.nomargin.cynema.data.local.entity.MovieSearchedDetailsModel
+import com.nomargin.cynema.data.remote.retrofit.entity.MovieModel
 import com.nomargin.cynema.databinding.ActivityMovieDiscussionPostBinding
 import com.nomargin.cynema.databinding.ItemDiscussionPostBinding
 import com.nomargin.cynema.databinding.ItemMovieDiscussionPostCommentBinding
+import com.nomargin.cynema.ui.fragment.home_fragment.HomeFragmentDirections
+import com.nomargin.cynema.ui.fragment.home_fragment.HomeViewModel
+import com.nomargin.cynema.ui.fragment.search_fragment.SearchFragmentDirections
+import com.nomargin.cynema.ui.fragment.search_fragment.SearchViewModel
+import com.nomargin.cynema.util.model.CarouselModel
 import com.nomargin.cynema.util.model.StatusModel
 import java.time.Duration
 import java.time.Instant
@@ -205,7 +214,7 @@ object FrequencyFunctions {
         increment: Long,
         hasVoted: Boolean,
         postReference: DocumentReference,
-        currentUserId: String?
+        currentUserId: String?,
     ): Resource<StatusModel> {
         return if (hasVoted) {
             when (updateType) {
@@ -348,6 +357,52 @@ object FrequencyFunctions {
                 )
             )
         }
+    }
+
+     fun <T> navigateToMovieDetails(
+        transactionType: Int,
+        item: T,
+        activity: Activity,
+        viewModel: ViewModel,
+    ) {
+        val navigate = when (transactionType) {
+            Constants.CLASS_TYPE.carouselModel -> {
+                val itemToCarousel = item as CarouselModel
+                val viewModelType = viewModel as HomeViewModel
+                viewModelType.saveDataToSharedPreferences(
+                    Constants.LOCAL_STORAGE.sharedPreferencesMovieIdKey,
+                    itemToCarousel.id.toString()
+                )
+                HomeFragmentDirections.actionHomeFragmentToMovieFragment()
+            }
+
+            Constants.CLASS_TYPE.movieModel -> {
+                val itemToMovieModel = item as MovieModel
+                val viewModelType = viewModel as HomeViewModel
+                viewModelType.saveDataToSharedPreferences(
+                    Constants.LOCAL_STORAGE.sharedPreferencesMovieIdKey,
+                    itemToMovieModel.movieId.toString()
+                )
+                HomeFragmentDirections.actionHomeFragmentToMovieFragment()
+            }
+
+            else -> {
+                val itemToMovieModel = item as MovieSearchedDetailsModel
+                val viewModelType = viewModel as SearchViewModel
+                viewModelType.saveDataToSharedPreferences(
+                    Constants.LOCAL_STORAGE.sharedPreferencesMovieIdKey,
+                    itemToMovieModel.id.toString()
+                )
+                SearchFragmentDirections.actionSearchFragmentToMovieFragment()
+            }
+        }
+        activity
+            .findNavController(
+                R.id.fragmentContainerView
+            )
+            .navigate(
+                navigate
+            )
     }
 
 }

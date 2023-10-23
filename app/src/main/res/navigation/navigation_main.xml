@@ -27,7 +27,11 @@
         android:id="@+id/search_fragment"
         android:name="com.nomargin.cynema.ui.fragment.search_fragment.SearchFragment"
         android:label="fragment_search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_search_fragment_to_movieFragment"
+            app:destination="@id/movieFragment" />
+    </fragment>
     <fragment
         android:id="@+id/favorites_fragment"
         android:name="com.nomargin.cynema.ui.fragment.favorites_fragment.FavoritesFragment"
