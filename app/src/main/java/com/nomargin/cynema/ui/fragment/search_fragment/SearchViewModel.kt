@@ -24,7 +24,6 @@ class SearchViewModel @Inject constructor(
         MutableLiveData()
     val popularMoviesResult: LiveData<MovieSearchedAppearanceModel> = _popularMoviesResult
 
-
     fun doSearch(query: String?) = viewModelScope.launch {
         query?.let {
             _movieSearchByQueryResult.value = theMovieDatabaseApiUseCase.getMovieDetailsByQuery(it)

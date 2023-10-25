@@ -7,14 +7,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.nomargin.cynema.R
-import com.nomargin.cynema.data.local.entity.MovieSearchedAppearanceModel
 import com.nomargin.cynema.data.local.entity.MovieSearchedDetailsModel
 import com.nomargin.cynema.databinding.ItemSearchByQueryResultBinding
 import com.nomargin.cynema.util.Constants
 import com.nomargin.cynema.util.extension.AdapterOnItemClickListener
 
 class MovieSearchPosterAdapter(
-    private var movieDetailsList: MovieSearchedAppearanceModel,
+    private var movieDetailsList: List<MovieSearchedDetailsModel>,
     private val onItemClickListener: AdapterOnItemClickListener,
 ) : RecyclerView.Adapter<MovieSearchPosterAdapter.MyViewHolder>() {
 
@@ -31,7 +30,7 @@ class MovieSearchPosterAdapter(
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val currentItem = movieDetailsList.results[position]
+        val currentItem = movieDetailsList[position]
         holder.item.movieName.text = currentItem.title
         Glide.with(parentContext!!)
             .load(Constants.TMDB_PATH_URLs.posterPathUrl + currentItem.backgroundPath)
@@ -50,9 +49,9 @@ class MovieSearchPosterAdapter(
         }
     }
 
-    override fun getItemCount(): Int = movieDetailsList.results.size
+    override fun getItemCount(): Int = movieDetailsList.size
 
-    fun setSearchedMovies(searchedMovies: MovieSearchedAppearanceModel) {
+    fun setSearchedMovies(searchedMovies: List<MovieSearchedDetailsModel>) {
         movieDetailsList = searchedMovies
         notifyDataSetChanged()
     }

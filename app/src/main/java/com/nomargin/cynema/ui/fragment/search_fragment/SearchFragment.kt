@@ -57,22 +57,24 @@ class SearchFragment : Fragment() {
 
     private fun updateMovieSearchPosterAdapter(movieSearchResult: MovieSearchedAppearanceModel?) {
         movieSearchResult?.let {
-            movieSearchPosterAdapter.setSearchedMovies(it)
+            movieSearchPosterAdapter.setSearchedMovies(it.results)
         }
     }
 
     private fun initMovieSearchPosterAdapter(movieDetailsByQueryModel: MovieSearchedAppearanceModel) {
         movieSearchPosterAdapter =
-            MovieSearchPosterAdapter(movieDetailsByQueryModel, object : AdapterOnItemClickListener {
-                override fun <T> onItemClickListener(item: T, position: Int) {
-                    FrequencyFunctions.navigateToMovieDetails(
-                        Constants.CLASS_TYPE.movieSearchedDetailsModel,
-                        item,
-                        requireActivity(),
-                        searchViewModel
-                    )
-                }
-            })
+            MovieSearchPosterAdapter(
+                movieDetailsByQueryModel.results,
+                object : AdapterOnItemClickListener {
+                    override fun <T> onItemClickListener(item: T, position: Int) {
+                        FrequencyFunctions.navigateToMovieDetails(
+                            Constants.CLASS_TYPE.movieSearchedDetailsModel,
+                            item,
+                            requireActivity(),
+                            searchViewModel
+                        )
+                    }
+                })
         binding.searchRecyclerView.adapter = movieSearchPosterAdapter
         binding.searchRecyclerView.layoutManager = LinearLayoutManager(requireContext())
     }

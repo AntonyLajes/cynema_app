@@ -152,6 +152,7 @@
     <string name="answer">Answer</string>
     <string name="publish_you_comment">Publish you comment</string>
     <string name="nothing_to_show_consider_creating_a_post"><b>Nothing to show.</b>\nConsider <font color="#FF9B3F">creating a post!</font></string>
+    <string name="nothing_to_show_consider_add_a_movie_to_your_favorites"><b>Nothing to show.</b>\nConsider <font color="#FF9B3F">add a movie to your favorites!</font></string>
     <string name="nothing_found_consider_rewriting_or_spell_checking"><b>Nothing found. </b>\nConsider <font color="#FF9B3F">rewriting or spell checking.</font></string>
     <string name="the_user_is_not_logged_in">Please, signIn before vote.</string>
     <string name="commenting_on">Commenting on</string>
@@ -174,4 +175,6 @@
     <string name="movie_removed_from_your_favorites">Movie removed from your favorites</string>
     <string name="movie_is_not_in_user_favorites">Movie is not in the user favorites.</string>
     <string name="movie_is_in_user_favorites">Movie is in the user favorites.</string>
+    <string name="user_has_not_movie_added_to_favorite_list">User has not movie added to favorite list.</string>
+    <string name="favorite_movies_successfully_got">Favorite movies successfully got</string>
 </resources>

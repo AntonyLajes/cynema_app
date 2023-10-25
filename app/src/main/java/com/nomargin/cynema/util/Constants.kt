@@ -138,5 +138,6 @@ object Constants {
         const val carouselModel = 1
         const val movieModel = 2
         const val movieSearchedDetailsModel = 3
+        const val favoriteMovieSearchedDetailsModel = 4
     }
 }
