@@ -26,6 +26,8 @@ class MovieDetailsViewModel @Inject constructor(
     val movieDetails: LiveData<MovieDetailsModel> = _movieDetails
     private var _favoriteHandlerResult: MutableLiveData<StatusModel?> = MutableLiveData()
     val favoriteHandlerResult: LiveData<StatusModel?> = _favoriteHandlerResult
+    private var _isMovieFavorite: MutableLiveData<StatusModel?> = MutableLiveData()
+    val isMovieFavorite: LiveData<StatusModel?> = _isMovieFavorite
 
     fun getDataFromSharedPreferences(key: String, defaultValue: String) = viewModelScope.launch {
         getMovieDetails(sharedPreferencesRepository.getString(key, defaultValue) ?: "")
@@ -33,6 +35,7 @@ class MovieDetailsViewModel @Inject constructor(
 
     private fun getMovieDetails(movieId: String) = viewModelScope.launch {
         _movieDetails.value = theMovieDatabaseApiUseCase.getMovieDetails(movieId)
+        getUserData()
     }
 
     fun addMovieToFavorites() = viewModelScope.launch {
@@ -42,9 +45,9 @@ class MovieDetailsViewModel @Inject constructor(
         }
     }
 
-    fun getUserData() = viewModelScope.launch {
+    private fun getUserData() = viewModelScope.launch {
         movieDetails.value?.id.let {
-            _favoriteHandlerResult.value =
+            _isMovieFavorite.value =
                 profileUseCase.verifyIfMovieIsFavorite(it.toString())
         }
     }

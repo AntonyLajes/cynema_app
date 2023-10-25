@@ -23,7 +23,7 @@ class ProfileUseCaseImpl @Inject constructor(
                             StatusModel(
                                 true,
                                 null,
-                                R.string.movie_added_to_your_favorites
+                                R.string.movie_is_in_user_favorites
                             )
                         )
                     )
@@ -33,7 +33,7 @@ class ProfileUseCaseImpl @Inject constructor(
                             StatusModel(
                                 true,
                                 null,
-                                R.string.movie_removed_from_your_favorites
+                                R.string.movie_is_not_in_user_favorites
                             )
                         )
                     )

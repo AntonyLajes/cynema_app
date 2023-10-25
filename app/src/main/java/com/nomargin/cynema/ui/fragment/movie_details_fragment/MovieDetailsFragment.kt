@@ -16,7 +16,7 @@ import com.nomargin.cynema.data.remote.retrofit.entity.MovieDetailsModel
 import com.nomargin.cynema.databinding.FragmentMovieDetailsBinding
 import com.nomargin.cynema.ui.adapter.recycler_view.FragmentMovieDetailsGenresAdapter
 import com.nomargin.cynema.util.Constants
-import com.nomargin.cynema.util.FrequencyFunctions
+import com.nomargin.cynema.util.FrequencyFunctions.makeToast
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.DecimalFormat
 
@@ -42,7 +42,6 @@ class MovieDetailsFragment : Fragment() {
             Constants.LOCAL_STORAGE.sharedPreferencesMovieIdKey,
             ""
         )
-        movieDetailsViewModel.getUserData()
         binding.buttonAddToFavorite.setOnClickListener {
             addMovieToFavorites()
         }
@@ -71,7 +70,22 @@ class MovieDetailsFragment : Fragment() {
                             changeFavoriteButton(R.drawable.ic_add_bookmark)
                         }
                     }
-                    FrequencyFunctions.makeToast(requireContext(), it.message)
+                    makeToast(requireContext(), it.message)
+                }
+            }
+        }
+        movieDetailsViewModel.isMovieFavorite.observe(viewLifecycleOwner) { isMovieFavorite ->
+            isMovieFavorite?.let {
+                if (it.isValid) {
+                    when (it.message) {
+                        R.string.movie_is_in_user_favorites -> {
+                            changeFavoriteButton(R.drawable.ic_added_bookmark)
+                        }
+
+                        else -> {
+                            changeFavoriteButton(R.drawable.ic_add_bookmark)
+                        }
+                    }
                 }
             }
         }
