@@ -8,7 +8,7 @@ data class UserProfileDataModel(
     val lastName: String? = null,
     val biography: String? = null,
     val profilePicture: String? = null,
-    val posts: List<Int>? = null,
+    val posts: List<String>? = null,
     val postsQuantity: Int? = null,
     val votedPosts: List<String?> = listOf(),
     @field:JvmField

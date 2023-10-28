@@ -3,11 +3,13 @@ package com.nomargin.cynema.data.usecase
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.nomargin.cynema.data.local.entity.PostAppearanceModel
+import com.nomargin.cynema.data.local.entity.PostModel
 import com.nomargin.cynema.data.remote.firebase.authentication.FirebaseAuthUseCase
 import com.nomargin.cynema.data.repository.PostRepository
 import com.nomargin.cynema.data.repository.ProfileRepository
 import com.nomargin.cynema.util.Constants
 import com.nomargin.cynema.util.FrequencyFunctions
+import com.nomargin.cynema.util.Resource
 import com.nomargin.cynema.util.Status
 import javax.inject.Inject
 
@@ -18,6 +20,23 @@ class PostUseCaseImpl @Inject constructor(
     firebaseAuth: FirebaseAuthUseCase,
 ) : PostUseCase {
     private val currentUser = firebaseAuth.getFirebaseAuth().currentUser
+
+    override suspend fun publishPost(postModel: PostModel): Resource<String> {
+        val publishPostResult = postRepository.publishPost(postModel)
+        return if (publishPostResult.status == Status.SUCCESS) {
+            val updateResult = profileRepository.updateProfileWhenUserCreateAPoster(
+                Constants.UPDATE_TYPE.AddPost,
+                publishPostResult.data ?: ""
+            )
+            if (updateResult?.isValid == true) {
+                publishPostResult
+            } else {
+                publishPostResult
+            }
+        } else {
+            publishPostResult
+        }
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun getPosts(movieId: String): List<PostAppearanceModel> {
@@ -92,5 +111,14 @@ class PostUseCaseImpl @Inject constructor(
         } else {
             null
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override suspend fun getPostByIdList(postIdList: List<String>): List<PostAppearanceModel> {
+        val postList: MutableList<PostAppearanceModel> = mutableListOf()
+        for (postId in postIdList) {
+            getPostById(postId)?.let { postList.add(it) }
+        }
+        return postList
     }
 }

@@ -1,8 +1,11 @@
 package com.nomargin.cynema.data.usecase
 
+import com.nomargin.cynema.data.remote.firebase.authentication.FirebaseAuthUseCase
+import com.nomargin.cynema.data.remote.firebase.entity.UserProfileDataModel
+import com.nomargin.cynema.data.repository.ProfileRepository
+import com.nomargin.cynema.util.Status
 import com.nomargin.cynema.R
 import com.nomargin.cynema.data.local.entity.MovieSearchedDetailsModel
-import com.nomargin.cynema.data.remote.firebase.authentication.FirebaseAuthUseCase
 import com.nomargin.cynema.data.repository.ProfileRepository
 import com.nomargin.cynema.util.Constants
 import com.nomargin.cynema.util.Resource
@@ -11,13 +14,27 @@ import javax.inject.Inject
 import kotlin.coroutines.suspendCoroutine
 
 class ProfileUseCaseImpl @Inject constructor(
-    private val profileRepository: ProfileRepository,
+    private var profileRepository: ProfileRepository,
+    private var firebaseAuthUseCase: FirebaseAuthUseCase,
     private val theMovieDatabaseApiUseCase: TheMovieDatabaseApiUseCase,
-    private val firebaseAuth: FirebaseAuthUseCase,
 ) : ProfileUseCase {
+
+    override suspend fun getUserData(): UserProfileDataModel? {
+        val profileData = profileRepository.getUserData(
+            firebaseAuthUseCase.getFirebaseAuth().currentUser?.uid ?: ""
+        )
+        return suspendCoroutine { continuation ->
+
+            if (profileData.status == Status.SUCCESS) {
+                continuation.resumeWith(Result.success(profileData.data))
+            } else {
+                continuation.resumeWith(Result.success(null))
+            }
+        }
+    }
+  
     override suspend fun verifyIfMovieIsFavorite(movieId: String): StatusModel {
-        val userData =
-            profileRepository.getUserData(firebaseAuth.getFirebaseAuth().currentUser?.uid.toString())
+        val userData = profileRepository.getUserData(firebaseAuth.getFirebaseAuth().currentUser?.uid.toString())
         return suspendCoroutine { continuation ->
             if (userData.statusModel?.isValid == true) {
                 if (userData.data?.favoriteMovies?.contains(movieId) == true) {

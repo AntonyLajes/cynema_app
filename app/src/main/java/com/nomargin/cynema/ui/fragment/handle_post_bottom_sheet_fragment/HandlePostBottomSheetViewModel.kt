@@ -46,7 +46,7 @@ class HandlePostBottomSheetViewModel @Inject constructor(
             isSpoiler = checked,
             movieId = movieId ?: ""
         )
-        _createPostStatus.value = postRepository.publishPost(postModel)
+        _createPostStatus.value = postUseCase.publishPost(postModel)
 
     }
 

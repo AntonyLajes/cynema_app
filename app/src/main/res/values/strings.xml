@@ -161,6 +161,8 @@
     <string name="delete">Delete</string>
     <string name="save">Save</string>
     <string name="post_updated_with_successfully">Post updated with successfully</string>
+    <string name="post_created_with_successfully">Post created with successfully</string>
+    <string name="post_deleted_with_successfully">Post deleted with successfully</string>
     <string name="comment_updated_with_successfully">Comment updated with successfully</string>
     <string name="this_action_cannot_be_undone_do_you_really_want_to_delete_the_post">This action cannot be undone. \nDo you really want to delete the post?</string>
     <string name="this_action_cannot_be_undone_do_you_really_want_to_delete_the_comment">This action cannot be undone. \nDo you really want to delete the comment?</string>
@@ -171,6 +173,11 @@
     <string name="editing_your_comment_on">Editing your comment on</string>
     <string name="coming_soon">Coming soon…</string>
     <string name="search_by_query_movie_item">Search by query movie item</string>
+    <string name="edit_profile">Edit profile</string>
+    <string name="see_profile_posts">See profile posts</string>
+    <string name="post_list">Post List</string>
+    <string name="posts">Posts</string>
+    <string name="nothing_to_show_the_user_has_not_posted_yet"><b>Nothing to show.</b>\nThe user <font color="#FF9B3F">has not</font> posted yet.</string>
     <string name="movie_added_to_your_favorites">Movie added to your favorites</string>
     <string name="movie_removed_from_your_favorites">Movie removed from your favorites</string>
     <string name="movie_is_not_in_user_favorites">Movie is not in the user favorites.</string>

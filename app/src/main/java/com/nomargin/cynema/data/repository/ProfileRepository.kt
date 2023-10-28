@@ -2,6 +2,7 @@ package com.nomargin.cynema.data.repository
 
 import android.net.Uri
 import com.nomargin.cynema.data.remote.firebase.entity.UserProfileDataModel
+import com.nomargin.cynema.util.Constants
 import com.nomargin.cynema.util.Resource
 import com.nomargin.cynema.util.model.StatusModel
 import com.nomargin.cynema.util.model.UserProfileModel
@@ -18,5 +19,11 @@ interface ProfileRepository {
 
     suspend fun getUserData(userId: String): Resource<UserProfileDataModel>
 
+    suspend fun updateProfileWhenUserCreateAPoster(
+        updateType: Constants.UPDATE_TYPE,
+        postId: String
+    ): StatusModel?
+
     suspend fun handlerFavoriteMovies(movieId: String): Resource<StatusModel>
+
 }
