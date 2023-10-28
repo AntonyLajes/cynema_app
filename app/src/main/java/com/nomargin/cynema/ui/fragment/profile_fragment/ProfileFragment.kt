@@ -63,7 +63,7 @@ class ProfileFragment : Fragment() {
 
     private fun viewPagerInflater() {
         viewPager.adapter = viewPagerAdapter
-        viewPagerAdapter.setFragment(postListFragment, getString(R.string.post_list))
+        viewPagerAdapter.setFragment(postListFragment, getString(R.string.posts))
         viewPager.offscreenPageLimit = viewPagerAdapter.itemCount
         val mediator = TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.text = viewPagerAdapter.getTitle(position)

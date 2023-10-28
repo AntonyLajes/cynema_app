@@ -189,43 +189,45 @@ class PostRepositoryImpl @Inject constructor(
             }
         }
 
-        val userReference = database
-            .document(firebaseAuth.getFirebaseAuth().currentUser?.uid ?: "")
+        return suspendCoroutine { continuation ->
 
-        return if (userReference.get().addOnCompleteListener { }.await().exists()) {
-            when (updateType) {
-                Constants.UPDATE_TYPE.Upvote -> {
-                    FrequencyFunctions.incrementAndDecrementHandler(
-                        updateType,
-                        votedType,
-                        1,
-                        hasVoted,
-                        postReference,
-                        firebaseAuth.getFirebaseAuth().currentUser?.uid
-                    )
-                }
+            database.document(
+                firebaseAuth.getFirebaseAuth().currentUser?.uid ?: ""
+            ).get()
+                .addOnSuccessListener {
+                    val result = when (updateType) {
+                        Constants.UPDATE_TYPE.Upvote -> {
+                            FrequencyFunctions.incrementAndDecrementHandler(
+                                updateType,
+                                votedType,
+                                1,
+                                hasVoted,
+                                postReference,
+                                firebaseAuth.getFirebaseAuth().currentUser?.uid
+                            )
+                        }
 
-                else -> {
-                    FrequencyFunctions.incrementAndDecrementHandler(
-                        updateType,
-                        votedType,
-                        -1,
-                        hasVoted,
-                        postReference,
-                        firebaseAuth.getFirebaseAuth().currentUser?.uid
+                        else -> {
+                            FrequencyFunctions.incrementAndDecrementHandler(
+                                updateType,
+                                votedType,
+                                -1,
+                                hasVoted,
+                                postReference,
+                                firebaseAuth.getFirebaseAuth().currentUser?.uid
+                            )
+                        }
+                    }
+
+                    continuation.resumeWith(
+                        Result.success(
+                            result
+                        )
                     )
+
+                }.addOnFailureListener {
+                    continuation.resumeWith(Result.failure(it))
                 }
-            }
-        } else {
-            Resource.error(
-                "Error",
-                null,
-                StatusModel(
-                    false,
-                    Constants.ERROR_TYPES.userIsNotLoggedIn,
-                    R.string.user_is_not_logged_in
-                )
-            )
         }
     }
 

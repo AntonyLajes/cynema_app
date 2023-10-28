@@ -112,4 +112,13 @@ class PostUseCaseImpl @Inject constructor(
             null
         }
     }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override suspend fun getPostByIdList(postIdList: List<String>): List<PostAppearanceModel> {
+        val postList: MutableList<PostAppearanceModel> = mutableListOf()
+        for (postId in postIdList) {
+            getPostById(postId)?.let { postList.add(it) }
+        }
+        return postList
+    }
 }

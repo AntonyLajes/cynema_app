@@ -14,4 +14,8 @@ interface PostUseCase {
         updateType: Constants.UPDATE_TYPE,
         postId: String
     ): PostAppearanceModel?
+
+    suspend fun getPostByIdList(
+        postIdList: List<String>
+    ): List<PostAppearanceModel>
 }
