@@ -88,4 +88,16 @@ class TheMovieDatabaseApiUseCaseImpl @Inject constructor(
         }
         return movieSearchedDetailsModel
     }
+
+    override suspend fun getMovieDetailsById(movieId: String): MovieSearchedDetailsModel {
+        val movieResponse = theMovieDatabaseRepository.getMovieDetails(movieId)
+        return MovieSearchedDetailsModel(
+            id = movieResponse.id,
+            title = movieResponse.title,
+            backgroundPath = movieResponse.backdropPath,
+            posterPath = movieResponse.posterPath,
+            releaseDate = movieResponse.releaseDate,
+            genres = movieResponse.genres
+        )
+    }
 }

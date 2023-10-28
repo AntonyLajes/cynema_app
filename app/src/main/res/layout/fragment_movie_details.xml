@@ -39,7 +39,7 @@
             <androidx.appcompat.widget.AppCompatImageButton
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:id="@+id/button_bookmark"
+                android:id="@+id/button_add_to_favorite"
                 android:layout_marginHorizontal="16dp"
                 android:background="@drawable/bg_bookmark_button"
                 android:src="@drawable/ic_add_bookmark"
@@ -54,7 +54,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:textColor="@color/custom_black"
-                app:layout_constraintEnd_toStartOf="@id/button_bookmark"
+                app:layout_constraintEnd_toStartOf="@id/button_add_to_favorite"
                 android:maxLines="1"
                 android:ellipsize="end"
                 android:textSize="22sp"

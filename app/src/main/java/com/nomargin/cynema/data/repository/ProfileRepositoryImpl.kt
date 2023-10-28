@@ -162,7 +162,7 @@ class ProfileRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun updateProfileWhenUserCreateAPoster(
+override suspend fun updateProfileWhenUserCreateAPoster(
         updateType: Constants.UPDATE_TYPE,
         postId: String,
     ): StatusModel? {
@@ -205,6 +205,69 @@ class ProfileRepositoryImpl @Inject constructor(
                         continuation.resumeWith(Result.failure(it))
                     }
                 }
+            }
+        }
+    }
+
+    override suspend fun handlerFavoriteMovies(
+        movieId: String,
+    ): Resource<StatusModel> {
+        val userData = getUserData(firebaseAuth.getFirebaseAuth().currentUser?.uid.toString())
+        return suspendCoroutine { continuation ->
+            if (userData.statusModel?.isValid == true) {
+                if (userData.data?.favoriteMovies?.contains(movieId) == true) {
+                    database.update(
+                        "favoriteMovies", FieldValue.arrayRemove(movieId)
+                    ).addOnSuccessListener {
+                        continuation.resumeWith(
+                            Result.success(
+                                Resource.success(
+                                    null,
+                                    StatusModel(
+                                        true,
+                                        null,
+                                        R.string.movie_removed_from_your_favorites
+                                    )
+                                )
+                            )
+                        )
+                    }.addOnFailureListener {
+                        continuation.resumeWith(Result.failure(it))
+                    }
+                } else {
+                    database.update(
+                        "favoriteMovies", FieldValue.arrayUnion(movieId)
+                    ).addOnSuccessListener {
+                        continuation.resumeWith(
+                            Result.success(
+                                Resource.success(
+                                    null,
+                                    StatusModel(
+                                        true,
+                                        null,
+                                        R.string.movie_added_to_your_favorites
+                                    )
+                                )
+                            )
+                        )
+                    }.addOnFailureListener {
+                        continuation.resumeWith(Result.failure(it))
+                    }
+                }
+            } else {
+                continuation.resumeWith(
+                    Result.success(
+                        Resource.error(
+                            "Error",
+                            null,
+                            StatusModel(
+                                false,
+                                null,
+                                R.string.error
+                            )
+                        )
+                    )
+                )
             }
         }
     }

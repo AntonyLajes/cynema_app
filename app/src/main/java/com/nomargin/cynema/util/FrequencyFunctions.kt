@@ -24,6 +24,8 @@ import com.nomargin.cynema.data.remote.retrofit.entity.MovieModel
 import com.nomargin.cynema.databinding.ActivityMovieDiscussionPostBinding
 import com.nomargin.cynema.databinding.ItemDiscussionPostBinding
 import com.nomargin.cynema.databinding.ItemMovieDiscussionPostCommentBinding
+import com.nomargin.cynema.ui.fragment.favorites_fragment.FavoritesFragmentDirections
+import com.nomargin.cynema.ui.fragment.favorites_fragment.FavoritesViewModel
 import com.nomargin.cynema.ui.fragment.home_fragment.HomeFragmentDirections
 import com.nomargin.cynema.ui.fragment.home_fragment.HomeViewModel
 import com.nomargin.cynema.ui.fragment.search_fragment.SearchFragmentDirections
@@ -359,7 +361,7 @@ object FrequencyFunctions {
         }
     }
 
-     fun <T> navigateToMovieDetails(
+    fun <T> navigateToMovieDetails(
         transactionType: Int,
         item: T,
         activity: Activity,
@@ -386,7 +388,7 @@ object FrequencyFunctions {
                 HomeFragmentDirections.actionHomeFragmentToMovieFragment()
             }
 
-            else -> {
+            Constants.CLASS_TYPE.movieSearchedDetailsModel -> {
                 val itemToMovieModel = item as MovieSearchedDetailsModel
                 val viewModelType = viewModel as SearchViewModel
                 viewModelType.saveDataToSharedPreferences(
@@ -394,6 +396,16 @@ object FrequencyFunctions {
                     itemToMovieModel.id.toString()
                 )
                 SearchFragmentDirections.actionSearchFragmentToMovieFragment()
+            }
+
+            else -> {
+                val itemToMovieModel = item as MovieSearchedDetailsModel
+                val viewModelType = viewModel as FavoritesViewModel
+                viewModelType.saveDataToSharedPreferences(
+                    Constants.LOCAL_STORAGE.sharedPreferencesMovieIdKey,
+                    itemToMovieModel.id.toString()
+                )
+                FavoritesFragmentDirections.actionFavoritesFragmentToMovieFragment()
             }
         }
         activity

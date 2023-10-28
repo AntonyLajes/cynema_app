@@ -36,7 +36,11 @@
         android:id="@+id/favorites_fragment"
         android:name="com.nomargin.cynema.ui.fragment.favorites_fragment.FavoritesFragment"
         android:label="fragment_favorites"
-        tools:layout="@layout/fragment_favorites" />
+        tools:layout="@layout/fragment_favorites" >
+        <action
+            android:id="@+id/action_favorites_fragment_to_movieFragment"
+            app:destination="@id/movieFragment" />
+    </fragment>
     <fragment
         android:id="@+id/profile_fragment"
         android:name="com.nomargin.cynema.ui.fragment.profile_fragment.ProfileFragment"

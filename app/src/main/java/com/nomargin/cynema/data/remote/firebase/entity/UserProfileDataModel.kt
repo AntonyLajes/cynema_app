@@ -13,6 +13,7 @@ data class UserProfileDataModel(
     val votedPosts: List<String?> = listOf(),
     @field:JvmField
     val isProfileUpdated: Boolean? = null,
+    val favoriteMovies: List<String> = listOf()
 )
 
 /*
