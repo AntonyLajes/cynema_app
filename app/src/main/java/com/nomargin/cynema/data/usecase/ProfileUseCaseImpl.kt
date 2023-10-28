@@ -1,27 +1,26 @@
 package com.nomargin.cynema.data.usecase
 
+import com.nomargin.cynema.R
+import com.nomargin.cynema.data.local.entity.MovieSearchedDetailsModel
 import com.nomargin.cynema.data.remote.firebase.authentication.FirebaseAuthUseCase
 import com.nomargin.cynema.data.remote.firebase.entity.UserProfileDataModel
 import com.nomargin.cynema.data.repository.ProfileRepository
-import com.nomargin.cynema.util.Status
-import com.nomargin.cynema.R
-import com.nomargin.cynema.data.local.entity.MovieSearchedDetailsModel
-import com.nomargin.cynema.data.repository.ProfileRepository
 import com.nomargin.cynema.util.Constants
 import com.nomargin.cynema.util.Resource
+import com.nomargin.cynema.util.Status
 import com.nomargin.cynema.util.model.StatusModel
 import javax.inject.Inject
 import kotlin.coroutines.suspendCoroutine
 
 class ProfileUseCaseImpl @Inject constructor(
     private var profileRepository: ProfileRepository,
-    private var firebaseAuthUseCase: FirebaseAuthUseCase,
+    private var firebaseAuth: FirebaseAuthUseCase,
     private val theMovieDatabaseApiUseCase: TheMovieDatabaseApiUseCase,
 ) : ProfileUseCase {
 
     override suspend fun getUserData(): UserProfileDataModel? {
         val profileData = profileRepository.getUserData(
-            firebaseAuthUseCase.getFirebaseAuth().currentUser?.uid ?: ""
+            firebaseAuth.getFirebaseAuth().currentUser?.uid ?: ""
         )
         return suspendCoroutine { continuation ->
 
