@@ -1,5 +1,6 @@
 package com.nomargin.cynema.ui.fragment.profile_fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,13 +14,14 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.nomargin.cynema.R
 import com.nomargin.cynema.data.remote.firebase.entity.UserProfileDataModel
 import com.nomargin.cynema.databinding.FragmentProfileBinding
+import com.nomargin.cynema.ui.activity.create_profile_activity.CreateProfileActivity
 import com.nomargin.cynema.ui.adapter.view_pager.ViewPagerAdapter
 import com.nomargin.cynema.ui.fragment.post_list_fragment.PostListFragment
 import com.nomargin.cynema.util.Constants
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ProfileFragment : Fragment() {
+class ProfileFragment : Fragment(), View.OnClickListener {
 
     private var _binding: FragmentProfileBinding? = null
     private val binding: FragmentProfileBinding get() = _binding!!
@@ -28,6 +30,8 @@ class ProfileFragment : Fragment() {
     private val tabLayout: TabLayout by lazy { binding.tabLayout }
     private val viewPager: ViewPager2 by lazy { binding.viewPager }
     private val postListFragment = PostListFragment()
+    private var userId: String = ""
+    private lateinit var userData: UserProfileDataModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,6 +40,7 @@ class ProfileFragment : Fragment() {
         _binding = FragmentProfileBinding.inflate(inflater)
         observers()
         getUserData()
+        initClicks()
         return binding.root
     }
 
@@ -44,9 +49,42 @@ class ProfileFragment : Fragment() {
         _binding = null
     }
 
+    override fun onClick(view: View) {
+        when (view.id) {
+            binding.buttonEditProfile.id -> {
+                openEditProfileScreen()
+            }
+        }
+    }
+
+    private fun openEditProfileScreen() {
+        val intent = Intent(requireContext(), CreateProfileActivity::class.java)
+        val bundle = Bundle()
+        bundle.putString(
+            Constants.BUNDLE_KEYS.UserId.name,
+            userId
+        )
+        bundle.putString(
+            Constants.BUNDLE_KEYS.UserProfileHandlerType.name,
+            Constants.UPDATE_TYPE.UpdateProfile.name
+        )
+        bundle.putParcelable(
+            Constants.BUNDLE_KEYS.UserData.name,
+            userData
+        )
+        intent.putExtras(bundle)
+        startActivity(intent)
+    }
+
+    private fun initClicks() {
+        binding.buttonEditProfile.setOnClickListener(this)
+    }
+
     private fun observers() {
-        profileViewModel.userData.observe(viewLifecycleOwner) { userData ->
-            userData?.let {
+        profileViewModel.userData.observe(viewLifecycleOwner) { data ->
+            data?.let {
+                userId = it.id ?: ""
+                userData = it
                 fieldsHandler(it)
                 val bundle: Bundle = Bundle()
                     .apply {

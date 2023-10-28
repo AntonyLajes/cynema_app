@@ -1,5 +1,9 @@
 package com.nomargin.cynema.data.remote.firebase.entity
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class UserProfileDataModel(
     val id: String? = null,
     val username: String? = null,
@@ -14,7 +18,7 @@ data class UserProfileDataModel(
     @field:JvmField
     val isProfileUpdated: Boolean? = null,
     val favoriteMovies: List<String> = listOf()
-)
+): Parcelable
 
 /*
     "user_id" to firebaseAuth.getFirebaseAuth().currentUser?.uid.toString(),

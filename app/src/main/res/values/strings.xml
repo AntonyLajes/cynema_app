@@ -184,4 +184,5 @@
     <string name="movie_is_in_user_favorites">Movie is in the user favorites.</string>
     <string name="user_has_not_movie_added_to_favorite_list">User has not movie added to favorite list.</string>
     <string name="favorite_movies_successfully_got">Favorite movies successfully got</string>
+    <string name="edit_your_profile">Edit your profile.</string>
 </resources>

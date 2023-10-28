@@ -33,10 +33,23 @@ class ProfileRepositoryImpl @Inject constructor(
     override suspend fun createProfile(userProfileModel: UserProfileModel): Resource<StatusModel> {
         val validateCreateProfileAttributes =
             validateAttributes.validateUserProfile(userProfileModel)
+        val userData = getUserData(
+            firebaseAuth.getFirebaseAuth().currentUser?.uid.toString()
+        )
         if (validateCreateProfileAttributes.isValid) {
-            val profilePictureLink = userProfileModel.userProfileUri?.let {
-                uploadProfilePicture(it)
-            } ?: ""
+            val profilePictureLink = when {
+                userProfileModel.userProfileUri != null -> {
+                    uploadProfilePicture(userProfileModel.userProfileUri!!)
+                }
+
+                userData.data?.profilePicture?.isNotEmpty() == true -> {
+                    userData.data.profilePicture
+                }
+
+                else -> {
+                    ""
+                }
+            }
             val user = UserProfileDataModel(
                 id = firebaseAuth.getFirebaseAuth().currentUser!!.uid,
                 username = userProfileModel.userUsername,
@@ -45,9 +58,12 @@ class ProfileRepositoryImpl @Inject constructor(
                 lastName = userProfileModel.userLastName,
                 biography = userProfileModel.userBiography,
                 profilePicture = profilePictureLink.toString(),
-                posts = arrayListOf(),
-                postsQuantity = 0,
-                isProfileUpdated = true
+                isProfileUpdated = true,
+                posts = if (userData.data?.posts?.isEmpty() == true){
+                    emptyList()
+                }else{
+                    userData.data?.posts
+                }
             )
 
             database.set(user)
@@ -84,7 +100,7 @@ class ProfileRepositoryImpl @Inject constructor(
     override suspend fun uploadProfilePicture(imageUri: Uri): Uri {
         val storageRef = firebaseStorage.getFirebaseStorage().reference
         val profilePictureRef =
-            storageRef.child("${Constants.STORAGE.profilePictureRoot}${imageUri.lastPathSegment}")
+            storageRef.child("${BuildConfig.FIREBASE_FLAVOR_COLLECTION}${Constants.STORAGE.profilePictureRoot}${imageUri.lastPathSegment}")
         val uploadProfilePicture = profilePictureRef.putFile(imageUri)
         return uploadProfilePicture.continueWithTask { task ->
             if (!task.isSuccessful) {
@@ -100,7 +116,6 @@ class ProfileRepositoryImpl @Inject constructor(
         return database.get().await()
             .exists()
     }
-
 
     override suspend fun checkUserUsername(username: String): StatusModel? {
 
@@ -162,7 +177,7 @@ class ProfileRepositoryImpl @Inject constructor(
         }
     }
 
-override suspend fun updateProfileWhenUserCreateAPoster(
+    override suspend fun updateProfileWhenUserCreateAPoster(
         updateType: Constants.UPDATE_TYPE,
         postId: String,
     ): StatusModel? {
