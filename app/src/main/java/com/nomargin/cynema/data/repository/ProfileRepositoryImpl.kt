@@ -177,7 +177,7 @@ class ProfileRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun updateProfileWhenUserCreateAPoster(
+    override suspend fun updateProfileWhenUserCreateOrDeleteAPoster(
         updateType: Constants.UPDATE_TYPE,
         postId: String,
     ): StatusModel? {

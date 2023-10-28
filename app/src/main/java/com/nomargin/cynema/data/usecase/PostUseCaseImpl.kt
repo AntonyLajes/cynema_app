@@ -11,6 +11,7 @@ import com.nomargin.cynema.util.Constants
 import com.nomargin.cynema.util.FrequencyFunctions
 import com.nomargin.cynema.util.Resource
 import com.nomargin.cynema.util.Status
+import com.nomargin.cynema.util.model.StatusModel
 import javax.inject.Inject
 
 class PostUseCaseImpl @Inject constructor(
@@ -24,7 +25,7 @@ class PostUseCaseImpl @Inject constructor(
     override suspend fun publishPost(postModel: PostModel): Resource<String> {
         val publishPostResult = postRepository.publishPost(postModel)
         return if (publishPostResult.status == Status.SUCCESS) {
-            val updateResult = profileRepository.updateProfileWhenUserCreateAPoster(
+            val updateResult = profileRepository.updateProfileWhenUserCreateOrDeleteAPoster(
                 Constants.UPDATE_TYPE.AddPost,
                 publishPostResult.data ?: ""
             )
@@ -120,5 +121,14 @@ class PostUseCaseImpl @Inject constructor(
             getPostById(postId)?.let { postList.add(it) }
         }
         return postList
+    }
+
+    override suspend fun deletePost(postId: String): StatusModel {
+        val deletePostResult = postRepository.deletePost(postId)
+        profileRepository.updateProfileWhenUserCreateOrDeleteAPoster(
+            Constants.UPDATE_TYPE.RemovePost,
+            postId
+        )
+        return deletePostResult
     }
 }
