@@ -8,7 +8,6 @@ import com.nomargin.cynema.data.local.entity.CommentAppearanceModel
 import com.nomargin.cynema.data.local.entity.PostAppearanceModel
 import com.nomargin.cynema.data.remote.firebase.authentication.FirebaseAuthUseCase
 import com.nomargin.cynema.data.repository.CommentRepository
-import com.nomargin.cynema.data.repository.PostRepository
 import com.nomargin.cynema.data.repository.SharedPreferencesRepository
 import com.nomargin.cynema.data.usecase.CommentUseCase
 import com.nomargin.cynema.data.usecase.PostUseCase
@@ -23,7 +22,6 @@ class MovieDiscussionPostViewModel @Inject constructor(
     private val postUseCase: PostUseCase,
     private val sharedPreferencesRepository: SharedPreferencesRepository,
     private val commentUseCase: CommentUseCase,
-    private val postRepository: PostRepository,
     private val firebaseAuth: FirebaseAuthUseCase,
     private val commentRepository: CommentRepository,
 ) : ViewModel() {
@@ -67,7 +65,7 @@ class MovieDiscussionPostViewModel @Inject constructor(
     }
 
     fun deletePost(postId: String?) = viewModelScope.launch {
-        _deletePost.value = postRepository.deletePost(postId ?: "")
+        _deletePost.value = postUseCase.deletePost(postId ?: "")
     }
 
     fun checkIfCurrentUserIsPostOwner(postOwnerId: String) {

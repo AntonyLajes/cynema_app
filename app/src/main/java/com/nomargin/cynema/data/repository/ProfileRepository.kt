@@ -19,7 +19,7 @@ interface ProfileRepository {
 
     suspend fun getUserData(userId: String): Resource<UserProfileDataModel>
 
-    suspend fun updateProfileWhenUserCreateAPoster(
+    suspend fun updateProfileWhenUserCreateOrDeleteAPoster(
         updateType: Constants.UPDATE_TYPE,
         postId: String
     ): StatusModel?
