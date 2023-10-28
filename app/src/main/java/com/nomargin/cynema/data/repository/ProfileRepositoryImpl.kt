@@ -1,6 +1,7 @@
 package com.nomargin.cynema.data.repository
 
 import android.net.Uri
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.toObject
 import com.nomargin.cynema.BuildConfig
 import com.nomargin.cynema.R
@@ -158,6 +159,53 @@ class ProfileRepositoryImpl @Inject constructor(
                     R.string.could_not_reach_the_user_data
                 )
             )
+        }
+    }
+
+    override suspend fun updateProfileWhenUserCreateAPoster(
+        updateType: Constants.UPDATE_TYPE,
+        postId: String,
+    ): StatusModel? {
+        return suspendCoroutine { continuation ->
+            when (updateType) {
+                Constants.UPDATE_TYPE.AddPost -> {
+                    database.update(
+                        "posts",
+                        FieldValue.arrayUnion(postId)
+                    ).addOnSuccessListener {
+                        continuation.resumeWith(
+                            Result.success(
+                                StatusModel(
+                                    true,
+                                    null,
+                                    R.string.post_created_with_successfully
+                                )
+                            )
+                        )
+                    }.addOnFailureListener {
+                        continuation.resumeWith(Result.failure(it))
+                    }
+                }
+
+                else -> {
+                    database.update(
+                        "posts",
+                        FieldValue.arrayRemove(postId)
+                    ).addOnSuccessListener {
+                        continuation.resumeWith(
+                            Result.success(
+                                StatusModel(
+                                    true,
+                                    null,
+                                    R.string.post_deleted_with_success
+                                )
+                            )
+                        )
+                    }.addOnFailureListener {
+                        continuation.resumeWith(Result.failure(it))
+                    }
+                }
+            }
         }
     }
 }

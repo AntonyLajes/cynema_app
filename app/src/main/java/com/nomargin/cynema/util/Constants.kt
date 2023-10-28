@@ -111,7 +111,8 @@ object Constants {
         MovieDiscussionPostId,
         MovieDiscussionPostCommentId,
         MovieDiscussionPostOwnerName,
-        MovieDiscussionHandlerType
+        MovieDiscussionHandlerType,
+        UserPostsCreated
     }
 
     enum class BOTTOM_SHEET_TYPE{
@@ -126,7 +127,9 @@ object Constants {
 
     enum class UPDATE_TYPE {
         Upvote,
-        Downvote
+        Downvote,
+        AddPost,
+        RemovePost
     }
 
     enum class VOTE_TYPE {

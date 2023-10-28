@@ -66,7 +66,6 @@ class PostRepositoryImpl @Inject constructor(
                                 )
                             )
                         )
-
                     }.addOnFailureListener {
                         continuation.resumeWith(
                             Result.failure(it)

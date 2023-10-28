@@ -1,13 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.fragment.profile_fragment.ProfileFragment">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/coming_soon" />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/button_edit_profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/color_primary"
+        android:contentDescription="@string/edit_profile"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_pen_edit"
+        android:tint="@color/color_primary"
+        app:fabCustomSize="48dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-</FrameLayout>
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/user_profile_picture"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginVertical="16dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toTopOf="@id/user_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/RoundedProfilePictureFromProfileScreen"
+        tools:src="@drawable/rocket_1" />
+
+    <TextView
+        android:id="@+id/user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxWidth="320dp"
+        android:maxLines="1"
+        android:textColor="@color/custom_bold_grey"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/user_username"
+        app:layout_constraintEnd_toEndOf="@id/user_profile_picture"
+        app:layout_constraintStart_toStartOf="@id/user_profile_picture"
+        app:layout_constraintTop_toBottomOf="@id/user_profile_picture"
+        tools:text="@string/lorem_ipsum" />
+
+    <TextView
+        android:id="@+id/user_username"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="1"
+        android:textColor="@color/color_primary"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@id/user_status"
+        app:layout_constraintEnd_toEndOf="@id/user_name"
+        app:layout_constraintStart_toStartOf="@id/user_name"
+        app:layout_constraintTop_toBottomOf="@id/user_name"
+        tools:text="@string/lorem_ipsum" />
+
+    <TextView
+        android:id="@+id/user_status"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginVertical="16dp"
+        android:ellipsize="end"
+        app:layout_constraintBottom_toTopOf="@id/tab_layout"
+        android:maxLines="3"
+        android:textColor="@color/custom_bold_grey"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/user_username"
+        tools:text="@string/lorem_ipsum" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:contentDescription="@string/see_profile_posts"
+        android:id="@+id/tab_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/custom_low_white"
+        app:layout_constraintBottom_toTopOf="@id/view_pager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/user_status" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/view_pager"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tab_layout" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
