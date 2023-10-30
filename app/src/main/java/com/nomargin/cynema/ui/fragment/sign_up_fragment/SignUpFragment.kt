@@ -175,7 +175,7 @@ class SignUpFragment : Fragment(), View.OnClickListener {
                         requireContext().getString(value.message)
                 }
                 Constants.ERROR_TYPES.firebaseAuthError -> {
-                    FrequencyFunctions.makeToast(requireContext(), value.message)
+                    emailLayout.setFieldError(value.message)
                 }
             }
         }

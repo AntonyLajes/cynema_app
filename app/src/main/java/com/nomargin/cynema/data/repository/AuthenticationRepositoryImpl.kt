@@ -69,10 +69,10 @@ class AuthenticationRepositoryImpl @Inject constructor(
                             )
                         )
                     }.addOnFailureListener {
-                        continuation.resumeWith(Result.failure(it))
+                        continuation.resumeWith(Result.success(catchError(it)))
                     }
                 } catch (e: Exception) {
-                    continuation.resumeWith(Result.failure(e))
+                    continuation.resumeWith(Result.success(catchError(e)))
                 }
             } else {
                 continuation.resumeWith(
@@ -110,10 +110,10 @@ class AuthenticationRepositoryImpl @Inject constructor(
                             )
                         )
                     }.addOnFailureListener {
-                        continuation.resumeWith(Result.failure(it))
+                        continuation.resumeWith(Result.success(catchError(it)))
                     }
                 } catch (e: Exception) {
-                    continuation.resumeWith(Result.failure(e))
+                    continuation.resumeWith(Result.success(catchError(e)))
                 }
             } else {
                 continuation.resumeWith(
@@ -151,7 +151,7 @@ class AuthenticationRepositoryImpl @Inject constructor(
                             )
                         }
                         .addOnFailureListener {
-                            continuation.resumeWith(Result.failure(it))
+                            continuation.resumeWith(Result.success(catchError(it)))
                         }
                 }
 
@@ -178,32 +178,6 @@ class AuthenticationRepositoryImpl @Inject constructor(
         return authenticationRequestUseCaseImpl.getAuthenticationRequest()
     }
 
-    private fun firebaseOnFailure(exception: Exception): Resource<StatusModel> {
-        return if (exception == FirebaseAuthException::class.java) {
-            val errorCode = (exception as FirebaseAuthException).errorCode
-            val errorMessage = Constants.AUTH_ERRORS.authErrors[errorCode] ?: R.string.unknown_error
-            Resource.error(
-                exception.message ?: "Error",
-                null,
-                StatusModel(
-                    false,
-                    Constants.ERROR_TYPES.firebaseAuthError,
-                    errorMessage
-                )
-            )
-        } else {
-            Resource.error(
-                exception.message ?: "Error",
-                null,
-                StatusModel(
-                    false,
-                    Constants.ERROR_TYPES.firebaseAuthError,
-                    R.string.unknown_error
-                )
-            )
-        }
-    }
-
     override suspend fun sendPasswordResetEmail(email: String): Resource<StatusModel> {
         return suspendCoroutine { continuation ->
             val validateSendPasswordResetEmailCredential =
@@ -226,10 +200,10 @@ class AuthenticationRepositoryImpl @Inject constructor(
                             )
                         )
                     }.addOnFailureListener {
-                        continuation.resumeWith(Result.failure(it))
+                        continuation.resumeWith(Result.success(catchError(it)))
                     }
                 } catch (e: Exception) {
-                    continuation.resumeWith(Result.failure(e))
+                    continuation.resumeWith(Result.success(catchError(e)))
                 }
             } else {
                 continuation.resumeWith(

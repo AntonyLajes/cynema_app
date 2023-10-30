@@ -119,6 +119,10 @@ class SignInFragment : Fragment(), View.OnClickListener {
                             binding.passwordInputLayout.setFieldError(it.message)
                         }
 
+                        Constants.ERROR_TYPES.firebaseAuthError -> {
+                            binding.emailInputLayout.setFieldError(it.message)
+                        }
+
                         else -> {
                             FrequencyFunctions.makeToast(requireContext(), it.message)
                         }
