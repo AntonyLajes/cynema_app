@@ -34,7 +34,11 @@ import dagger.hilt.android.AndroidEntryPoint
 class CreateProfileActivity : AppCompatActivity(), View.OnClickListener {
 
     companion object {
-        private const val galleryPermission = Manifest.permission.READ_EXTERNAL_STORAGE
+        private var galleryPermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            Manifest.permission.READ_MEDIA_IMAGES
+        } else {
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        }
     }
 
     private val binding: ActivityCreateProfileBinding by lazy {
