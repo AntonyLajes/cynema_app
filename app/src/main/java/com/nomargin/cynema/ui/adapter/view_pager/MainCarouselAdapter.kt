@@ -2,6 +2,7 @@ package com.nomargin.cynema.ui.adapter.view_pager
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -39,14 +40,20 @@ class MainCarouselAdapter(
             )
         }
         val genreDesc: MutableList<String> = mutableListOf()
-        for (genre in currentItem.genres) {
-            genre.genreDesc?.let {
-                genreDesc.add(it)
+        for (genre in currentItem.genres ?: emptyList()) {
+            genre.genreDesc?.let {desc ->
+                genreDesc.add(desc)
             }
         }
         if (genreDesc.isNotEmpty()) {
-            holder.itemMainCarouselBinding.carouselItemGenre.text =
-                genreDesc.take(2).joinToString(" • ")
+            when(genreDesc.size){
+                1-> {
+                    holder.itemMainCarouselBinding.carouselItemGenre.text = genreDesc.take(1).joinToString(" • ")
+                }
+                else -> {
+                    holder.itemMainCarouselBinding.carouselItemGenre.text = genreDesc.take(2).joinToString(" • ")
+                }
+            }
         }
     }
 

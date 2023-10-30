@@ -6,5 +6,5 @@ interface AppLocalDatabaseUseCase {
     suspend fun insertGenres(genres: List<GenreModel>)
     suspend fun selectAllGenres(): List<GenreModel>
     suspend fun selectGenreById(genreId: Int): GenreModel
-
+    suspend fun closeDatabase()
 }
