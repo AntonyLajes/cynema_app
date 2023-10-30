@@ -224,10 +224,6 @@ class MovieDiscussionPostActivity : AppCompatActivity(), View.OnClickListener, O
         movieDiscussionPostViewModel.getAllComments(movieDiscussionPostId)
     }
 
-    private fun getComments() {
-        movieDiscussionPostViewModel.getAllComments(movieDiscussionPostId)
-    }
-
     private fun observers() {
         movieDiscussionPostViewModel.post.observe(this) { post ->
             binding.swipeToRefresh.isRefreshing = false

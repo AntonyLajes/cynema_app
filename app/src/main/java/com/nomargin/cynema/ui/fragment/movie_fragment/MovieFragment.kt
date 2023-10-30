@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -26,7 +25,6 @@ class MovieFragment : Fragment() {
     private val tabLayout: TabLayout by lazy { binding.tabLayout }
     private val viewPager: ViewPager2 by lazy { binding.viewPager }
     private val viewPagerAdapter: ViewPagerAdapter by lazy { ViewPagerAdapter(requireActivity()) }
-    private val movieViewModel: MovieViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,14 +43,6 @@ class MovieFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        observers()
-    }
-
-    private fun observers() {
     }
 
     private fun viewPagerInflater() {

@@ -28,7 +28,6 @@ class ProfileRepositoryImpl @Inject constructor(
     private lateinit var createProfileResult: Resource<StatusModel>
     private val database = firebaseFirestore.getFirebaseFirestore()
         .collection("${Constants.FIRESTORE.rootCollection}/${BuildConfig.FIREBASE_FLAVOR_COLLECTION}/${Constants.FIRESTORE.usersCollection}")
-        .document(firebaseAuth.getFirebaseAuth().currentUser?.uid.toString())
 
     override suspend fun createProfile(userProfileModel: UserProfileModel): Resource<StatusModel> {
         val validateCreateProfileAttributes =
@@ -59,14 +58,14 @@ class ProfileRepositoryImpl @Inject constructor(
                 biography = userProfileModel.userBiography,
                 profilePicture = profilePictureLink.toString(),
                 isProfileUpdated = true,
-                posts = if (userData.data?.posts?.isEmpty() == true){
+                posts = if (userData.data?.posts?.isEmpty() == true) {
                     emptyList()
-                }else{
+                } else {
                     userData.data?.posts
                 }
             )
 
-            database.set(user)
+            database.document(firebaseAuth.getFirebaseAuth().currentUser?.uid.toString()).set(user)
                 .addOnSuccessListener {
                     createProfileResult = Resource.success(
                         null,
@@ -113,8 +112,14 @@ class ProfileRepositoryImpl @Inject constructor(
     }
 
     override suspend fun verifyProfile(): Boolean {
-        return database.get().await()
-            .exists()
+        return suspendCoroutine { continuation ->
+            database.document(firebaseAuth.getFirebaseAuth().currentUser?.uid.toString()).get()
+                .addOnSuccessListener {
+                    continuation.resumeWith(Result.success(it.exists()))
+                }.addOnFailureListener {
+                    continuation.resumeWith(Result.failure(it))
+                }
+        }
     }
 
     override suspend fun checkUserUsername(username: String): StatusModel? {
@@ -184,10 +189,11 @@ class ProfileRepositoryImpl @Inject constructor(
         return suspendCoroutine { continuation ->
             when (updateType) {
                 Constants.UPDATE_TYPE.AddPost -> {
-                    database.update(
-                        "posts",
-                        FieldValue.arrayUnion(postId)
-                    ).addOnSuccessListener {
+                    database.document(firebaseAuth.getFirebaseAuth().currentUser?.uid.toString())
+                        .update(
+                            "posts",
+                            FieldValue.arrayUnion(postId)
+                        ).addOnSuccessListener {
                         continuation.resumeWith(
                             Result.success(
                                 StatusModel(
@@ -203,10 +209,11 @@ class ProfileRepositoryImpl @Inject constructor(
                 }
 
                 else -> {
-                    database.update(
-                        "posts",
-                        FieldValue.arrayRemove(postId)
-                    ).addOnSuccessListener {
+                    database.document(firebaseAuth.getFirebaseAuth().currentUser?.uid.toString())
+                        .update(
+                            "posts",
+                            FieldValue.arrayRemove(postId)
+                        ).addOnSuccessListener {
                         continuation.resumeWith(
                             Result.success(
                                 StatusModel(
@@ -231,9 +238,10 @@ class ProfileRepositoryImpl @Inject constructor(
         return suspendCoroutine { continuation ->
             if (userData.statusModel?.isValid == true) {
                 if (userData.data?.favoriteMovies?.contains(movieId) == true) {
-                    database.update(
-                        "favoriteMovies", FieldValue.arrayRemove(movieId)
-                    ).addOnSuccessListener {
+                    database.document(firebaseAuth.getFirebaseAuth().currentUser?.uid.toString())
+                        .update(
+                            "favoriteMovies", FieldValue.arrayRemove(movieId)
+                        ).addOnSuccessListener {
                         continuation.resumeWith(
                             Result.success(
                                 Resource.success(
@@ -250,9 +258,10 @@ class ProfileRepositoryImpl @Inject constructor(
                         continuation.resumeWith(Result.failure(it))
                     }
                 } else {
-                    database.update(
-                        "favoriteMovies", FieldValue.arrayUnion(movieId)
-                    ).addOnSuccessListener {
+                    database.document(firebaseAuth.getFirebaseAuth().currentUser?.uid.toString())
+                        .update(
+                            "favoriteMovies", FieldValue.arrayUnion(movieId)
+                        ).addOnSuccessListener {
                         continuation.resumeWith(
                             Result.success(
                                 Resource.success(

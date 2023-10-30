@@ -14,8 +14,9 @@ import com.nomargin.cynema.data.usecase.AppLocalDatabaseUseCase
 import com.nomargin.cynema.data.usecase.TheMovieDatabaseApiUseCase
 import com.nomargin.cynema.util.model.CarouselModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.async
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -59,7 +60,9 @@ class HomeViewModel @Inject constructor(
         for (movie in movieList) {
             val movieGenres: MutableList<GenreModel> = mutableListOf()
             for (movieGenre in movie.genreIds) {
-                val genre = async { appLocalDatabaseUseCase.selectGenreById(movieGenre) }.await()
+                val genre = withContext(Dispatchers.Default) {
+                    appLocalDatabaseUseCase.selectGenreById(movieGenre)
+                }
                 movieGenres.add(genre)
             }
             movieCarouselModel.add(
@@ -76,7 +79,11 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getPopularMovies() = viewModelScope.launch {
-        async { getMovieModelToCarouselModel(theMovieDatabaseApiUseCase.getPopularMovies().results) }.await()
+        withContext(Dispatchers.Default) {
+            getMovieModelToCarouselModel(
+                theMovieDatabaseApiUseCase.getPopularMovies().results
+            )
+        }
     }
 
     private fun getNowPlayingMovies() = viewModelScope.launch {
