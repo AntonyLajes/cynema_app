@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
@@ -27,7 +28,7 @@ import com.nomargin.cynema.util.model.CarouselModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), View.OnClickListener {
 
     private val homeViewModel: HomeViewModel by viewModels()
     private var _binding: FragmentHomeBinding? = null
@@ -51,6 +52,22 @@ class HomeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onClick(view: View) {
+        when (view.id) {
+            binding.profilePicture.id -> {
+                goToUserProfile()
+            }
+        }
+    }
+
+    private fun initClicks() {
+        binding.profilePicture.setOnClickListener(this)
+    }
+
+    private fun goToUserProfile() {
+        findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToProfileFragment())
     }
 
     private fun observers() {
@@ -79,6 +96,7 @@ class HomeFragment : Fragment() {
         binding.includeShimmerLayout.shimmerLayout.stopShimmer()
         binding.includeShimmerLayout.shimmerLayout.visibility = View.GONE
         binding.mainView.visibility = View.VISIBLE
+        initClicks()
     }
 
     private fun initCarousel(movies: List<CarouselModel>) {

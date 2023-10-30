@@ -7,6 +7,7 @@ import androidx.navigation.findNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.nomargin.cynema.R
 import com.nomargin.cynema.databinding.ActivityMainBinding
+import com.nomargin.cynema.util.FrequencyFunctions
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -23,10 +24,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun bottomNavigationListenerHandler() {
         bottomNavigationView.setOnItemSelectedListener { item ->
-            navigationFragmentHandler(item)
+            FrequencyFunctions.navigationFragmentHandler(this, binding, item.itemId)
         }
         bottomNavigationView.setOnItemReselectedListener { item ->
-            navigationFragmentHandler(item)
+            FrequencyFunctions.navigationFragmentHandler(this, binding, item.itemId)
         }
     }
 
