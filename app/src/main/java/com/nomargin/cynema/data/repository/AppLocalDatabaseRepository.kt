@@ -10,4 +10,5 @@ interface AppLocalDatabaseRepository {
 
     suspend fun selectGenreById(genreId: Int): GenreModel
 
+    suspend fun closeDatabase()
 }
