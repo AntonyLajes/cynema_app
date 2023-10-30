@@ -61,6 +61,14 @@ class AuthActivity : AppCompatActivity() {
         viewPager.offscreenPageLimit = viewPagerAdapter.itemCount
         val mediator = TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.text = viewPagerAdapter.getTitle(position)
+            tab.contentDescription = when (viewPagerAdapter.getTitle(position)) {
+                getString(R.string.sign_in_fragment_name) -> {
+                    getString(R.string.sign_in_tab)
+                }
+                else -> {
+                    getString(R.string.sign_up_tab)
+                }
+            }
         }
         mediator.attach()
     }
@@ -90,10 +98,10 @@ class AuthActivity : AppCompatActivity() {
                 FrequencyFunctions.makeToast(this, oneTapStatus.message)
             }
         }
-        authViewModel.isProfileCreated.observe(this){isProfileCreated ->
-            if(isProfileCreated){
+        authViewModel.isProfileCreated.observe(this) { isProfileCreated ->
+            if (isProfileCreated) {
                 FrequencyFunctions.startNewActivityFromCurrentActivity(this, MainActivity())
-            }else{
+            } else {
                 FrequencyFunctions.startNewActivityFromCurrentActivity(
                     this,
                     CreateProfileActivity()

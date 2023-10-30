@@ -141,6 +141,7 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_sign_in"
+            android:contentDescription="@string/sign_in_button"
             style="@style/CustomProviderButton"
             android:layout_marginTop="16dp"
             android:backgroundTint="@color/color_primary"

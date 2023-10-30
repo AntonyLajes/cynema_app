@@ -25,7 +25,7 @@ class HomeViewModel @Inject constructor(
     private val appLocalDatabaseUseCase: AppLocalDatabaseUseCase,
     private val profileRepository: ProfileRepository,
     private val authenticationRepository: AuthenticationRepository,
-    private val sharedPreferencesRepository: SharedPreferencesRepository
+    private val sharedPreferencesRepository: SharedPreferencesRepository,
 ) : ViewModel() {
 
     private val _genres: MutableLiveData<List<GenreModel>> = MutableLiveData()
@@ -60,9 +60,7 @@ class HomeViewModel @Inject constructor(
         for (movie in movieList) {
             val movieGenres: MutableList<GenreModel> = mutableListOf()
             for (movieGenre in movie.genreIds) {
-                val genre = withContext(Dispatchers.Default) {
-                    appLocalDatabaseUseCase.selectGenreById(movieGenre)
-                }
+                val genre = appLocalDatabaseUseCase.selectGenreById(movieGenre)
                 movieGenres.add(genre)
             }
             movieCarouselModel.add(
@@ -100,10 +98,11 @@ class HomeViewModel @Inject constructor(
 
     private fun getUserProfileData() = viewModelScope.launch {
         val userId = authenticationRepository.verifyLogin().data?.uid ?: ""
-        _userProfileData.value = profileRepository.getUserData(userId).data ?: UserProfileDataModel()
+        _userProfileData.value =
+            profileRepository.getUserData(userId).data ?: UserProfileDataModel()
     }
 
-    fun saveDataToSharedPreferences(key: String, movieId: String){
+    fun saveDataToSharedPreferences(key: String, movieId: String) {
         sharedPreferencesRepository.putString(key, movieId)
     }
 

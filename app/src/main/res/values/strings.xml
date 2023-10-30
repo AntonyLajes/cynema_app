@@ -185,4 +185,8 @@
     <string name="user_has_not_movie_added_to_favorite_list">User has not movie added to favorite list.</string>
     <string name="favorite_movies_successfully_got">Favorite movies successfully got</string>
     <string name="edit_your_profile">Edit your profile.</string>
+    <string name="sign_in_button">Sign In Button</string>
+    <string name="sign_up_button">Sign Up Button</string>
+    <string name="sign_in_tab">Sign In Tab</string>
+    <string name="sign_up_tab">Sign Up Tab</string>
 </resources>

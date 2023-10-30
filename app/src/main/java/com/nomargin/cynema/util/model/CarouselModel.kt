@@ -7,5 +7,5 @@ data class CarouselModel (
     val title: String,
     val backgroundPath: String,
     val posterPath: String,
-    val genres: List<GenreModel>?
+    val genres: List<GenreModel?>?
 )

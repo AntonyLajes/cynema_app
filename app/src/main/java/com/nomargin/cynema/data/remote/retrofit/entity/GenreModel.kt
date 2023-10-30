@@ -14,5 +14,5 @@ data class GenreModel (
     val genreId: Int? = null,
     @ColumnInfo(name = Constants.LOCAL_STORAGE.genreDescColumnName)
     @SerializedName("name")
-    val genreDesc: String? = null
+    val genreDesc: String = ""
 )

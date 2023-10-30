@@ -129,6 +129,7 @@
             android:id="@+id/button_sign_up"
             style="@style/CustomProviderButton"
             android:backgroundTint="@color/color_primary"
+            android:contentDescription="@string/sign_up_button"
             android:text="@string/sign_up"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
