@@ -41,7 +41,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="4dp"
                 android:layout_marginBottom="4dp"
-                android:text="@string/lets_relax_and_watch_a_movie"
+                android:text="@string/lets_relax_and_talk"
                 android:textColor="@color/custom_black"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"

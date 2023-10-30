@@ -21,6 +21,7 @@ import com.google.firebase.firestore.FieldValue
 import com.nomargin.cynema.R
 import com.nomargin.cynema.data.local.entity.MovieSearchedDetailsModel
 import com.nomargin.cynema.data.remote.retrofit.entity.MovieModel
+import com.nomargin.cynema.databinding.ActivityMainBinding
 import com.nomargin.cynema.databinding.ActivityMovieDiscussionPostBinding
 import com.nomargin.cynema.databinding.ItemDiscussionPostBinding
 import com.nomargin.cynema.databinding.ItemMovieDiscussionPostCommentBinding
@@ -415,6 +416,40 @@ object FrequencyFunctions {
             .navigate(
                 navigate
             )
+    }
+
+    fun navigationFragmentHandler(
+        activity: Activity,
+        binding: ActivityMainBinding,
+        itemId: Int,
+    ): Boolean {
+        return when (itemId) {
+            R.id.home_fragment -> {
+                activity.findNavController(binding.fragmentContainerView.id)
+                    .navigate(R.id.home_fragment)
+                true
+            }
+
+            R.id.search_fragment -> {
+                activity.findNavController(binding.fragmentContainerView.id)
+                    .navigate(R.id.search_fragment)
+                true
+            }
+
+            R.id.favorites_fragment -> {
+                activity.findNavController(binding.fragmentContainerView.id)
+                    .navigate(R.id.favorites_fragment)
+                true
+            }
+
+            R.id.profile_fragment -> {
+                activity.findNavController(binding.fragmentContainerView.id)
+                    .navigate(R.id.profile_fragment)
+                true
+            }
+
+            else -> false
+        }
     }
 
 }
