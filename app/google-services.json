@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "15708406258-1tdt8oi7p78ao3e2cfe37340g7ktemev.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nomargin.cynema",
+            "certificate_hash": "0ba02ea65649097eb320640790667b9337bcc417"
+          }
+        },
+        {
           "client_id": "15708406258-3gji0gvsh4joj0nqghblsvj35t96fqrj.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -50,6 +58,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "15708406258-8d2821fvb7ruott0nptncnu346lv0brl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nomargin.cynema.development",
+            "certificate_hash": "0ba02ea65649097eb320640790667b9337bcc417"
+          }
+        },
         {
           "client_id": "15708406258-li0kf6ms2ib65415o4dgnncgkjdvpjmc.apps.googleusercontent.com",
           "client_type": 1,
